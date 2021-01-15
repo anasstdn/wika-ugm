@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateTblSettingTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('tbl_setting', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_input')->nullable();
+            $table->string('opsi_key',100)->nullable();
+            $table->string('opsi_val',100)->nullable();
+            $table->timestamps();
+            $table->foreign('user_input')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('tbl_setting');
+    }
+}
