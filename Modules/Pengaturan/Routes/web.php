@@ -31,3 +31,24 @@ Route::prefix('user')->group(function() {
 	Route::match(['get', 'post'],'/{id}/edit','UserController@edit');
 	Route::get('/{id}/delete', 'UserController@destroy');
 });
+
+Route::prefix('permissions')->group(function() {
+    Route::get('/', 'PermissionController@index');
+    Route::match(['get', 'post'],'/get-data','PermissionController@getData');
+    Route::get('/create',['as' => 'permissions.create', 'uses' => 'PermissionController@create']);
+    Route::match(['get','post'],'/store',['as' => 'permissions.store', 'uses' => 'PermissionController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'permissions.update', 'uses' => 'PermissionController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','PermissionController@edit');
+    Route::match(['get','post'],'/send-data','PermissionController@sendData');
+    Route::get('/{id}/delete', 'PermissionController@destroy');
+});
+
+Route::prefix('roles')->group(function() {
+    Route::get('/', 'RoleController@index');
+    Route::match(['get', 'post'],'/get-data','RoleController@getData');
+    Route::get('/create',['as' => 'roles.create', 'uses' => 'RoleController@create']);
+    Route::match(['get','post'],'/store',['as' => 'roles.store', 'uses' => 'RoleController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'roles.update', 'uses' => 'RoleController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','RoleController@edit');
+    Route::get('/{id}/delete', 'RoleController@destroy');
+});
