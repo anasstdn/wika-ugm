@@ -10,4 +10,8 @@ function message($isSuccess,$successMessage="Data has been saved",$failedMessage
     Session::flash('messageType',$isSuccess ? 'sukses' : 'gagal');
 }
 
+function getConfigValues($configName){
+    return \App\Models\ConfigId::getValues($configName);
+}
+
 ?>

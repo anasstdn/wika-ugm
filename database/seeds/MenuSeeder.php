@@ -57,7 +57,7 @@ class MenuSeeder extends Seeder
     		'permission_id'=>$permission->id,
     		'ordinal'=>2,
     		'parent_status'=>'N',
-    		'url'=>'users',
+    		'url'=>'user',
     	)
     );
     	$submenu->save();
