@@ -7,13 +7,13 @@
         <div class="row push">
             <div class="col-md py-10 d-md-flex align-items-md-center text-center">
                 <h1 class="text-white mb-0">
-                    <span class="font-w300">Access Control List</span>
-                    <span class="font-w400 font-size-lg text-white-op d-none d-md-inline-block">Manajemen Permissions</span>
+                    <span class="font-w300">Masterdata</span>
+                    <span class="font-w400 font-size-lg text-white-op d-none d-md-inline-block">Supplier</span>
                 </h1>
             </div>
             <div class="col-md py-10 d-md-flex align-items-md-center justify-content-md-end text-center">
-                @can('permissions-create')
-                <a class="btn btn-alt-primary" href="#" onclick="show_modal('{{ route('permissions.create') }}')">
+                @can('supplier-create')
+                <a class="btn btn-alt-primary" href="#" onclick="show_modal('{{ route('supplier.create') }}')">
                     <i class="fa fa-plus mr-5"></i> Tambah Baru
                 </a>
                 @endcan
@@ -29,14 +29,14 @@
     <!-- Breadcrumb -->
     <div class="content">
         <nav class="breadcrumb mb-0">
-            <a class="breadcrumb-item" href="javascript:void(0)">Access Control List</a>
-            <span class="breadcrumb-item active">Manajemen Permissions</span>
+            <a class="breadcrumb-item" href="javascript:void(0)">Masterdata</a>
+            <span class="breadcrumb-item active">Supplier</span>
         </nav>
         <h2 class="content-heading"></h2>
         <!-- Dynamic Table Full -->
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Manajemen Permissions</h3>
+                <h3 class="block-title">Supplier</h3>
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
@@ -56,8 +56,11 @@
                   <thead>
                     <tr>
                       <th data-field="no">No</th>
-                      <th data-field="name">Name</th>
-                      <th data-field="guard_name">Guard Name</th>
+                      <th data-field="kode_supplier">Kode Supplier</th>
+                      <th data-field="nama_supplier">Nama Supplier</th>
+                      <th data-field="telepon">Telepon</th>
+                      <th data-field="mobile">Mobile</th>
+                      <th data-field="flag_aktif">Flag Aktif</th>
                       <th data-field="aksi">Aksi</th>
                   </tr>
               </thead>
@@ -86,7 +89,7 @@
 
         $.ajax({
             type: "POST",
-            url: "{{ url('permissions/get-data') }}",
+            url: "{{ url('supplier/get-data') }}",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

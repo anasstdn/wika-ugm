@@ -98,6 +98,7 @@ class PermissionController extends Controller
     public function getData(Request $request)
     {
         $input = $request->all();
+        dd($input);
 
         $offset = $request->has('offset') ? $request->get('offset') : 0;
         $limit = $request->has('limit') ? $request->get('limit') : 10;
@@ -111,16 +112,20 @@ class PermissionController extends Controller
                             ->orWhere('guard_name','LIKE','%'.$search.'%');
                         }
                     })
-                    ->offset($offset)
-                    ->limit($limit)
-                    ->get();
+                    // ->offset($offset)
+                    // ->limit($limit)
+                    // ->get();
+                    ->paginate($limit);
 
         $total_all = Permission::get();
 
         $data = array();
+
+        $no = $dataList->firstItem();
         
         foreach($dataList as $key => $val)
         {
+            $data[$key]['no'] = $no;
             $data[$key]['name'] = $val->name;
             $data[$key]['guard_name'] = $val->guard_name;
 
@@ -138,6 +143,7 @@ class PermissionController extends Controller
                 $data[$key]['aksi'].="<a href='$delete' onclick='clicked(event)' class='btn btn-danger btn-sm' data-original-title='Hapus' title='Hapus'><i class='fa fa-trash' aria-hidden='true'></i></a></div></div>";
             }
             
+            $no++;
         }
         return response()->json(array('data' => $data,'total' => count($total_all)));
     }

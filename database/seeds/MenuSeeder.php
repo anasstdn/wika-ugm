@@ -20,7 +20,7 @@ class MenuSeeder extends Seeder
         Menu::truncate();
         $this->menuAcl();
         // $this->menuPengaturan();
-        // $this->menuMasterdata();
+        $this->menuMasterdata();
         // $this->menuTransaksiKas();
         // $this->menuSimpanan();
         // $this->menuPinjaman();
@@ -93,6 +93,59 @@ class MenuSeeder extends Seeder
             'ordinal'=>2,
             'parent_status'=>'N',
             'url'=>'roles',
+        )
+    );
+        $submenu->save();
+    }
+
+    private function menuMasterdata(){
+        $this->command->info('Menu Masterdata Seeder');
+        $permission = Permission::firstOrNew(array(
+            'name'=>'master-data-menu'
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+        $menu = Menu::firstOrNew(array(
+            'name'=>'Masterdata',
+            'permission_id'=>$permission->id,
+            'ordinal'=>1,
+            'parent_status'=>'Y'
+        ));
+        $menu->icon = 'si-folder';
+        $menu->save();
+
+          //create SUBMENU master
+        $permission = Permission::firstOrNew(array(
+            'name'=>'material-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Material',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'N',
+            'url'=>'material',
+        )
+    );
+        $submenu->save();
+
+           //create SUBMENU master
+        $permission = Permission::firstOrNew(array(
+            'name'=>'supplier-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Supplier',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'N',
+            'url'=>'supplier',
         )
     );
         $submenu->save();

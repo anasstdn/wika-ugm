@@ -52,3 +52,14 @@ Route::prefix('roles')->group(function() {
     Route::match(['get', 'post'],'/{id}/edit','RoleController@edit');
     Route::get('/{id}/delete', 'RoleController@destroy');
 });
+
+Route::prefix('supplier')->group(function() {
+    Route::get('/', 'SupplierController@index');
+    Route::match(['get', 'post'],'/get-data','SupplierController@getData');
+    Route::get('/create',['as' => 'supplier.create', 'uses' => 'SupplierController@create']);
+    Route::match(['get','post'],'/store',['as' => 'supplier.store', 'uses' => 'SupplierController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'supplier.update', 'uses' => 'SupplierController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','SupplierController@edit');
+    Route::match(['get','post'],'/send-data','SupplierController@sendData');
+    Route::get('/{id}/delete', 'SupplierController@destroy');
+});
