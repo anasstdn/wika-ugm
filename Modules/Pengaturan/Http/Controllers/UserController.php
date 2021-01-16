@@ -126,16 +126,20 @@ class UserController extends Controller
                             ->orWhere('email','LIKE','%'.$search.'%');
                         }
                     })
-                    ->offset($offset)
-                    ->limit($limit)
-                    ->get();
+                    // ->offset($offset)
+                    // ->limit($limit)
+                    // ->get();
+                    ->paginate($limit);
 
         $total_all = User::get();
 
         $data = array();
 
+        $no = $offset + 1;
+
         foreach($dataList as $key => $val)
         {
+            $data[$key]['no'] = $no;
             $data[$key]['name'] = $val->name;
             $data[$key]['username'] = $val->username;
             $data[$key]['email'] = $val->email;
@@ -179,10 +183,12 @@ class UserController extends Controller
                 }
                 $data[$key]['aksi'].="<a href='$delete' onclick='clicked(event)' class='btn btn-danger btn-sm' data-original-title='Hapus' title='Hapus'><i class='fa fa-trash' aria-hidden='true'></i></a></div></div>";
             }
+
+            $no++;
             
         }
 
-        return response()->json(array('data' => $data,'total' => count($total_all)));
+        return response()->json(array('data' => $data,'total' => $dataList->total()));
     }
 
     public function sendData(Request $request)

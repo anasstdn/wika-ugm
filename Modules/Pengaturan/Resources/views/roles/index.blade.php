@@ -55,7 +55,7 @@
                   >
                   <thead>
                     <tr>
-                      <th data-field="id"></th>
+                      <th data-field="no">No</th>
                       <th data-field="name">Name</th>
                       <th data-field="guard_name">Guard Name</th>
                       <th data-field="aksi">Aksi</th>

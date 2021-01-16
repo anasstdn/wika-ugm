@@ -55,7 +55,7 @@
                   >
                   <thead>
                     <tr>
-                      <th data-field="id"></th>
+                      <th data-field="no">No</th>
                       <th data-field="name">Nama</th>
                       <th data-field="username">Username</th>
                       <th data-field="email">Email</th>

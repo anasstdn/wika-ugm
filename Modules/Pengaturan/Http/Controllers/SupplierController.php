@@ -114,7 +114,7 @@ class SupplierController extends Controller
 
         $data = array();
 
-        $no = $dataList->firstItem();
+        $no = $offset + 1;
         
         foreach($dataList as $key => $val)
         {
@@ -143,6 +143,6 @@ class SupplierController extends Controller
             $no++;
             
         }
-        return response()->json(array('data' => $data,'total' => count($total_all)));
+        return response()->json(array('data' => $data,'total' => $dataList->total()));
     }
 }
