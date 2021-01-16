@@ -145,4 +145,67 @@ class SupplierController extends Controller
         }
         return response()->json(array('data' => $data,'total' => $dataList->total()));
     }
+
+    public function sendData(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'kode_supplier' => 'required',
+            'nama_supplier' => 'required',
+            'flag_aktif' => 'required',
+        ]);
+
+        if($validation->passes() == false)
+        {
+            $data = array(
+                'status' => false,
+                'msg' => $validation->errors()->all(),
+            );
+
+            return \Response::json($data);
+        }
+
+        $input = $request->all();
+
+        DB::beginTransaction();
+        try {
+            switch($input['mode'])
+            {
+                case 'add':
+                $data = array(
+                    'kode_supplier' => $input['kode_supplier'],
+                    'nama_supplier' => $input['nama_supplier'],
+                    'telepon' => $input['telepon'],
+                    'nama_supplier' => $input['nama_supplier'],
+                );
+
+                $act = Permission::create($data);
+                break;
+                case 'edit':
+                $act = Permission::find($input['id']);
+                $act->update($input);
+                break;
+            }
+
+            if($act == true)
+            {
+                $data = array(
+                    'status' => true,
+                    'msg' => 'Data berhasil disimpan'
+                );
+            }
+            else
+            {
+                $data = array(
+                    'status' => false,
+                    'msg' => 'Data gagal disimpan'
+                );
+            }
+        } catch (Exception $e) {
+          echo 'Message' .$e->getMessage();
+          DB::rollback();
+      }
+      DB::commit();
+
+      return \Response::json($data);
+  }
 }
