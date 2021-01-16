@@ -36,6 +36,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
+        dd('aaaaa');
         return view('pengaturan::supplier.form');
     }
 
