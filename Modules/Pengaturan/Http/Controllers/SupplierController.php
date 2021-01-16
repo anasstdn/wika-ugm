@@ -36,7 +36,6 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        dd('aaaaa');
         return view('pengaturan::supplier.form');
     }
 
@@ -67,7 +66,8 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        return view('pengaturan::supplier.form');
+        $data = Supplier::find($id);
+        return view('pengaturan::supplier.form',compact('data'));
     }
 
     /**
@@ -89,6 +89,11 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         //
+        $data = Supplier::find($id);
+        $data->delete();
+        message($data,'Data berhasil dihapus!','Data gagal dihapus!');
+
+        return redirect()->back();
     }
 
     public function getData(Request $request)
@@ -125,7 +130,15 @@ class SupplierController extends Controller
             $data[$key]['telepon'] = $val->telepon;
             $data[$key]['mobile'] = $val->mobile;
             $data[$key]['diskon_supplier'] = $val->diskon_supplier;
-            $data[$key]['flag_aktif'] = $val->flag_aktif;
+            if($val->flag_aktif == 'Y')
+            {
+                $data[$key]['flag_aktif'] = "<div class='col-md-12'><div class='text-center'><span class='badge badge-primary'>Aktif</span></div></div>";
+            }
+            else
+            {
+                $data[$key]['flag_aktif'] = "<div class='col-md-12'><div class='text-center'><span class='badge badge-danger'>Nonaktif</span></div></div>";
+            }
+            
 
             $edit=url("supplier/".$val->id)."/edit";
             $delete=url("supplier/".$val->id)."/delete";
@@ -176,14 +189,26 @@ class SupplierController extends Controller
                     'kode_supplier' => $input['kode_supplier'],
                     'nama_supplier' => $input['nama_supplier'],
                     'telepon' => $input['telepon'],
-                    'nama_supplier' => $input['nama_supplier'],
+                    'mobile' => $input['mobile'],
+                    'diskon_supplier' => $input['diskon_supplier'],
+                    'flag_aktif' => $input['flag_aktif'],
                 );
 
-                $act = Permission::create($data);
+                $act = Supplier::create($data);
                 break;
                 case 'edit':
-                $act = Permission::find($input['id']);
-                $act->update($input);
+                $act = Supplier::find($input['id']);
+
+                $data = array(
+                    'kode_supplier' => $input['kode_supplier'],
+                    'nama_supplier' => $input['nama_supplier'],
+                    'telepon' => $input['telepon'],
+                    'mobile' => $input['mobile'],
+                    'diskon_supplier' => $input['diskon_supplier'],
+                    'flag_aktif' => $input['flag_aktif'],
+                );
+
+                $act->update($data);
                 break;
             }
 

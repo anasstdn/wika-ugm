@@ -63,3 +63,16 @@ Route::prefix('supplier')->group(function() {
     Route::match(['get','post'],'/send-data','SupplierController@sendData');
     Route::get('/{id}/delete', 'SupplierController@destroy');
 });
+
+Route::prefix('material')->group(function() {
+    Route::get('/', 'MaterialController@index');
+    Route::match(['get', 'post'],'/get-data','MaterialController@getData');
+    Route::get('/create',['as' => 'material.create', 'uses' => 'MaterialController@create']);
+    Route::get('/{id}/add-child', 'MaterialController@addChild');
+    Route::match(['get','post'],'/material-search','MaterialController@materialSearch');
+    Route::match(['get','post'],'/store',['as' => 'material.store', 'uses' => 'MaterialController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'material.update', 'uses' => 'MaterialController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','MaterialController@edit');
+    Route::match(['get','post'],'/send-data','MaterialController@sendData');
+    Route::get('/{id}/delete', 'MaterialController@destroy');
+});

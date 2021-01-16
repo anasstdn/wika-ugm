@@ -8,12 +8,12 @@
             <div class="col-md py-10 d-md-flex align-items-md-center text-center">
                 <h1 class="text-white mb-0">
                     <span class="font-w300">Masterdata</span>
-                    <span class="font-w400 font-size-lg text-white-op d-none d-md-inline-block">Supplier</span>
+                    <span class="font-w400 font-size-lg text-white-op d-none d-md-inline-block">Material</span>
                 </h1>
             </div>
             <div class="col-md py-10 d-md-flex align-items-md-center justify-content-md-end text-center">
-                @can('supplier-create')
-                <a class="btn btn-alt-primary" href="#" onclick="show_modal('{{ route('supplier.create') }}')">
+                @can('material-create')
+                <a class="btn btn-alt-primary" href="#" onclick="show_modal('{{ route('material.create') }}')">
                     <i class="fa fa-plus mr-5"></i> Tambah Baru
                 </a>
                 @endcan
@@ -30,13 +30,13 @@
     <div class="content">
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="javascript:void(0)">Masterdata</a>
-            <span class="breadcrumb-item active">Supplier</span>
+            <span class="breadcrumb-item active">Material</span>
         </nav>
         <h2 class="content-heading"></h2>
         <!-- Dynamic Table Full -->
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Supplier</h3>
+                <h3 class="block-title">Material</h3>
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
@@ -56,11 +56,10 @@
                   <thead>
                     <tr>
                       <th data-field="no">No</th>
-                      <th data-field="kode_supplier">Kode Supplier</th>
-                      <th data-field="nama_supplier">Nama Supplier</th>
-                      <th data-field="telepon">Telepon</th>
-                      <th data-field="mobile">Mobile</th>
-                      <th data-field="diskon_supplier">Diskon Supplier (%)</th>
+                      <th data-field="material">Nama Material</th>
+                      <th data-field="spesifikasi">Spesifikasi</th>
+                      <th data-field="satuan">Satuan</th>
+                      <th data-field="level">level</th>
                       <th data-field="flag_aktif">Flag Aktif</th>
                       <th data-field="aksi">Aksi</th>
                   </tr>
@@ -90,7 +89,7 @@
 
         $.ajax({
             type: "POST",
-            url: "{{ url('supplier/get-data') }}",
+            url: "{{ url('material/get-data') }}",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

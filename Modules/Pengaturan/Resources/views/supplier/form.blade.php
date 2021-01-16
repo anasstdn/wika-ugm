@@ -45,7 +45,7 @@
                     <div class="form-group row" style="margin-bottom: 1.429rem;">
                         <label class="col-form-label col-md-3">Diskon Supplier</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control form-control-sm" id="diskon_supplier" name="diskon_supplier" value="{{ isset($data) && !empty($data->diskon_supplier) ?$data->diskon_supplier:'' }}">
+                            <input type="number" class="form-control form-control-sm" id="diskon_supplier" name="diskon_supplier" min="0" step="0.01" value="{{ isset($data) && !empty($data->diskon_supplier) ?$data->diskon_supplier:0 }}">
                             <span class="help-block"></span>
                         </div>
                     </div>
