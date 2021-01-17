@@ -14,9 +14,10 @@
 
                             <!-- Logo -->
                             <div class="content-header-item">
-                                <a class="link-effect font-w700" href="index.html">
-                                    <i class="si si-fire text-primary"></i>
-                                    <span class="font-size-xl text-dual-primary-dark">code</span><span class="font-size-xl text-primary">base</span>
+                                <a class="link-effect font-w700" href="{{ url('/') }}">
+                                    {{-- <i class="si si-fire text-primary"></i> --}}
+                                    <span class="font-size-xl text-dual-primary-dark"><img src="{{asset('images/')}}/logo_wika.png" alt="logo" style="width:8em; height:auto;"></span>
+                                    
                                 </a>
                             </div>
                             <!-- END Logo -->

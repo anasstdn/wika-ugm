@@ -23,6 +23,14 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $config_admin = getConfigValues('ROLE_ADMIN');
+
+        if(isset(\Auth::user()->roles[0]->id) && !in_array(\Auth::user()->roles[0]->id, $config_admin))
+        {
+            $id=\Auth::user()->profile_id!==null?\Auth::user()->profile_id:\Auth::user()->id;
+            message(false,'','Silahkan lengkapi dahulu profil anda sebelum melanjutkan.');
+            return redirect('profil/edit/'.$id);
+        }
         return view('home');
     }
 }

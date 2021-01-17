@@ -94,9 +94,9 @@
                     <div class="content content-full overflow-hidden">
                       <!-- Header -->
                       <div class="py-30 text-center">
-                        <a class="link-effect font-w700" href="index.html">
-                          <i class="si si-fire"></i>
-                          <span class="font-size-xl text-primary-dark">code</span><span class="font-size-xl">base</span>
+                        <a class="link-effect font-w700" href="{{ url('/') }}">
+                          {{-- <i class="si si-fire"></i> --}}
+                          <span class="font-size-xl text-dual-primary-dark"><img class="navbar-brand" src="{{asset('images/')}}/logo_wika.png" alt="logo" style="width:12em; height:auto;"></span>
                         </a>
                       </div>
                       <!-- END Header -->
