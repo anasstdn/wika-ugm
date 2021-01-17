@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\Profil;
+use App\Models\UserProfil;
 use App\Models\User;
 use App\Models\JenisKelamin;
 use App\Models\Agama;
@@ -34,15 +35,14 @@ class ProfilController extends Controller
 
     public function index()
     {
-        $id_profil = isset(\Auth::user()->user_profil->profil_id)?\Auth::user()->user_profil->profil_id:null;
-        $foto_profile=\App\Models\Profil::find($id_profil);
-
-        $cek_data_exists = \DB::select('SELECT * FROM profil WHERE id ="'.$id_profil.'" LIMIT 1');
+        $cek_data_exists = \DB::select('SELECT * FROM user_profil WHERE user_id ="'.\Auth::user()->id.'" LIMIT 1');
         // dd($cek_data_exists);
 
         if(isset($cek_data_exists) && !empty($cek_data_exists))
         {
-            return view('pengaturan::profil.index',compact('foto_profile'));
+            $data = Profil::find($cek_data_exists[0]->profil_id);
+
+            return view('pengaturan::profil.index',compact('data'));
         }
         else
         {
@@ -88,14 +88,23 @@ class ProfilController extends Controller
      */
     public function edit($id)
     {
-        $profile=null;
-        // dd($id);
-        $id_profil = isset(\Auth::user()->user_profil->profil_id)?\Auth::user()->user_profil->profil_id:null;
-        if($id_profil!==null)
+        $id_profil = null;
+
+        $cek_data_exists = \DB::select('SELECT * FROM user_profil WHERE user_id ="'.\Auth::user()->id.'" LIMIT 1');
+        // dd($cek_data_exists);
+
+        if(isset($cek_data_exists) && !empty($cek_data_exists))
         {
-            $profile=Profil::leftjoin('pegawai','pegawai.id_profil','=','profil.id')->find($id);
+            $profile = Profil::find($cek_data_exists[0]->profil_id);
+            $id_profil = $profile->id;
         }
-        return view('pengaturan::profil.form');
+
+        if(!isset($profile))
+        {
+            $id_profil = $id;
+        }
+
+        return view('pengaturan::profil.form',compact('id_profil','profile'));
     }
 
     /**
@@ -107,6 +116,74 @@ class ProfilController extends Controller
     public function update(Request $request, $id)
     {
         //
+        Validator::make($request->all(), [
+            'nik' => 'required',
+            'nama' => 'required',
+            'tempat_lahir' => 'required',
+            'tanggal_lahir' => 'required',
+            'jenis_kelamin' => 'required',
+            'agama' => 'required',
+            'status_perkawinan' => 'required',
+            'alamat_ktp' => 'required',
+            'kota_ktp' => 'required',
+            'alamat_domisili' => 'required',
+            'kota_domisili' => 'required',
+            'no_telp' => 'required',
+            'email' => 'required',
+        ]);
+
+        $input = $request->all();
+
+        DB::beginTransaction();
+        try {
+
+           $flag=isset($input['foto_name'])?$input['foto_name']:null;
+
+           if($request->hasFile('profile-settings-avatar'))
+           {
+            $extension = $request->file('profile-settings-avatar')->getClientOriginalExtension();
+            $dir = 'images/profile/';
+            $flag = uniqid() . '_' . time() . '.' . $extension;
+            $request->file('profile-settings-avatar')->move($dir, $flag);
+        }
+
+        $dataUser  = array(
+            'nama' => ucwords(strtolower($input['nama'])),
+            'nik' => $input['nik'] ,
+            'jenis_kelamin' => $input['jenis_kelamin'] ,
+            'agama' => $input['agama'] ,
+            'status_perkawinan' => $input['status_perkawinan'] ,
+            'alamat_domisili' => $input['alamat_domisili'] ,
+            'kota_domisili' => $input['kota_domisili'] ,
+            'alamat_ktp' => $input['alamat_ktp'] ,
+            'kota_ktp' => $input['kota_ktp'] ,
+            'tempat_lahir' => $input['tempat_lahir'] ,
+            'tgl_lahir' => date('Y-m-d',strtotime($input['tanggal_lahir'])) ,
+            'no_telp' => $input['no_telp'] ,
+            'email' => $input['email'] ,
+            'foto' => $flag,
+          );
+
+        $userProfil = UserProfil::where('user_id',\Auth::user()->id)->first();
+
+        if(empty($userProfil))
+        {
+            $save_profil = Profil::create($dataUser);
+            $insert = UserProfil::create(['user_id' => \Auth::user()->id,'profil_id' => $save_profil->id]);
+        }
+        else
+        {
+            $insert = Profil::find($id)->update($dataUser);
+        }
+
+            message($insert,'Data berhasil disimpan!','Data gagal disimpan!');
+        } catch (Exception $e) {
+            echo 'Message' .$e->getMessage();
+            DB::rollback();
+        }
+        DB::commit();
+
+        return redirect('/profil');
     }
 
     /**

@@ -137,6 +137,7 @@ Route::prefix('profil')->group(function() {
     Route::get('/', 'ProfilController@index');
     Route::get('/edit/{id}', 'ProfilController@edit');
     Route::match(['get','post'],'/send-data','ProfilController@sendData');
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'profil.update', 'uses' => 'ProfilController@update']);
     Route::match(['get','post'],'/load-data-jenis-kelamin','ProfilController@loadDataJenisKelamin');
     Route::match(['get','post'],'/load-data-agama','ProfilController@loadDataAgama');
     Route::match(['get','post'],'/load-data-status-perkawinan','ProfilController@loadDataStatusPerkawinan');

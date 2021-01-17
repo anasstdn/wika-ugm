@@ -37,8 +37,8 @@
 			<!-- Avatar -->
 			<div class="mb-15">
 				<a class="img-link" href="{{url('profil')}}">
-          @if(isset($foto_profile) && $foto_profile->photo!==null)
-          <img class="rounded2 img-avatar" src="{{asset('images/')}}/profile/{{$foto_profile->photo}}" alt="">
+          @if(isset($data->foto) && $data->foto!==null)
+          <img class="rounded2 img-avatar" src="{{asset('images/')}}/profile/{{$data->foto}}" alt="">
           @else
           <img class="img-avatar img-avatar96 img-avatar-thumb" src="{{asset('codebase/')}}/src/assets/media/avatars/avatar15.jpg" alt="">
           @endif
@@ -49,13 +49,13 @@
 			<!-- Personal -->
 			<h1 class="h3 text-white font-w700 mb-10">
         <?php 
-        $id=\Auth::user()->profile_id!==null?\Auth::user()->profile_id:\Auth::user()->id;
+        $id=$data->id;
          ?>
-				{{isset(\Auth::user()->profile->first_name)?\Auth::user()->profile->first_name:''}}&nbsp{{isset(\Auth::user()->profile->last_name)?\Auth::user()->profile->last_name:''}}
+				{{$data->nama}}
 			</h1>
 			<h2 class="h5 text-white-op">
-				Senior Web Developer&nbsp&nbsp<i class="si si-calendar mb-5"></i> 01 September 2019<br/><br/><a class="btn btn-sm btn-alt-secondary mb-5 px-20" href="{{url('profil/edit/')}}/{{$id}}">
-				<i class="fa fa-pencil"></i> Edit Profile
+				<a class="btn btn-sm btn-alt-secondary mb-5 px-20" href="{{url('profil/edit/')}}/{{$id}}">
+				<i class="fa fa-pencil"></i> Edit Profil
 			</a>
 			</h2>
 			<!-- END Personal -->
@@ -88,82 +88,80 @@
   	<!-- Articles -->
   	<h2 class="content-heading">
   		{{-- <button type="button" class="btn btn-sm btn-rounded btn-alt-secondary float-right">View More..</button> --}}
-  		<i class="si si-note mr-5"></i> Personal Information
+  		<i class="si si-note mr-5"></i> Informasi Pribadi
   	</h2>
   	<div class="form-group row col-md-12">
   		<div class="col-lg-2 text-right">
-  			<span>Employee ID</span>
+  			<span>No KTP</span>
   		</div>
   		<div class="col-lg-6 text-left">
-        <?php 
-        $nip=isset(\Auth::user()->profile->employees[0]->employee_id)?\Auth::user()->profile->employees[0]->employee_id:null;
-        
-        ?>
-  			<span>{{isset($nip) && $nip!==null?explode('/',$nip)[0].' / '.explode('/',$nip)[1].' / '.explode('/',$nip)[2]:''}}</span>
+  			<span>{{$data->nik}}</span>
   		</div>
   	</div>
   	<div class="form-group row col-md-12">
   		<div class="col-lg-2 text-right">
-  			<span>Full Name</span>
+  			<span>Nama Lengkap</span>
   		</div>
   		<div class="col-lg-6 text-left">
-  			<span>{{isset(\Auth::user()->profile->first_name)?\Auth::user()->profile->first_name:''}}&nbsp{{isset(\Auth::user()->profile->last_name)?\Auth::user()->profile->last_name:''}}</span>
-  		</div>
-  	</div>
-  	<div class="form-group row col-md-12">
-  		<div class="col-lg-2 text-right">
-  			<span>ID Card Number</span>
-  		</div>
-  		<div class="col-lg-6 text-left">
-  			<span>{{isset(\Auth::user()->profile->nik)?\Auth::user()->profile->nik:''}}</span>
-  		</div>
-  	</div>
-  	<div class="form-group row col-md-12">
-  		<div class="col-lg-2 text-right">
-  			<span>Place of Birth / DOB</span>
-  		</div>
-  		<div class="col-lg-6 text-left">
-  			<span>{{isset(\Auth::user()->profile->pob)?\Auth::user()->profile->pob:''}}, {{\Auth::user()->profile_id!==null?date_indo(date('Y-m-d',strtotime(\App\Models\Profile::find(\Auth::user()->profile_id)->dob))):''}}</span>
+  			<span>{{$data->nama}}</span>
   		</div>
   	</div>
     <div class="form-group row col-md-12">
       <div class="col-lg-2 text-right">
-        <span>Sex</span>
+        <span>Tempat / Tanggal Lahir</span>
       </div>
       <div class="col-lg-6 text-left">
-        <span>{{isset(\Auth::user()->profile->sex)?\Auth::user()->profile->sex:''}}</span>
-      </div>
-    </div>
-     <div class="form-group row col-md-12">
-      <div class="col-lg-2 text-right">
-        <span>Religion</span>
-      </div>
-      <div class="col-lg-6 text-left">
-        <span>{{isset(\Auth::user()->profile->religion->name)?\Auth::user()->profile->religion->name:''}}</span>
-      </div>
-    </div>
-     <div class="form-group row col-md-12">
-      <div class="col-lg-2 text-right">
-        <span>Blood Group</span>
-      </div>
-      <div class="col-lg-6 text-left">
-        <span>{{isset(\Auth::user()->profile->blood->name)?\Auth::user()->profile->blood->name.''.\Auth::user()->profile->blood->rhesus:''}}</span>
+        <span>{{$data->tempat_lahir}}, {{date_indo(date('Y-m-d',strtotime($data->tgl_lahir)))}}</span>
       </div>
     </div>
   	<div class="form-group row col-md-12">
   		<div class="col-lg-2 text-right">
-  			<span>Contact</span>
+  			<span>Jenis Kelamin</span>
+  		</div>
+  		<div class="col-lg-6 text-left">
+  			<span>{{\App\Models\JenisKelamin::find($data->jenis_kelamin)->jenis_kelamin}}</span>
+  		</div>
+  	</div>
+    <div class="form-group row col-md-12">
+      <div class="col-lg-2 text-right">
+        <span>Agama</span>
+      </div>
+      <div class="col-lg-6 text-left">
+        <span>{{\App\Models\Agama::find($data->agama)->agama}}</span>
+      </div>
+    </div>
+     <div class="form-group row col-md-12">
+      <div class="col-lg-2 text-right">
+        <span>Status Perkawinan</span>
+      </div>
+      <div class="col-lg-6 text-left">
+        <span>{{\App\Models\StatusPerkawinan::find($data->status_perkawinan)->status_perkawinan}}</span>
+      </div>
+    </div>
+    <div class="form-group row col-md-12">
+      <div class="col-lg-2 text-right">
+        <span>Alamat KTP</span>
+      </div>
+      <div class="col-lg-6 text-left">
+        <address>
+          {{ $data->alamat_ktp }}<br>
+          {{ $data->kota_ktp }}
+        </address>
+      </div>
+    </div>
+  	<div class="form-group row col-md-12">
+  		<div class="col-lg-2 text-right">
+  			<span>Alamat Domisili</span>
   		</div>
   		<div class="col-lg-6 text-left">
   			<address>
-  				{{-- <strong>Twitter, Inc.</strong><br> --}}
-  				{{isset(\Auth::user()->profile->address)?\Auth::user()->profile->address:''}}<br>
-  				{{isset(\Auth::user()->profile->province->name)?\Auth::user()->profile->province->name:''}}, {{isset(\Auth::user()->profile->province->country->name)?\Auth::user()->profile->province->country->name:''}}&nbsp{{isset(\Auth::user()->profile->postal_code)?\Auth::user()->profile->postal_code:''}}<br>
-  				<abbr title="Phone">Phone:</abbr> {{isset(\Auth::user()->profile->phone)?\Auth::user()->profile->phone:''}}
+  				{{ $data->alamat_domisili }}<br>
+          {{ $data->kota_domisili }}<br>
   			</address>
   			<address>
+          <abbr title="Phone"><strong>Telepon</strong></abbr><br> {{$data->no_telp}}<br/>
   				<strong>Email</strong><br>
-  				<a href="mailto:#">{{isset(\Auth::user()->profile->email)?\Auth::user()->profile->email:''}}</a>
+  				<a href="mailto:#">{{$data->email}}</a>
   			</address>
   		</div>
   	</div>
