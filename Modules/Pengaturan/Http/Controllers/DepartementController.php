@@ -5,30 +5,30 @@ namespace Modules\Pengaturan\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use App\Models\Material;
+use App\Models\Departement;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-
-class MaterialController extends Controller
+class DepartementController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
+    
     function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:material-list|material-create|material-edit|material-delete', ['only' => ['index','store','getData']]);
-        $this->middleware('permission:material-create', ['only' => ['create','store']]);
-        $this->middleware('permission:material-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:material-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:departement-list|departement-create|departement-edit|departement-delete', ['only' => ['index','store','getData']]);
+        $this->middleware('permission:departement-create', ['only' => ['create','store']]);
+        $this->middleware('permission:departement-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:departement-delete', ['only' => ['destroy']]);
     }
 
     public function index()
     {
-        return view('pengaturan::material.index');
+        return view('pengaturan::departement.index');
     }
 
     /**
@@ -37,8 +37,7 @@ class MaterialController extends Controller
      */
     public function create()
     {
-        $level = 1;
-        return view('pengaturan::material.form',compact('level'));
+        return view('pengaturan::departement.form');
     }
 
     /**
@@ -68,8 +67,8 @@ class MaterialController extends Controller
      */
     public function edit($id)
     {
-        $data = Material::find($id);
-        return view('pengaturan::material.form',compact('data','id'));
+        $data = Departement::find($id);
+        return view('pengaturan::departement.form',compact('data','id'));
     }
 
     /**
@@ -91,7 +90,7 @@ class MaterialController extends Controller
     public function destroy($id)
     {
         //
-        $data = Material::find($id);
+        $data = Departement::find($id);
         $data->delete();
         message($data,'Data berhasil dihapus!','Data gagal dihapus!');
 
@@ -106,21 +105,18 @@ class MaterialController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         $search = $request->has('search') ? $request->get('search') : null;
 
-        $dataList = Material::select('*')
+        $dataList = Departement::select('*')
                     ->where(function($q) use($search){
                         if(!empty($search))
                         {
-                            $q->where('kode_material','LIKE','%'.$search.'%')
-                            ->orWhere('material','LIKE','%'.$search.'%')
-                            ->orWhere('satuan','LIKE','%'.$search.'%');
+                            $q->where('departement','LIKE','%'.$search.'%');
                         }
                     })
                     // ->offset($offset)
                     // ->limit($limit)
-                    ->orderby('kode_material','ASC')
                     ->paginate($limit);
 
-        // $total_all = Supplier::get();
+        // $total_all = Departement::get();
 
         $data = array();
 
@@ -129,16 +125,7 @@ class MaterialController extends Controller
         foreach($dataList as $key => $val)
         {
             $data[$key]['no'] = $no;
-            $data[$key]['material'] = $val->kode_material;
-            $data[$key]['material'] .= "&nbsp;&nbsp;";
-            for($i = 0; $i < $val->level ; $i++)
-            {
-                $data[$key]['material'] .= "&emsp;&emsp;";
-            }
-            $data[$key]['material'] .= $val->material;
-            $data[$key]['spesifikasi'] = $val->spesifikasi;
-            $data[$key]['satuan'] = $val->satuan;
-            $data[$key]['level'] = $val->level;
+            $data[$key]['departement'] = $val->departement;
             if($val->flag_aktif == 'Y')
             {
                 $data[$key]['flag_aktif'] = "<div class='col-md-12'><div class='text-center'><span class='badge badge-primary'>Aktif</span></div></div>";
@@ -148,30 +135,17 @@ class MaterialController extends Controller
                 $data[$key]['flag_aktif'] = "<div class='col-md-12'><div class='text-center'><span class='badge badge-danger'>Nonaktif</span></div></div>";
             }
             
-            $add=url("material/".$val->id)."/add-child";
-            if($val->level !== 1)
-            {
-                $edit=url("material/".$val->id)."/edit-child";
-            }
-            else
-            {
-                $edit=url("material/".$val->id)."/edit";
-            }
-            
-            $delete=url("material/".$val->id)."/delete";
+
+            $edit=url("departement/".$val->id)."/edit";
+            $delete=url("departement/".$val->id)."/delete";
 
             $data[$key]['aksi'] = '';
 
-            if(\Auth::user()->can('material-create'))
+            if(\Auth::user()->can('departement-edit'))
             {
-                $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='#' onclick='show_modal(\"$add\")' class='btn btn-primary btn-sm' data-original-title='Tambah' title='Tambah'><i class='fa fa-plus' aria-hidden='true'></i></a>&nbsp";
+                $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='#' onclick='show_modal(\"$edit\")' class='btn btn-primary btn-sm' data-original-title='Edit' title='Edit'><i class='fa fa-edit' aria-hidden='true'></i></a>&nbsp";
             }
-
-            if(\Auth::user()->can('material-edit'))
-            {
-                $data[$key]['aksi'] .="<a href='#' onclick='show_modal(\"$edit\")' class='btn btn-primary btn-sm' data-original-title='Edit' title='Edit'><i class='fa fa-edit' aria-hidden='true'></i></a>&nbsp";
-            }
-            if(\Auth::user()->can('material-delete'))
+            if(\Auth::user()->can('departement-delete'))
             {
                 $data[$key]['aksi'].="<a href='$delete' onclick='clicked(event)' class='btn btn-danger btn-sm' data-original-title='Hapus' title='Hapus'><i class='fa fa-trash' aria-hidden='true'></i></a></div></div>";
             }
@@ -182,20 +156,11 @@ class MaterialController extends Controller
         return response()->json(array('data' => $data,'total' => $dataList->total()));
     }
 
-    // public function materialSearch(Request $request)
-    // {
-    //     $data = \DB::table('material')
-    //             ->select(\DB::raw('material.id, CONCAT(kode_material,", ",)'));
-    // }
-
     public function sendData(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'kode_material' => 'required',
-            'material' => 'required',
+            'departement' => 'required',
             'flag_aktif' => 'required',
-            'level' => 'required',
-            'parent_status' => 'required',
         ]);
 
         if($validation->passes() == false)
@@ -216,32 +181,19 @@ class MaterialController extends Controller
             {
                 case 'add':
                 $data = array(
-                    'kode_material' => $input['kode_material'],
-                    'material' => $input['material'],
-                    'spesifikasi' => $input['spesifikasi'],
-                    'satuan' => $input['satuan'],
+                    'departement' => $input['departement'],
                     'flag_aktif' => $input['flag_aktif'],
-                    'level' => $input['level'],
-                    'parent_status' => $input['parent_status'],
-                    'parent_id' => $input['parent_id'] !== "null" ?$input['parent_id']:null ,
                 );
 
-                $act = Material::create($data);
+                $act = Departement::create($data);
                 break;
                 case 'edit':
-                $act = Material::find($input['id']);
+                $act = Departement::find($input['id']);
 
                 $data = array(
-                    'kode_material' => $input['kode_material'],
-                    'material' => $input['material'],
-                    'spesifikasi' => $input['spesifikasi'],
-                    'satuan' => $input['satuan'],
+                    'departement' => $input['departement'],
                     'flag_aktif' => $input['flag_aktif'],
-                    'level' => $input['level'],
-                    'parent_status' => $input['parent_status'],
-                    'parent_id' => $input['parent_id'] !== "null" ?$input['parent_id']:null ,
                 );
-
 
                 $act->update($data);
                 break;
@@ -268,22 +220,5 @@ class MaterialController extends Controller
       DB::commit();
 
       return \Response::json($data);
-  }
-
-  public function addChild($id)
-  {
-    $parent_id = $id;
-    $data = Material::find($id);
-    $level = $data->level + 1;
-
-    return view('pengaturan::material.form-child',compact('parent_id','level'));
-  }
-
-  public function editChild($id)
-  {
-    $data = Material::find($id);
-    $parent_id = $data->parent_id;
-
-    return view('pengaturan::material.form-child',compact('data','parent_id'));
   }
 }

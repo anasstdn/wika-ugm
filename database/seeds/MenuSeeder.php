@@ -114,6 +114,22 @@ class MenuSeeder extends Seeder
         $menu->icon = 'si-folder';
         $menu->save();
 
+        $permission = Permission::firstOrNew(array(
+            'name'=>'material-barang-menu',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Material Barang',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'Y',
+        )
+    );
+        $submenu->save();
+
           //create SUBMENU master
         $permission = Permission::firstOrNew(array(
             'name'=>'material-list',
@@ -121,16 +137,16 @@ class MenuSeeder extends Seeder
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
+        $subsubmenu = Menu::firstOrNew(array(
             'name'=>'Material',
-            'parent_id'=>$menu->id,
+            'parent_id'=>$submenu->id,
             'permission_id'=>$permission->id,
-            'ordinal'=>2,
+            'ordinal'=>3,
             'parent_status'=>'N',
             'url'=>'material',
         )
     );
-        $submenu->save();
+        $subsubmenu->save();
 
            //create SUBMENU master
         $permission = Permission::firstOrNew(array(
@@ -139,16 +155,135 @@ class MenuSeeder extends Seeder
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
+        $subsubmenu = Menu::firstOrNew(array(
             'name'=>'Supplier',
-            'parent_id'=>$menu->id,
+            'parent_id'=>$submenu->id,
             'permission_id'=>$permission->id,
-            'ordinal'=>2,
+            'ordinal'=>3,
             'parent_status'=>'N',
             'url'=>'supplier',
         )
     );
+        $subsubmenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'kepegawaian-menu',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Kepegawaian',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'Y',
+        )
+    );
         $submenu->save();
+
+            //create SUBMENU master
+        $permission = Permission::firstOrNew(array(
+            'name'=>'departement-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $subsubmenu = Menu::firstOrNew(array(
+            'name'=>'Departement',
+            'parent_id'=>$submenu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>3,
+            'parent_status'=>'N',
+            'url'=>'departement',
+        )
+    );
+        $subsubmenu->save();
+
+          //create SUBMENU master
+        $permission = Permission::firstOrNew(array(
+            'name'=>'jabatan-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Jabatan',
+            'parent_id'=>$submenu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>3,
+            'parent_status'=>'N',
+            'url'=>'jabatan',
+        )
+    );
+        $submenu->save();
+
+    $permission = Permission::firstOrNew(array(
+            'name'=>'umum-menu',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Umum',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'Y',
+        )
+    );
+        $submenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'agama-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $subsubmenu = Menu::firstOrNew(array(
+            'name'=>'Agama',
+            'parent_id'=>$submenu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>3,
+            'parent_status'=>'N',
+            'url'=>'agama',
+        )
+    );
+        $subsubmenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'status-perkawinan-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $subsubmenu = Menu::firstOrNew(array(
+            'name'=>'Status Perkawinan',
+            'parent_id'=>$submenu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>3,
+            'parent_status'=>'N',
+            'url'=>'status-perkawinan',
+        )
+    );
+        $subsubmenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'jenis-kelamin-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $subsubmenu = Menu::firstOrNew(array(
+            'name'=>'Jenis Kelamin',
+            'parent_id'=>$submenu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>3,
+            'parent_status'=>'N',
+            'url'=>'jenis-kelamin',
+        )
+    );
+        $subsubmenu->save();
     }
 }
 

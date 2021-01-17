@@ -4,42 +4,42 @@
             {{ csrf_field() }}
             <div class="block block-themed block-transparent mb-0">
                 <div class="block-header bg-primary-dark">
-                    <h3 class="block-title">{{isset($data) && $data->exists()? 'Edit': 'Tambah'}} Supplier</h3>
+                    <h3 class="block-title">{{isset($data) && $data->exists()? 'Edit': 'Tambah'}} Material</h3>
                     <div class="block-options">
                         <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                             <i class="si si-close"></i>
                         </button>
                     </div>
                 </div>
-                <input type="hidden" id="mode" name="mode" value="add">
-                <input type="hidden" id="id" name="id" value="">
+                <input type="hidden" id="mode" name="mode" value="{{isset($data) && $data->exists()?'edit':'add'}}">
+                <input type="hidden" id="id" name="id" value="{{isset($data) && $data->exists()?$data->id:''}}">
                 <input type="hidden" name="parent_id" id="parent_id" value="{{$parent_id}}">
                 <div class="block-content">
                     <div class="form-group row" style="margin-bottom: 1.429rem;">
                         <label class="col-form-label col-md-3">Kode Material</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control form-control-sm" id="kode_material" name="kode_material" value="">
+                            <input type="text" class="form-control form-control-sm" id="kode_material" name="kode_material" value="{{ isset($data) && !empty($data->kode_material) ?$data->kode_material:'' }}">
                             <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group row" style="margin-bottom: 1.429rem;">
                         <label class="col-form-label col-md-3">Nama Material</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control form-control-sm" id="material" name="material" value="">
+                            <input type="text" class="form-control form-control-sm" id="material" name="material" value="{{ isset($data) && !empty($data->material) ?$data->material:'' }}">
                             <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group row" style="margin-bottom: 1.429rem;">
                         <label class="col-form-label col-md-3">Spesifikasi</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control form-control-sm" id="spesifikasi" name="spesifikasi" value="">
+                            <input type="text" class="form-control form-control-sm" id="spesifikasi" name="spesifikasi" value="{{ isset($data) && !empty($data->spesifikasi) ?$data->spesifikasi:'' }}">
                             <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="form-group row" style="margin-bottom: 1.429rem;">
                         <label class="col-form-label col-md-3">Satuan</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control form-control-sm" id="satuan" name="satuan" value="">
+                            <input type="text" class="form-control form-control-sm" id="satuan" name="satuan" value="{{ isset($data) && !empty($data->satuan) ?$data->satuan:'' }}">
                             <span class="help-block"></span>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                     <div class="form-group row" style="margin-bottom: 1.429rem;">
                         <label class="col-form-label col-md-3">Level</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control form-control-sm" id="level" name="level" value="{{ isset($data) && !empty($data->level) ? ($data->level + 1):'' }}">
+                            <input type="text" class="form-control form-control-sm" id="level" name="level" value="{{ isset($data->level)?$data->level:$level }}" readonly="">
                             <span class="help-block"></span>
                         </div>
                     </div>

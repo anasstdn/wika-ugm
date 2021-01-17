@@ -24,7 +24,7 @@ class CreateMaterialTable extends Migration
             $table->string('parent_status', 1)->default('N')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
-            $table->foreign('parent_id')->references('id')->on('material');
+            $table->foreign('parent_id')->references('id')->on('material')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

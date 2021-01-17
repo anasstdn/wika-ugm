@@ -69,10 +69,33 @@ Route::prefix('material')->group(function() {
     Route::match(['get', 'post'],'/get-data','MaterialController@getData');
     Route::get('/create',['as' => 'material.create', 'uses' => 'MaterialController@create']);
     Route::get('/{id}/add-child', 'MaterialController@addChild');
+    Route::get('/{id}/edit-child', 'MaterialController@editChild');
     Route::match(['get','post'],'/material-search','MaterialController@materialSearch');
     Route::match(['get','post'],'/store',['as' => 'material.store', 'uses' => 'MaterialController@store']);
     Route::match(['get','post','put'],'/update/{id}',['as' => 'material.update', 'uses' => 'MaterialController@update']);
     Route::match(['get', 'post'],'/{id}/edit','MaterialController@edit');
     Route::match(['get','post'],'/send-data','MaterialController@sendData');
     Route::get('/{id}/delete', 'MaterialController@destroy');
+});
+
+Route::prefix('departement')->group(function() {
+    Route::get('/', 'DepartementController@index');
+    Route::match(['get', 'post'],'/get-data','DepartementController@getData');
+    Route::get('/create',['as' => 'departement.create', 'uses' => 'DepartementController@create']);
+    Route::match(['get','post'],'/store',['as' => 'departement.store', 'uses' => 'DepartementController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'departement.update', 'uses' => 'DepartementController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','DepartementController@edit');
+    Route::match(['get','post'],'/send-data','DepartementController@sendData');
+    Route::get('/{id}/delete', 'DepartementController@destroy');
+});
+
+Route::prefix('jabatan')->group(function() {
+    Route::get('/', 'JabatanController@index');
+    Route::match(['get', 'post'],'/get-data','JabatanController@getData');
+    Route::get('/create',['as' => 'jabatan.create', 'uses' => 'JabatanController@create']);
+    Route::match(['get','post'],'/store',['as' => 'jabatan.store', 'uses' => 'JabatanController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'jabatan.update', 'uses' => 'JabatanController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','JabatanController@edit');
+    Route::match(['get','post'],'/send-data','JabatanController@sendData');
+    Route::get('/{id}/delete', 'JabatanController@destroy');
 });
