@@ -36,7 +36,6 @@ class ProfilController extends Controller
     public function index()
     {
         $cek_data_exists = \DB::select('SELECT * FROM user_profil WHERE user_id ="'.\Auth::user()->id.'" LIMIT 1');
-        // dd($cek_data_exists);
 
         if(isset($cek_data_exists) && !empty($cek_data_exists))
         {
@@ -89,9 +88,9 @@ class ProfilController extends Controller
     public function edit($id)
     {
         $id_profil = null;
+        $profile = null;
 
         $cek_data_exists = \DB::select('SELECT * FROM user_profil WHERE user_id ="'.\Auth::user()->id.'" LIMIT 1');
-        // dd($cek_data_exists);
 
         if(isset($cek_data_exists) && !empty($cek_data_exists))
         {
