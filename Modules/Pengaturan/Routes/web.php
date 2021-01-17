@@ -99,3 +99,45 @@ Route::prefix('jabatan')->group(function() {
     Route::match(['get','post'],'/send-data','JabatanController@sendData');
     Route::get('/{id}/delete', 'JabatanController@destroy');
 });
+
+Route::prefix('agama')->group(function() {
+    Route::get('/', 'AgamaController@index');
+    Route::match(['get', 'post'],'/get-data','AgamaController@getData');
+    Route::get('/create',['as' => 'agama.create', 'uses' => 'AgamaController@create']);
+    Route::match(['get','post'],'/store',['as' => 'agama.store', 'uses' => 'AgamaController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'agama.update', 'uses' => 'AgamaController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','AgamaController@edit');
+    Route::match(['get','post'],'/send-data','AgamaController@sendData');
+    Route::get('/{id}/delete', 'AgamaController@destroy');
+});
+
+Route::prefix('jenis-kelamin')->group(function() {
+    Route::get('/', 'JenisKelaminController@index');
+    Route::match(['get', 'post'],'/get-data','JenisKelaminController@getData');
+    Route::get('/create',['as' => 'jenis-kelamin.create', 'uses' => 'JenisKelaminController@create']);
+    Route::match(['get','post'],'/store',['as' => 'jenis-kelamin.store', 'uses' => 'JenisKelaminController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'jenis-kelamin.update', 'uses' => 'JenisKelaminController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','JenisKelaminController@edit');
+    Route::match(['get','post'],'/send-data','JenisKelaminController@sendData');
+    Route::get('/{id}/delete', 'JenisKelaminController@destroy');
+});
+
+Route::prefix('status-perkawinan')->group(function() {
+    Route::get('/', 'StatusPerkawinanController@index');
+    Route::match(['get', 'post'],'/get-data','StatusPerkawinanController@getData');
+    Route::get('/create',['as' => 'status-perkawinan.create', 'uses' => 'StatusPerkawinanController@create']);
+    Route::match(['get','post'],'/store',['as' => 'status-perkawinan.store', 'uses' => 'StatusPerkawinanController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'status-perkawinan.update', 'uses' => 'StatusPerkawinanController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','StatusPerkawinanController@edit');
+    Route::match(['get','post'],'/send-data','StatusPerkawinanController@sendData');
+    Route::get('/{id}/delete', 'StatusPerkawinanController@destroy');
+});
+
+Route::prefix('profil')->group(function() {
+    Route::get('/', 'ProfilController@index');
+    Route::get('/edit/{id}', 'ProfilController@edit');
+    Route::match(['get','post'],'/send-data','ProfilController@sendData');
+    Route::match(['get','post'],'/load-data-jenis-kelamin','ProfilController@loadDataJenisKelamin');
+    Route::match(['get','post'],'/load-data-agama','ProfilController@loadDataAgama');
+    Route::match(['get','post'],'/load-data-status-perkawinan','ProfilController@loadDataStatusPerkawinan');
+});
