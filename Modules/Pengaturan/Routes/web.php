@@ -142,3 +142,18 @@ Route::prefix('profil')->group(function() {
     Route::match(['get','post'],'/load-data-agama','ProfilController@loadDataAgama');
     Route::match(['get','post'],'/load-data-status-perkawinan','ProfilController@loadDataStatusPerkawinan');
 });
+
+Route::prefix('pegawai')->group(function() {
+    Route::get('/', 'PegawaiController@index');
+    Route::match(['get', 'post'],'/get-data','PegawaiController@getData');
+    Route::get('/create',['as' => 'pegawai.create', 'uses' => 'PegawaiController@create']);
+    Route::get('/profil-search','PegawaiController@profilSearch');
+    Route::match(['get','post'],'/load-data-jabatan','PegawaiController@loadDataJabatan');
+    Route::match(['get','post'],'/load-data-departement','PegawaiController@loadDataDepartement');
+    Route::match(['get','post'],'/load-profil','PegawaiController@loadProfil');
+    Route::match(['get','post'],'/store',['as' => 'pegawai.store', 'uses' => 'PegawaiController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'pegawai.update', 'uses' => 'PegawaiController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','PegawaiController@edit');
+    Route::match(['get','post'],'/send-data','PegawaiController@sendData');
+    Route::get('/{id}/delete', 'PegawaiController@destroy');
+});

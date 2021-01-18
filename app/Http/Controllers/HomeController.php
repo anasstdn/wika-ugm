@@ -27,9 +27,18 @@ class HomeController extends Controller
 
         if(isset(\Auth::user()->roles[0]->id) && !in_array(\Auth::user()->roles[0]->id, $config_admin))
         {
-            $id=\Auth::user()->profile_id!==null?\Auth::user()->profile_id:\Auth::user()->id;
-            message(false,'','Silahkan lengkapi dahulu profil anda sebelum melanjutkan.');
-            return redirect('profil/edit/'.$id);
+            $cek_data_exists = \DB::select('SELECT * FROM user_profil WHERE user_id ="'.\Auth::user()->id.'" LIMIT 1');
+
+            if(isset($cek_data_exists) && !empty($cek_data_exists))
+            {
+                return view('home');
+            }
+            else
+            {
+                $id=\Auth::user()->id;
+                message(false,'','Silahkan lengkapi dahulu profil anda sebelum melanjutkan.');
+                return redirect('profil/edit/'.$id);
+            }
         }
         return view('home');
     }

@@ -207,7 +207,7 @@ class MenuSeeder extends Seeder
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
+        $subsubmenu = Menu::firstOrNew(array(
             'name'=>'Jabatan',
             'parent_id'=>$submenu->id,
             'permission_id'=>$permission->id,
@@ -216,7 +216,25 @@ class MenuSeeder extends Seeder
             'url'=>'jabatan',
         )
     );
-        $submenu->save();
+        $subsubmenu->save();
+
+            //create SUBMENU master
+        $permission = Permission::firstOrNew(array(
+            'name'=>'pegawai-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $subsubmenu = Menu::firstOrNew(array(
+            'name'=>'Data Pegawai',
+            'parent_id'=>$submenu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>3,
+            'parent_status'=>'N',
+            'url'=>'pegawai',
+        )
+    );
+        $subsubmenu->save();
 
     $permission = Permission::firstOrNew(array(
             'name'=>'umum-menu',

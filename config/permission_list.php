@@ -35,6 +35,10 @@ return [
 					'jabatan-create',
 					'jabatan-edit',
 					'jabatan-delete',
+					'pegawai-list',
+					'pegawai-create',
+					'pegawai-edit',
+					'pegawai-delete',
 				'umum-menu',
 					'agama-list',
 					'agama-create',
@@ -80,6 +84,10 @@ return [
 					'jabatan-create',
 					'jabatan-edit',
 					'jabatan-delete',
+					'pegawai-list',
+					'pegawai-create',
+					'pegawai-edit',
+					'pegawai-delete',
 				'umum-menu',
 					'agama-list',
 					'agama-create',
@@ -101,6 +109,27 @@ return [
 		],
 
 		'pelaksana' => [
+			'profil-list',
+			'profil-create',
+			'profil-edit',
+			'profil-delete',
+		],
+
+		'site_manager' => [
+			'profil-list',
+			'profil-create',
+			'profil-edit',
+			'profil-delete',
+		],
+
+		'project_manager' => [
+			'profil-list',
+			'profil-create',
+			'profil-edit',
+			'profil-delete',
+		],
+
+		'komersial' => [
 			'profil-list',
 			'profil-create',
 			'profil-edit',
