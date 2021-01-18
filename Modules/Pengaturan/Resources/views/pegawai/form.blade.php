@@ -42,9 +42,9 @@
 						<div class="form-group col-4">
 							<label for="wizard-progress-nama-belakang">Pencarian Pegawai</label>
 							<select class="form-control select2" id="profil_id" name="profil_id">
-								{{-- @if($kecamatan->exists && !empty($kecamatan->id_kabupaten))
-								<option value="{{ $kabupaten->id }}">{{ $kabupaten->kabupaten }}, {{ $kabupaten->provinsi->provinsi }}</option>
-								@endif --}}
+								@if(isset($data->profil_id) && !empty($data->profil_id))
+								<option value="{{ $data->profil_id }}">{{ $data->profil->nama }}</option>
+								@endif
 							</select>
 						</div>
 					</div>
@@ -85,7 +85,7 @@
 					<div class="form-row">
 						<div class="form-group col-4">
 							<label for="wizard-progress-nama-depan">NIP</label>
-							<input class="form-control form-control-sm" type="text" id="nip" name="nip">
+							<input class="form-control form-control-sm" type="text" id="nip" name="nip" value="{{ isset($data->nip) && !empty($data->nip)?$data->nip:'' }}">
 						</div>
 						<div class="form-group col-4">
 							<label for="wizard-progress-nama-depan">Jabatan</label>
@@ -101,18 +101,18 @@
 					<div class="form-row">
 						<div class="form-group col-4">
 							<label for="wizard-progress-nama-depan">Tanggal Bergabung</label>
-							<input class="form-control form-control-sm datepicker" type="text" id="tgl_bergabung" name="tgl_bergabung">
+							<input class="form-control form-control-sm datepicker" type="text" id="tgl_bergabung" name="tgl_bergabung" value="{{ isset($data->tgl_bergabung) && !empty($data->tgl_bergabung)?date('d-m-Y',strtotime($data->tgl_bergabung)):'' }}">
 						</div>
 						<div class="form-group col-4">
 							<label for="wizard-progress-nama-depan">Status Resign</label>
 							<select class="select form-control form-control-sm" name="status_resign" id="status_resign" style="width: 100%;" data-placeholder="">
-								<option value="Y">Ya</option>
-								<option value="N" selected="">Tidak</option>
+								<option value="Y" {{ isset($data->status_resign) && !empty($data->status_resign)?$data->status_resign == 'Y'?'selected':'' :'' }}>Ya</option>
+								<option value="N" {{ isset($data->status_resign) && !empty($data->status_resign)?$data->status_resign == 'N'?'selected':'' :'selected' }}>Tidak</option>
 							</select>
 						</div>
 						<div class="form-group col-4 resign" style="display: none">
 							<label for="wizard-progress-nama-depan">Tanggal Resign</label>
-							<input class="form-control form-control-sm datepicker" type="text" id="tgl_resign" name="tgl_resign">
+							<input class="form-control form-control-sm datepicker" type="text" id="tgl_resign" name="tgl_resign" value="{{ isset($data->tgl_resign) && !empty($data->tgl_resign)?date('d-m-Y',strtotime($data->tgl_resign)):'' }}">
 						</div>
 					</div>
 					<div class="form-group row" style="margin-top: 2em">
@@ -131,8 +131,18 @@
 
 @push('js')
 <script type="text/javascript">
+	var jabatan_id = "{{ isset($data->jabatan_id) && !empty($data->jabatan_id)?$data->jabatan_id:null }}";
+	var departement_id = "{{ isset($data->departement_id) && !empty($data->departement_id)?$data->departement_id:null }}";
 	const load_autocomplete_data = async() => {
 		tgl_resign();
+
+		if($('#profil_id').val() !== '')
+		{
+			var profil_id = $('#profil_id').val();
+			var formData = new FormData();
+			formData.append('profil_id', profil_id);
+			load_data_pegawai('{{ url('pegawai/load-profil') }}','POST',formData);
+		}
 
 		$('#status_resign').on('change',function(e){
 			tgl_resign();
@@ -154,6 +164,7 @@
 			formData.append('profil_id', profil_id);
 			load_data_pegawai('{{ url('pegawai/load-profil') }}','POST',formData);
 		});
+
 
 		load_data_jabatan = await load_data_ajax('{{ url('pegawai/load-data-jabatan') }}','POST').then(function(result) {
 			insert_into_select_opt(result,'#jabatan_id','id','jabatan');
@@ -263,10 +274,6 @@
 			autoclose: true
 		});
 
-		load_autocomplete_data().then((e) => {
-			// console.log('aaaaa');
-		}).catch(e => console.log(e));
-
 		$.validator.addMethod("validDate", function(value, element) {
 			return this.optional(element) || moment(value,"DD-MM-YYYY").isValid();
 		}, "Format tanggal yang diperbolehkan, exp: DD-MM-YYYY");
@@ -340,6 +347,33 @@
 		$(".datepicker").on("change", function (e) {  
 			$(this).valid(); 
 		});
+
+		$('#status_resign').on('change',function(){
+			if($('#status_resign').val() == 'Y')
+			{
+				$('#tgl_resign').rules('add', {
+					required: true,
+					validDate:true,
+				});
+			}
+			else
+			{
+				$('#tgl_resign').rules('remove');
+			}
+		})
+
+		load_autocomplete_data().then((e) => {
+			console.log('aaaaa');
+			if(jabatan_id !== null)
+			{
+				$('#jabatan_id').val(jabatan_id).trigger('change');
+			}
+			if(departement_id !== null)
+			{
+				$('#departement_id').val(departement_id).trigger('change');
+			}
+		}).catch(e => console.log(e));
+
 	})
 </script>
 @endpush

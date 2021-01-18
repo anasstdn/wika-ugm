@@ -112,7 +112,8 @@ class PegawaiController extends Controller
      */
     public function edit($id)
     {
-        return view('pengaturan::pegawai.form');
+        $data = Pegawai::find($id);
+        return view('pengaturan::pegawai.form',compact('data','id'));
     }
 
     /**
@@ -124,6 +125,47 @@ class PegawaiController extends Controller
     public function update(Request $request, $id)
     {
         //
+        Validator::make($request->all(), [
+            'profil_id' => 'required',
+            'nip' => 'required',
+            'jabatan_id' => 'required',
+            'departement_id' => 'required',
+            'tgl_bergabung' => 'required',
+            'status_resign' => 'required',
+        ]);
+
+        $input = $request->all();
+
+        DB::beginTransaction();
+        try {
+            $tgl_resign = null;
+            if($input['status_resign'] == 'Y')
+            {
+                $tgl_resign = date('Y-m-d',strtotime($input['tgl_resign']));
+            }
+
+            $data = array(
+                'profil_id' => $input['profil_id'],
+                'nip' => $input['nip'],
+                'jabatan_id' => $input['jabatan_id'],
+                'departement_id' => $input['departement_id'],
+                'tgl_bergabung' => date('Y-m-d',strtotime($input['tgl_bergabung'])),
+                'status_resign' => $input['status_resign'],
+                'tgl_resign' => $tgl_resign,
+                'user_update' => \Auth::user()->id, 
+            );
+
+            $insert = Pegawai::find($id)->update($data);
+
+            message($insert,'Data berhasil disimpan!','Data gagal disimpan!');
+
+        } catch (Exception $e) {
+            echo 'Message' .$e->getMessage();
+            DB::rollback();
+        }
+        DB::commit();
+
+        return redirect('/pegawai');
     }
 
     /**
@@ -203,7 +245,7 @@ class PegawaiController extends Controller
 
             if(\Auth::user()->can('pegawai-edit'))
             {
-                $data[$key]['aksi'] .="<a href='#' onclick='show_modal(\"$edit\")' class='btn btn-primary btn-sm' data-original-title='Edit' title='Edit'><i class='fa fa-edit' aria-hidden='true'></i></a>&nbsp";
+                $data[$key]['aksi'] .="<a href='$edit' class='btn btn-primary btn-sm' data-original-title='Edit' title='Edit'><i class='fa fa-edit' aria-hidden='true'></i></a>&nbsp";
             }
 
             // if(\Auth::user()->can('material-delete'))

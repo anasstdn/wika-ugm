@@ -21,6 +21,7 @@ class MenuSeeder extends Seeder
         $this->menuAcl();
         // $this->menuPengaturan();
         $this->menuMasterdata();
+        $this->menuSpm();
         // $this->menuTransaksiKas();
         // $this->menuSimpanan();
         // $this->menuPinjaman();
@@ -302,6 +303,41 @@ class MenuSeeder extends Seeder
         )
     );
         $subsubmenu->save();
+    }
+
+    private function menuSpm()
+    {
+        $this->command->info('Menu SPM Seeder');
+        $permission = Permission::firstOrNew(array(
+            'name'=>'spm-menu'
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+        $menu = Menu::firstOrNew(array(
+            'name'=>'SPM',
+            'permission_id'=>$permission->id,
+            'ordinal'=>1,
+            'parent_status'=>'Y'
+        ));
+        $menu->icon = 'si-briefcase';
+        $menu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'spm-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Pengajuan SPM',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'N',
+            'url' => 'spm'
+        )
+    );
+        $submenu->save();
     }
 }
 

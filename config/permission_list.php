@@ -52,6 +52,11 @@ return [
 					'jenis-kelamin-create',
 					'jenis-kelamin-edit',
 					'jenis-kelamin-delete',
+			'spm-menu',
+				'spm-list',
+				'spm-create',
+				'spm-edit',
+				'spm-delete',
 
 			'profil-list',
 			'profil-create',
@@ -101,6 +106,11 @@ return [
 					'jenis-kelamin-create',
 					'jenis-kelamin-edit',
 					'jenis-kelamin-delete',
+			'spm-menu',
+				'spm-list',
+				'spm-create',
+				'spm-edit',
+				'spm-delete',
 
 			'profil-list',
 			'profil-create',
@@ -109,6 +119,12 @@ return [
 		],
 
 		'pelaksana' => [
+			'spm-menu',
+				'spm-list',
+				'spm-create',
+				'spm-edit',
+				'spm-delete',
+				
 			'profil-list',
 			'profil-create',
 			'profil-edit',
