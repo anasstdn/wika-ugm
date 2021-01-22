@@ -21,8 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $keterangan
  * @property int|null $user_input
  * @property int|null $user_update
- * @property bool|null $flag_lihat
- * @property Carbon|null $tgl_lihat
+ * @property string|null $flag_verif_site_manager
+ * @property int|null $user_verif_site_manager
+ * @property Carbon|null $tgl_verif_site_manager
  * @property string|null $flag_verif_komersial
  * @property int|null $user_verif_komersial
  * @property Carbon|null $tgl_verif_komersial
@@ -44,14 +45,14 @@ class Spm extends Model
 	protected $casts = [
 		'user_input' => 'int',
 		'user_update' => 'int',
-		'flag_lihat' => 'bool',
+		'user_verif_site_manager' => 'int',
 		'user_verif_komersial' => 'int',
 		'user_verif_pm' => 'int'
 	];
 
 	protected $dates = [
 		'tgl_spm',
-		'tgl_lihat',
+		'tgl_verif_site_manager',
 		'tgl_verif_komersial',
 		'tgl_verif_pm'
 	];
@@ -64,8 +65,9 @@ class Spm extends Model
 		'keterangan',
 		'user_input',
 		'user_update',
-		'flag_lihat',
-		'tgl_lihat',
+		'flag_verif_site_manager',
+		'user_verif_site_manager',
+		'tgl_verif_site_manager',
 		'flag_verif_komersial',
 		'user_verif_komersial',
 		'tgl_verif_komersial',
@@ -76,7 +78,7 @@ class Spm extends Model
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'user_verif_pm');
+		return $this->belongsTo(User::class, 'user_verif_site_manager');
 	}
 
 	public function detail_spms()

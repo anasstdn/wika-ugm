@@ -103,6 +103,91 @@
             </div>
           </div>
         </div>
+
+           <div class="block block-themed">
+              <div class="block-header bg-success">
+                <h3 class="block-title">Pengajuan SPM Diterima</h3>
+                <div class="block-options">
+                  <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                    <i class="si si-refresh"></i>
+                  </button>
+                  <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+                </div>
+              </div>
+            {{-- <div class="block-header block-header-default">
+                <h3 class="block-title">Pegawai</h3>
+              </div> --}}
+              <div class="block-content block-content-full">
+               <div class="table-responsive">
+                <table 
+                data-toggle="table"
+                data-ajax="ajaxRequestDiterima"
+                data-search="false"
+                data-side-pagination="server"
+                data-pagination="true"
+                data-page-list="[5,10, 25, 50, 100, 200, All]"
+                data-show-fullscreen="true"
+                data-show-extended-pagination="true"
+                class="table table-bordered table-striped table-vcenter" 
+                id="table-diterima"
+                >
+                <thead>
+                  <tr>
+                    <th data-field="no">No</th>
+                    <th data-field="no_spm">Nomor SPM</th>
+                    <th data-field="tgl_spm">Tanggal Pengajuan</th>
+                    <th data-field="nama_pemohon">Pemohon</th>
+                    <th data-field="lokasi">Lokasi</th>
+                    <th data-field="aksi">Aksi</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="block block-themed">
+              <div class="block-header bg-danger">
+                <h3 class="block-title">Pengajuan SPM Ditolak</h3>
+                <div class="block-options">
+                  <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                    <i class="si si-refresh"></i>
+                  </button>
+                  <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+                </div>
+              </div>
+            {{-- <div class="block-header block-header-default">
+                <h3 class="block-title">Pegawai</h3>
+              </div> --}}
+              <div class="block-content block-content-full">
+               <div class="table-responsive">
+                <table 
+                data-toggle="table"
+                data-ajax="ajaxRequestDitolak"
+                data-search="false"
+                data-side-pagination="server"
+                data-pagination="true"
+                data-page-list="[5,10, 25, 50, 100, 200, All]"
+                data-show-fullscreen="true"
+                data-show-extended-pagination="true"
+                class="table table-bordered table-striped table-vcenter" 
+                id="table-ditolak"
+                >
+                <thead>
+                  <tr>
+                    <th data-field="no">No</th>
+                    <th data-field="no_spm">Nomor SPM</th>
+                    <th data-field="tgl_spm">Tanggal Pengajuan</th>
+                    <th data-field="nama_pemohon">Pemohon</th>
+                    <th data-field="lokasi">Lokasi</th>
+                    <th data-field="aksi">Aksi</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      
       </div>
     </div>
 
@@ -130,6 +215,70 @@
         $.ajax({
           type: "POST",
           url: "{{ url('spm/get-data') }}",
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          data: formData,
+          dataType: "json",
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+            params.success({
+              "rows": data.data,
+              "total": data.total
+            })
+          },
+          error: function (er) {
+            params.error(er);
+          }
+        });
+      }
+
+      function ajaxRequestDiterima(params) {
+        var formData = new FormData();
+        formData.append('limit', params.data.limit);
+        formData.append('offset', params.data.offset);
+        formData.append('order', params.data.order);
+        formData.append('search', params.data.search);
+        formData.append('sort', params.data.sort);
+        formData.append('nama', $('#nama').val());
+
+        $.ajax({
+          type: "POST",
+          url: "{{ url('spm/get-data-diterima') }}",
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          data: formData,
+          dataType: "json",
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+            params.success({
+              "rows": data.data,
+              "total": data.total
+            })
+          },
+          error: function (er) {
+            params.error(er);
+          }
+        });
+      }
+
+      function ajaxRequestDitolak(params) {
+        var formData = new FormData();
+        formData.append('limit', params.data.limit);
+        formData.append('offset', params.data.offset);
+        formData.append('order', params.data.order);
+        formData.append('search', params.data.search);
+        formData.append('sort', params.data.sort);
+        formData.append('nama', $('#nama').val());
+
+        $.ajax({
+          type: "POST",
+          url: "{{ url('spm/get-data-ditolak') }}",
           headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           },
@@ -207,6 +356,8 @@
 
       $('#cari').click(function(){
         $('#table').bootstrapTable('refresh')
+        $('#table-diterima').bootstrapTable('refresh');
+        $('#table-ditolak').bootstrapTable('refresh');
       });
 
       $('#reset').click(function(){
@@ -214,6 +365,8 @@
         $('#departement_id').val('').trigger('change');
         $('#jabatan_id').val('').trigger('change');
         $('#table').bootstrapTable('refresh');   
+        $('#table-diterima').bootstrapTable('refresh');
+        $('#table-ditolak').bootstrapTable('refresh');
       });
     })
   </script>

@@ -18,6 +18,8 @@ Route::prefix('transaksi')->group(function() {
 Route::prefix('spm')->group(function() {
     Route::get('/', 'SPMController@index');
     Route::match(['get', 'post'],'/get-data','SPMController@getData');
+    Route::match(['get', 'post'],'/get-data-diterima','SPMController@getDataDiterima');
+    Route::match(['get', 'post'],'/get-data-ditolak','SPMController@getDataDitolak');
     Route::get('/create',['as' => 'spm.create', 'uses' => 'SPMController@create']);
     Route::match(['get', 'post'],'/material-search','SPMController@searchMaterial');
     Route::match(['get','post'],'/store',['as' => 'spm.store', 'uses' => 'SPMController@store']);
@@ -25,5 +27,7 @@ Route::prefix('spm')->group(function() {
     Route::match(['get', 'post'],'/{id}/edit','SPMController@edit');
     Route::match(['get', 'post'],'/{id}/view','SPMController@show');
     Route::match(['get','post'],'/send-data','SPMController@sendData');
-    Route::get('/{id}/delete', 'SPMController@destroy');
+    Route::match(['get','post'],'/load-data-material','SPMController@loadDataMaterial');
+    Route::get('/delete-detail-spm', 'SPMController@deleteDetailSpm');
+    Route::get('/{id}/batal', 'SPMController@batal');
 });

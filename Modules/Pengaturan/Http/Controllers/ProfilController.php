@@ -103,7 +103,13 @@ class ProfilController extends Controller
             $id_profil = $id;
         }
 
-        return view('pengaturan::profil.form',compact('id_profil','profile'));
+        $material = \DB::table('material')
+                    ->where('parent_status','N')
+                    ->where('flag_aktif','Y')
+                    ->orderby('kode_material','ASC')
+                    ->get();
+
+        return view('pengaturan::profil.form',compact('id_profil','profile','material'));
     }
 
     /**

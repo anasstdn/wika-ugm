@@ -18,7 +18,7 @@
 <div class="content">
 	<div class="block block-themed">
 		<div class="block-header bg-info">
-			<h3 class="block-title"><i class="fa fa-user-circle mr-5 text-muted"></i> Informasi Pribadi</h3>
+			<h3 class="block-title"><i class="fa fa-user-circle mr-5 text-muted"></i> Pengajuan Surat Pengadaan Material</h3>
 			<div class="block-options">
 				<button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
 					<i class="si si-refresh"></i>
@@ -28,6 +28,7 @@
 		</div>
 		<div class="block-content">
 			<div class="row items-push">
+
 
 				<div class="col-lg-12">
 					<!-- Progress Wizard -->
@@ -184,7 +185,7 @@
 					},
 				});
 
-				if($(this).attr('id') == 'keterangan')
+				if($(this).attr('id') == 'keterangan_spm')
 				{
 					$(this).rules('add', {
 						required: false,
@@ -231,12 +232,6 @@
 		$(function(){
 			initWizardDefaults();
 			initWizardSimple();
-
-
-			$(".select2").select2({
-				dropdownParent: $("#form"),
-				width: '100%'
-			});
 
 			$('.datepicker').datepicker({
 				format: "dd-mm-yyyy",

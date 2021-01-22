@@ -47,40 +47,35 @@
 				<div class="form-row">
 					<div class="form-group col-3">
 						<label for="wizard-progress-nama-depan">Mengetahui Site Manager</label>
-						@if(isset($data->flag_lihat))
-						@if($data->flag_lihat == true)
-						<span class="badge badge-success">Terkonfirmasi</span>
+						<br/>
+						@if($data->flag_verif_site_manager == 'Y')
+						<span class="badge badge-success">Disetujui</span>
+						@elseif($data->flag_verif_site_manager == 'N')
+						<span class="badge badge-danger">Ditolak</span>
 						@else
-						<span class="badge badge-danger">Menunggu Konfirmasi</span>
-						@endif
+						<span class="badge badge-danger">Menunggu Verifikasi</span>
 						@endif
 					</div>
 					<div class="form-group col-3">
 						<label for="wizard-progress-nama-depan">Verifikasi Projek Manager</label>
-						@if(isset($data->flag_lihat))
-						@if($data->flag_lihat == true)
+						<br/>
 						@if($data->flag_verif_pm == 'Y')
 						<span class="badge badge-success">Disetujui</span>
-						@else
+						@elseif($data->flag_verif_pm == 'N')
 						<span class="badge badge-danger">Ditolak</span>
-						@endif
 						@else
-						<span class="badge badge-danger">Menunggu Konfirmasi Site Manager</span>
-						@endif
+						<span class="badge badge-danger">Menunggu Verifikasi</span>
 						@endif
 					</div>
 					<div class="form-group col-3">
 						<label for="wizard-progress-nama-depan">Verifikasi Komersil</label>
-						@if(isset($data->flag_lihat))
-						@if($data->flag_lihat == true)
+						<br/>
 						@if($data->flag_verif_komersial == 'Y')
 						<span class="badge badge-success">Disetujui</span>
-						@else
+						@elseif($data->flag_verif_komersial == 'N')
 						<span class="badge badge-danger">Ditolak</span>
-						@endif
 						@else
-						<span class="badge badge-danger">Menunggu Konfirmasi Site Manager</span>
-						@endif
+						<span class="badge badge-danger">Menunggu Verifikasi</span>
 						@endif
 					</div>
 					<div class="form-group col-3">
@@ -102,24 +97,56 @@
 						@endphp
 						<input class="form-control form-control-sm" type="text" id="nama" value="{{$nama}}" readonly="">
 					</div>
-			</div>
-			<hr/>
-			<div class="table-responsive">
-				<table class="table-sm thead-light" width="100%">
-					<thead>
-						<tr>
-							<th>No</th>
-							<th>Jenis Material</th>
-							<th>Spesifikasi</th>
-							<th>Jumlah</th>
-							<th>Satuan</th>
-							<th>Digunakan Tanggal</th>
-							<th>Keterangan</th>
-						</tr>
-					</thead>
-				</table>
+				</div>
+				<hr/>
+				<div class="table-responsive">
+					<table class="table table-sm" width="100%">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>Jenis Material</th>
+								<th>Spesifikasi</th>
+								<th>Jumlah</th>
+								<th>Satuan</th>
+								<th>Digunakan Tanggal</th>
+								<th>Keterangan</th>
+							</tr>
+						</thead>
+						<tbody>
+							@if(isset($data_detail) && !$data_detail->isEmpty())
+							@foreach($data_detail as $key => $value)
+							@php
+							$material = \DB::table('material')->find($value->material_id);
+							@endphp
+							<tr>
+								<td>{{ $key+1 }}</td>
+								<td>{{ $material->kode_material }} - {{ $material->material }}</td>
+								<td>{{ $material->spesifikasi }}</td>
+								<td>{{ $value->volume }}</td>
+								<td>{{ $material->satuan }}</td>
+								<td>{{ date_indo(date('Y-m-d',strtotime($value->tgl_penggunaan))) }}</td>
+								<td>{{ $value->keterangan }}</td>
+							</tr>
+							@endforeach
+							@endif
+						</tbody>
+					</table>
+				</div>
+				<hr/>
+				<div class="form-row">
+					<div class="form-group col-6">
+						<label for="wizard-progress-nama-depan">Keterangan</label>
+						<textarea class="form-control" readonly="" rows="5">{{ $data->keterangan }}</textarea>
+					</div>
+				</div>
+
+				<br/><br/>
+				<div class="row">
+					<div class="col-12 text-right">
+						<a href="{{ url('/spm') }}" class="btn btn-alt-success">Kembali</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-@endsection
+	@endsection
