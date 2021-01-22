@@ -215,6 +215,8 @@
 
         <script src="{{asset('codebase/')}}/src/assets/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 
+        <script src="{{asset('js/')}}/AppendGrid.js"></script>
+
         <script>jQuery(function(){ Codebase.helpers(['maxlength']); });</script>
 
         <script type="text/javascript">

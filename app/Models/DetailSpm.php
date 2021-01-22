@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $spm_id
  * @property int|null $material_id
  * @property float|null $volume
+ * @property Carbon|null $tgl_penggunaan
  * @property string|null $keterangan
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -35,10 +36,15 @@ class DetailSpm extends Model
 		'volume' => 'float'
 	];
 
+	protected $dates = [
+		'tgl_penggunaan'
+	];
+
 	protected $fillable = [
 		'spm_id',
 		'material_id',
 		'volume',
+		'tgl_penggunaan',
 		'keterangan'
 	];
 

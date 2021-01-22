@@ -185,6 +185,14 @@ class PegawaiController extends Controller
         $offset = $request->has('offset') ? $request->get('offset') : 0;
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         // $search = $request->has('search') ? $request->get('search') : null;
+        if($offset == 0)
+        {
+          $page = 1;
+        }
+        else
+        {
+          $page = ($offset / $limit) + 1;
+        }
 
         $dataList = Pegawai::select(\DB::raw('pegawai.*, profil.nama,jabatan.jabatan,departement.departement'))
                     ->join('profil','pegawai.profil_id','=','profil.id')
@@ -207,7 +215,7 @@ class PegawaiController extends Controller
                     // ->offset($offset)
                     // ->limit($limit)
                     ->orderby('profil.nama','ASC')
-                    ->paginate($limit);
+                    ->paginate($limit,['*'], 'page', $page);
 
         // $total_all = Supplier::get();
 

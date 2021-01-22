@@ -24,12 +24,15 @@ class CreateSpmTable extends Migration
             $table->unsignedBigInteger('user_update')->nullable();
             $table->foreign('user_update')->references('id')->on('users');
             $table->boolean('flag_lihat')->default(false)->nullable();
+            $table->datetime('tgl_lihat')->nullable();
             $table->string('flag_verif_komersial',1)->default('N')->nullable();
             $table->unsignedBigInteger('user_verif_komersial')->nullable();
             $table->foreign('user_verif_komersial')->references('id')->on('users');
+            $table->datetime('tgl_verif_komersial')->nullable();
             $table->string('flag_verif_pm',1)->default('N')->nullable();
             $table->unsignedBigInteger('user_verif_pm')->nullable();
             $table->foreign('user_verif_pm')->references('id')->on('users');
+            $table->datetime('tgl_verif_pm')->nullable();
             $table->timestamps();
         });
     }

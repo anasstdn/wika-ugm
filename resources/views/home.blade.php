@@ -43,6 +43,9 @@
     <!-- Content -->
     <div class="content">
         <!-- Icon Navigation -->
+        <table id="tblAppendGrid"></table>
+         <hr/>
+  <button id="load" type="button" class="btn btn-primary">Load Data</button>
         <div class="row gutters-tiny push">
             <div class="col-6 col-md-4 col-xl-2">
                 <a class="block block-rounded block-bordered block-link-shadow text-center" href="javascript:void(0)">
@@ -201,180 +204,10 @@
 
         <!-- More Data -->
         <div class="row">
-            <!-- Latest Orders -->
-            <div class="col-xl-6">
-                <div class="block block-rounded block-bordered">
-                    <div class="block-header">
-                        <h3 class="block-title text-uppercase">Latest Orders</h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                <i class="si si-refresh"></i>
-                            </button>
-                            <button type="button" class="btn-block-option">
-                                <i class="si si-wrench"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content p-5">
-                        <table class="table table-borderless table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th style="width: 100px;">ID</th>
-                                    <th>Status</th>
-                                    <th class="d-none d-sm-table-cell">Customer</th>
-                                    <th class="text-right">Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1851</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-danger">Canceled</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Jose Parker</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$203</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1850</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-warning">Pending</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Jose Parker</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$842</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1849</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-danger">Canceled</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Betty Kelley</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$151</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1848</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Completed</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Barbara Scott</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$688</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1847</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-danger">Canceled</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Susan Day</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$963</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1846</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-success">Completed</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Susan Day</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$836</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1845</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info">Processing</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Alice Moore</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$616</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1844</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-warning">Pending</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Sara Fields</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$162</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1843</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info">Processing</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Betty Kelley</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$683</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="font-w600" href="javascript:void(0)">ORD.1842</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-info">Processing</span>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a href="javascript:void(0)">Megan Fuller</a>
-                                    </td>
-                                    <td class="text-right">
-                                        <span class="text-black">$240</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!-- END Latest Orders -->
+
 
             <!-- Top Products -->
-            <div class="col-xl-6">
+            <div class="col-xl-12">
                 <div class="block block-rounded block-bordered">
                     <div class="block-header">
                         <h3 class="block-title text-uppercase">Top Products</h3>
@@ -388,218 +221,25 @@
                         </div>
                     </div>
                     <div class="block-content p-5">
-                        <table class="table table-borderless table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="d-none d-sm-table-cell" style="width: 100px;">ID</th>
-                                    <th>Product</th>
-                                    <th class="text-center">Orders</th>
-                                    <th class="d-none d-sm-table-cell text-center">Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.258</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Dark Souls III</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">912</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.198</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Bioshock Collection</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">895</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.852</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Alien Isolation</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">820</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.741</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Bloodborne</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">793</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.985</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Forza Motorsport 7</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">782</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.056</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Fifa 18</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">776</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.036</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Gears of War 4</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">680</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.682</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Minecraft</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">670</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.478</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Dishonored 2</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">640</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-none d-sm-table-cell">
-                                        <a class="font-w600" href="javascript:void(0)">PID.952</a>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:void(0)">Gran Turismo Sport</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="text-gray-dark" href="javascript:void(0)">630</a>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell text-center">
-                                        <div class="text-warning">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                       <div class="form-row">
+                          <div class="form-group col-12 text-right">
+                             <button id="add_keluarga" type="button" class="btn btn-primary">Tambah Keluarga</button>
+                         </div>
+                     </div>
+                     <table id="table-list-keluarga"  class="table borderless table-hover table-striped table-bordered w-full">
+                        <thead>
+                            <tr>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Nama</th>
+                                <th class="text-center">Hubungan Keluarga</th>
+                                <th class="text-center">Pekerjaan</th>
+                                <th class="text-center">Tanggal Lahir</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-list-keluarga-body">
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>
@@ -609,14 +249,104 @@
     </div>
     <!-- END Content -->
 </div>
+
 <!-- END Page Content -->
 @endsection
 
 @push('js')
 <script>
-   axios.get('https://jsonplaceholder.typicode.com/todos')
-   .then((response) => {
-    console.log(response.data);
-});
+    $.fn.hasId = function(id) {
+      return this.attr('id') == id;
+  };
+    const table_list_pegawai = $('#table-list-keluarga');
+    let flag_new_table = true;
+    $(function(){
+        $('#add_keluarga').click(()=>{
+            if(flag_new_table){
+                flag_new_table = false;
+            }
+            add_row_to_table(table_list_pegawai);
+        })
+
+        $("#table-list-keluarga-body").on( "click", ".delete-keluarga-btn", function(e) {
+
+            let row = $(this).closest('tr');
+            remove_row_table(table_list_pegawai,row);
+
+        });
+    })
+
+    const add_row_to_table = (table) => {
+        row = `
+        <tr class="table-new-row-keluarga" data-row-id-pegawai = "">
+        <th class="text-center" style="text-align:center">
+        <span class="isi number"></span>
+        </th>
+        <th class="text-left">
+        <input name="pegawai[]" id="pegawai_" class="form-control isi" value="" type="text" autocomplete="on">
+        </th>
+        <th class="text-center">
+        <select class="form-control select isi" id="id_hubungan_keluarga_" name="id_hubungan_keluarga[]" data-plugin="select2">
+        <optgroup label="Hubungan Keluarga">
+        <option value="">-Pilih-</option>
+        @if(isset($hubungan_keluarga_select) && !$hubungan_keluarga_select->isEmpty)
+        @foreach($hubungan_keluarga_select as $a)
+        <option value="<?php echo $a->id?>"><?php echo $a->hubungan_keluarga ?></option>
+        @endforeach
+        @endif
+        </optgroup>
+        </select>
+        </th>
+        <th class="text-left">
+        <select class="form-control select keluar isi" id="id_profesi_" name="id_profesi[]" data-plugin="select2">
+        <optgroup label="Profesi">
+        <option value="">-Pilih-</option>
+        @if(isset($pekerjaan_select) && !$pekerjaan_select->isEmpty())
+        @foreach($pekerjaan_select as $a)
+        <option value="<?php echo $a->id?>"><?php echo $a->nama_profesi ?></option>
+        @endforeach
+        @endif
+        </optgroup>
+        </select>
+        </th>
+        <th class="text-left">
+        <input name="tanggal_lahir[]" style="text-align:right;" id="tanggal_lahir_'+count+'" class="form-control isi" value="" type="text" autocomplete="on">
+        </th>
+        <th class="text-center">
+        <button type="button" class="btn btn-danger btn-icon btn-xs delete-keluarga-btn" aria-label="Left Align">
+        <span class="glyphicon glyphicon-trash" aria-hidden="true" data-id-pegawai=""></span>
+        </button>
+        </th>
+        </tr>
+        `;
+
+            let tbody = table.find("tbody").attr('id'); // tbody of table
+            $('#'+tbody).append(row);
+            updateRows();
+        }
+
+        const remove_row_table = (table,row = null) => {
+
+            if(row){
+                let tbody = row.parent();
+                row.remove();
+                if(tbody.children().length < 1) {
+                    flag_new_table = true;
+                } else {
+                    updateRows();
+                }
+            } else {
+                let row = table.find("tbody>tr");
+                row.remove();
+            }
+        }
+
+        function updateRows(){
+            $('#table-list-keluarga tbody tr').each( (tr_index,tr) =>{
+                $(tr).children('th').each( (th_index, th) => {
+                    $(th).find('.number').html(tr_index + 1);
+                });    
+            });
+        };
 </script>
 @endpush

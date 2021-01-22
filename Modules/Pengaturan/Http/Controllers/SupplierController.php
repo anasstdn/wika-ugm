@@ -104,6 +104,15 @@ class SupplierController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         $search = $request->has('search') ? $request->get('search') : null;
 
+        if($offset == 0)
+        {
+          $page = 1;
+        }
+        else
+        {
+          $page = ($offset / $limit) + 1;
+        }
+
         $dataList = Supplier::select('*')
                     ->where(function($q) use($search){
                         if(!empty($search))

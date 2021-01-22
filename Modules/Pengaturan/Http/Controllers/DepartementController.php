@@ -105,6 +105,15 @@ class DepartementController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         $search = $request->has('search') ? $request->get('search') : null;
 
+        if($offset == 0)
+        {
+          $page = 1;
+        }
+        else
+        {
+          $page = ($offset / $limit) + 1;
+        }
+
         $dataList = Departement::select('*')
                     ->where(function($q) use($search){
                         if(!empty($search))
@@ -114,7 +123,7 @@ class DepartementController extends Controller
                     })
                     // ->offset($offset)
                     // ->limit($limit)
-                    ->paginate($limit);
+                    ->paginate($limit,['*'], 'page', $page);
 
         // $total_all = Departement::get();
 

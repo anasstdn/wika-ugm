@@ -336,6 +336,13 @@
 			},
 		});
 
+		$('#form').submit('#simpan',function(e){
+			if($("#form").valid())
+			{
+				clicked(e);
+			}
+		})
+
 		$('input').on('focus focusout keyup', function () {
 			$(this).valid();
 		});

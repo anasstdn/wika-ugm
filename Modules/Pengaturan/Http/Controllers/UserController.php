@@ -116,6 +116,15 @@ class UserController extends Controller
 
         $columns = Schema::getColumnListing('users');
 
+        if($offset == 0)
+        {
+          $page = 1;
+        }
+        else
+        {
+          $page = ($offset / $limit) + 1;
+        }
+
         $dataList = User::select(\DB::raw('users.*'))
                     ->with('roles')
                     ->where(function($q) use($search){
@@ -129,7 +138,7 @@ class UserController extends Controller
                     // ->offset($offset)
                     // ->limit($limit)
                     // ->get();
-                    ->paginate($limit);
+                    ->paginate($limit,['*'], 'page', $page);
 
         $total_all = User::get();
 
