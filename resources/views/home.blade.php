@@ -103,7 +103,7 @@
             <div class="col-md-6">
                 <div class="block block-rounded block-bordered">
                     <div class="block-header">
-                        <h3 class="block-title text-uppercase">Sales</h3>
+                        <h3 class="block-title text-uppercase">Stok Gudang</h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                                 <i class="si si-refresh"></i>
@@ -116,14 +116,56 @@
                     <div class="block-content p-5">
                         <!-- Lines Chart Container functionality is initialized in js/pages/db_corporate.min.js which was auto compiled from _es6/pages/db_corporate.js -->
                         <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
-                        <canvas class="js-chartjs-corporate-lines"></canvas>
+                        <div class="form-row" style="margin-left: 0.5em">
+                          <div class="form-group col-1">
+                            <label for="wizard-progress-nama-depan">Cari</label>
+                        </div>
+                        <div class="form-group col-5">
+                            <select class="select2 form-control form-control-sm" name="material_id" id="material_id" style="width: 100%;" data-placeholder="">
+                                <option value="">- Silahkan Pilih -</option>
+                                @if(isset($material) && !$material->isEmpty())
+                                @foreach($material as $key => $val)
+                                <option value="{{$val->id}}">{{$val->kode_material}} {{$val->material}}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="form-group col-3">
+                            <a href="#" class="btn btn-alt-success btn-sm" id="reset"><i class="si si-refresh"></i> Reset</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                  <table 
+                  data-toggle="table"
+                  data-ajax="ajaxRequest"
+                  data-search="false"
+                  data-side-pagination="server"
+                  data-pagination="true"
+                  data-page-list="[5,10, 25, 50, 100, 200, All]"
+                  data-show-fullscreen="false"
+                  data-show-extended-pagination="true"
+                  class="table table-sm table-vcenter" 
+                  id="table"
+                  >
+                  <thead>
+                    <tr>
+                      <th data-field="no">No</th>
+                      <th data-field="kode_material">Kode Material</th>
+                      <th data-field="material">Material</th>
+                      <th data-field="satuan">Satuan</th>
+                      <th data-field="qty">Qty</th>
+                  </tr>
+              </thead>
+          </table>
+      </div>
+                        
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="block block-rounded block-bordered">
                     <div class="block-header">
-                        <h3 class="block-title text-uppercase">Earnings</h3>
+                        <h3 class="block-title text-uppercase">Riwayat Stok Gudang</h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                                 <i class="si si-refresh"></i>
@@ -136,7 +178,60 @@
                     <div class="block-content p-5">
                         <!-- Lines Chart Container functionality is initialized in js/pages/db_corporate.min.js which was auto compiled from _es6/pages/db_corporate.js -->
                         <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
-                        <canvas class="js-chartjs-corporate-lines2"></canvas>
+                         <div class="form-row" style="margin-left: 0.5em">
+                          <div class="form-group col-1">
+                            <label for="wizard-progress-nama-depan">Cari</label>
+                        </div>
+                        <div class="form-group col-4">
+                            <select class="select2 form-control form-control-sm" name="material_riwayat" id="material_riwayat" style="width: 100%;" data-placeholder="">
+                                <option value="">- Silahkan Pilih -</option>
+                                @if(isset($material) && !$material->isEmpty())
+                                @foreach($material as $key => $val)
+                                <option value="{{$val->id}}">{{$val->kode_material}} {{$val->material}}</option>
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="form-group col-5">
+                            <div id="filter_tgl" class="input-group" style="display: inline;">
+                                <button class="btn btn-default btn-sm" id="daterange-btn" style="border:1px solid #ccc">
+                                <i class="fa fa-calendar"></i> <span id="reportrange"><span> Tanggal</span></span>
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <input type="hidden" name="daterangepicker_start" id="daterangepicker_start" value="">
+                            <input type="hidden" name="daterangepicker_end" id="daterangepicker_end" value="">
+                        </div>
+                    </div>
+                        <div class="form-group col-2">
+                            <a href="#" class="btn btn-alt-success btn-sm" id="reset_riwayat"><i class="si si-refresh"></i> Reset</a>
+                        </div>
+                    </div>
+                        <div class="table-responsive">
+                  <table 
+                  data-toggle="table"
+                  data-ajax="ajaxRequestRiwayat"
+                  data-search="false"
+                  data-side-pagination="server"
+                  data-pagination="true"
+                  data-page-list="[5,10, 25, 50, 100, 200, All]"
+                  data-show-fullscreen="false"
+                  data-show-extended-pagination="true"
+                  class="table table-sm table-vcenter" 
+                  id="table-riwayat-stok"
+                  >
+                  <thead>
+                    <tr>
+                      <th data-field="no">No</th>
+                      <th data-field="material">Material</th>
+                      <th data-field="tanggal_riwayat">Tanggal</th>
+                      <th data-field="qty">Qty</th>
+                      <th data-field="penambahan">(+)</th>
+                      <th data-field="pengurangan">(-)</th>
+                      <th data-field="user_input">User</th>
+                  </tr>
+              </thead>
+          </table>
+      </div>
                     </div>
                 </div>
             </div>
@@ -163,24 +258,8 @@
                     </div>
                     <div class="block-content p-5">
                      <div class="form-row">
-                      <div class="form-group col-12 text-right">
-                       <button id="add_keluarga" type="button" class="btn btn-primary">Tambah Keluarga</button>
-                   </div>
+                        
                </div>
-               <table id="table-list-keluarga"  class="table borderless table-hover table-striped table-bordered w-full">
-                <thead>
-                    <tr>
-                        <th class="text-center">No</th>
-                        <th class="text-center">Nama</th>
-                        <th class="text-center">Hubungan Keluarga</th>
-                        <th class="text-center">Pekerjaan</th>
-                        <th class="text-center">Tanggal Lahir</th>
-                        <th class="text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="table-list-keluarga-body">
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
@@ -196,98 +275,124 @@
 
 @push('js')
 <script>
-    $.fn.hasId = function(id) {
-      return this.attr('id') == id;
-  };
-  const table_list_pegawai = $('#table-list-keluarga');
-  let flag_new_table = true;
-  $(function(){
-    $('#add_keluarga').click(()=>{
-        if(flag_new_table){
-            flag_new_table = false;
-        }
-        add_row_to_table(table_list_pegawai);
+    var start = moment().startOf('month');
+    var end = moment().endOf('month');
+
+    $(function(){
+        $(".select2").select2({
+            width: '100%'
+        });
+
+        $('#material_id').on("change", function(e) {
+         $('#table').bootstrapTable('refresh');
+     });
+
+        $('#material_riwayat').on("change", function(e) {
+         $('#table-riwayat-stok').bootstrapTable('refresh');
+     });
+
+        $('#reset').click(function(){
+            $('#material_id').val('').trigger('change');
+            $('#table').bootstrapTable('refresh');   
+        })
+
+        $('#reset_riwayat').click(function(){
+            $('#material_riwayat').val('').trigger('change');
+            cb(start,end);
+            $('#table-riwayat-stok').bootstrapTable('refresh');   
+        })
+
+        $('#daterange-btn').daterangepicker({
+        ranges: {
+          'Hari ini': [moment(), moment()],
+          'Kemarin': [moment().subtract('days', 1), moment().subtract('days', 1)],
+          '7 Hari yang lalu': [moment().subtract('days', 6), moment()],
+          '30 Hari yang lalu': [moment().subtract('days', 29), moment()],
+          'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
+          'Bulan kemarin': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+          'Tahun ini': [moment().subtract('year', 0).startOf('year').startOf('month'), moment().subtract('year', 0).endOf('year').endOf('month')],
+          'Tahun kemarin': [moment().subtract('year', 1).startOf('year').startOf('month'), moment().subtract('year', 1).endOf('year').endOf('month')],
+        },
+        showDropdowns: true,
+        format: 'YYYY-MM-DD',
+        startDate: moment().startOf('month'),
+        endDate: moment().endOf('month'),
+      },cb);
+
+      cb(start,end);
     })
 
-    $("#table-list-keluarga-body").on( "click", ".delete-keluarga-btn", function(e) {
+    function cb(start, end) {
+        $('#daterangepicker_start').val(start.format('YYYY-MM-DD'));
+        $('#daterangepicker_end').val(end.format('YYYY-MM-DD'));
+        $('#reportrange span').html(start.format('D MMM YYYY') + ' - ' + end.format('D MMM YYYY'));
+        $('#table-riwayat-stok').bootstrapTable('refresh');
+      }
 
-        let row = $(this).closest('tr');
-        remove_row_table(table_list_pegawai,row);
+    function ajaxRequest(params) {
+        var formData = new FormData();
+        formData.append('limit', params.data.limit);
+        formData.append('offset', params.data.offset);
+        formData.append('order', params.data.order);
+        formData.append('search', params.data.search);
+        formData.append('sort', params.data.sort);
+        formData.append('material_id', $('#material_id').val());
 
-    });
-})
+        $.ajax({
+          type: "POST",
+          url: "{{ url('home/get-data-stok') }}",
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          data: formData,
+          dataType: "json",
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+            params.success({
+              "rows": data.data,
+              "total": data.total
+            })
+          },
+          error: function (er) {
+            params.error(er);
+          }
+        });
+      }
 
-  const add_row_to_table = (table) => {
-    row = `
-    <tr class="table-new-row-keluarga" data-row-id-pegawai = "">
-    <th class="text-center" style="text-align:center">
-    <span class="isi number"></span>
-    </th>
-    <th class="text-left">
-    <input name="pegawai[]" id="pegawai_" class="form-control isi" value="" type="text" autocomplete="on">
-    </th>
-    <th class="text-center">
-    <select class="form-control select isi" id="id_hubungan_keluarga_" name="id_hubungan_keluarga[]" data-plugin="select2">
-    <optgroup label="Hubungan Keluarga">
-    <option value="">-Pilih-</option>
-    @if(isset($hubungan_keluarga_select) && !$hubungan_keluarga_select->isEmpty)
-    @foreach($hubungan_keluarga_select as $a)
-    <option value="<?php echo $a->id?>"><?php echo $a->hubungan_keluarga ?></option>
-    @endforeach
-    @endif
-    </optgroup>
-    </select>
-    </th>
-    <th class="text-left">
-    <select class="form-control select keluar isi" id="id_profesi_" name="id_profesi[]" data-plugin="select2">
-    <optgroup label="Profesi">
-    <option value="">-Pilih-</option>
-    @if(isset($pekerjaan_select) && !$pekerjaan_select->isEmpty())
-    @foreach($pekerjaan_select as $a)
-    <option value="<?php echo $a->id?>"><?php echo $a->nama_profesi ?></option>
-    @endforeach
-    @endif
-    </optgroup>
-    </select>
-    </th>
-    <th class="text-left">
-    <input name="tanggal_lahir[]" style="text-align:right;" id="tanggal_lahir_'+count+'" class="form-control isi" value="" type="text" autocomplete="on">
-    </th>
-    <th class="text-center">
-    <button type="button" class="btn btn-danger btn-icon btn-xs delete-keluarga-btn" aria-label="Left Align">
-    <span class="glyphicon glyphicon-trash" aria-hidden="true" data-id-pegawai=""></span>
-    </button>
-    </th>
-    </tr>
-    `;
+      function ajaxRequestRiwayat(params) {
+        var formData = new FormData();
+        formData.append('limit', params.data.limit);
+        formData.append('offset', params.data.offset);
+        formData.append('order', params.data.order);
+        formData.append('search', params.data.search);
+        formData.append('sort', params.data.sort);
+        formData.append('material_id', $('#material_riwayat').val());
+        formData.append('date_start', $('#daterangepicker_start').val());
+        formData.append('date_end', $('#daterangepicker_end').val());
 
-            let tbody = table.find("tbody").attr('id'); // tbody of table
-            $('#'+tbody).append(row);
-            updateRows();
-        }
-
-        const remove_row_table = (table,row = null) => {
-
-            if(row){
-                let tbody = row.parent();
-                row.remove();
-                if(tbody.children().length < 1) {
-                    flag_new_table = true;
-                } else {
-                    updateRows();
-                }
-            } else {
-                let row = table.find("tbody>tr");
-                row.remove();
-            }
-        }
-
-        function updateRows(){
-            $('#table-list-keluarga tbody tr').each( (tr_index,tr) =>{
-                $(tr).children('th').each( (th_index, th) => {
-                    $(th).find('.number').html(tr_index + 1);
-                });    
-            });
-        };
-    </script>
-    @endpush
+        $.ajax({
+          type: "POST",
+          url: "{{ url('home/get-data-riwayat-stok') }}",
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          data: formData,
+          dataType: "json",
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+            params.success({
+              "rows": data.data,
+              "total": data.total
+            })
+          },
+          error: function (er) {
+            params.error(er);
+          }
+        });
+      }
+</script>
+@endpush

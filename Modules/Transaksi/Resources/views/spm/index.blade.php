@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
- <link rel="stylesheet" href="{{asset('css/')}}/daterangepicker.css">
 <!-- Header -->
 <div class="bg-primary-dark">
   <div class="content content-top">
@@ -212,7 +211,6 @@
     @endsection
 
     @push('js')
-    <script src="{{asset('js/')}}/daterangepicker.js"></script>
     <script>
       var start = moment().startOf('month');
       var end = moment().endOf('month');

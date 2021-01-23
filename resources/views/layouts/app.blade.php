@@ -43,6 +43,7 @@
     <link rel="stylesheet" href="{{asset('codebase/')}}/src/assets/js/plugins/flatpickr/flatpickr.min.css">
 
     <link rel="stylesheet" href="{{asset('codebase/')}}/src/assets/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+     <link rel="stylesheet" href="{{asset('css/')}}/daterangepicker.css">
 
     <!-- END Stylesheets -->
 </head>
@@ -216,6 +217,7 @@
         <script src="{{asset('codebase/')}}/src/assets/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
 
         <script src="{{asset('js/')}}/AppendGrid.js"></script>
+        <script src="{{asset('js/')}}/daterangepicker.js"></script>
 
         <script>jQuery(function(){ Codebase.helpers(['maxlength']); });</script>
 
