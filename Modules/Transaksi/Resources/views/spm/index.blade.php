@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+ <link rel="stylesheet" href="{{asset('css/')}}/daterangepicker.css">
 <!-- Header -->
 <div class="bg-primary-dark">
   <div class="content content-top">
@@ -47,12 +48,23 @@
                 <div class="form-row">
                   <div class="form-group col-4">
                     <label for="wizard-progress-nama-depan">Pencarian (No SPM, Pemohon dan Lokasi)</label>
-                    <input class="form-control form-control-sm" type="text" id="nama">
+                    <input class="form-control" type="text" id="nama">
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="wizard-progress-nama-depan">Tanggal Pengajuan</label><br/>
+                    <div id="filter_tgl" class="input-group" style="display: inline;">
+                      <button class="btn btn-default" id="daterange-btn" style="border:1px solid #ccc">
+                        <i class="fa fa-calendar"></i> <span id="reportrange"><span> Tanggal</span></span>
+                        <i class="fa fa-caret-down"></i>
+                      </button>
+                      <input type="hidden" name="daterangepicker_start" id="daterangepicker_start" value="">
+                      <input type="hidden" name="daterangepicker_end" id="daterangepicker_end" value="">
+                    </div>
                   </div>
                   <div class="form-group col-3">
                     <br/>
-                    <a href="javascript::void(0)" class="btn btn-alt-primary" id="cari">Cari</a>
-                    <a href="javascript::void(0)" class="btn btn-alt-success" id="reset">Reset</a>
+                    <a href="#" class="btn btn-alt-primary" id="cari">Cari</a>
+                    <a href="#" class="btn btn-alt-success" id="reset">Reset</a>
                   </div>
                 </div>
               </div>
@@ -200,9 +212,11 @@
     @endsection
 
     @push('js')
-
-
+    <script src="{{asset('js/')}}/daterangepicker.js"></script>
     <script>
+      var start = moment().startOf('month');
+      var end = moment().endOf('month');
+
       function ajaxRequest(params) {
         var formData = new FormData();
         formData.append('limit', params.data.limit);
@@ -211,6 +225,8 @@
         formData.append('search', params.data.search);
         formData.append('sort', params.data.sort);
         formData.append('nama', $('#nama').val());
+        formData.append('date_start', $('#daterangepicker_start').val());
+        formData.append('date_end', $('#daterangepicker_end').val());
 
         $.ajax({
           type: "POST",
@@ -243,6 +259,8 @@
         formData.append('search', params.data.search);
         formData.append('sort', params.data.sort);
         formData.append('nama', $('#nama').val());
+        formData.append('date_start', $('#daterangepicker_start').val());
+        formData.append('date_end', $('#daterangepicker_end').val());
 
         $.ajax({
           type: "POST",
@@ -275,6 +293,8 @@
         formData.append('search', params.data.search);
         formData.append('sort', params.data.sort);
         formData.append('nama', $('#nama').val());
+        formData.append('date_start', $('#daterangepicker_start').val());
+        formData.append('date_end', $('#daterangepicker_end').val());
 
         $.ajax({
           type: "POST",
@@ -349,6 +369,29 @@
       // $(".select").select2({
       //   width: '100%'
       // });
+      
+      
+
+      $('#daterange-btn').daterangepicker({
+        ranges: {
+          'Hari ini': [moment(), moment()],
+          'Kemarin': [moment().subtract('days', 1), moment().subtract('days', 1)],
+          '7 Hari yang lalu': [moment().subtract('days', 6), moment()],
+          '30 Hari yang lalu': [moment().subtract('days', 29), moment()],
+          'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
+          'Bulan kemarin': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+          'Tahun ini': [moment().subtract('year', 0).startOf('year').startOf('month'), moment().subtract('year', 0).endOf('year').endOf('month')],
+          'Tahun kemarin': [moment().subtract('year', 1).startOf('year').startOf('month'), moment().subtract('year', 1).endOf('year').endOf('month')],
+        },
+        showDropdowns: true,
+        format: 'YYYY-MM-DD',
+        startDate: moment().startOf('month'),
+        endDate: moment().endOf('month')
+      },cb);
+
+      cb(start,end);
+
+      
 
       load_autocomplete_data().then((e) => {
         $('#table').bootstrapTable('refresh');
@@ -367,7 +410,14 @@
         $('#table').bootstrapTable('refresh');   
         $('#table-diterima').bootstrapTable('refresh');
         $('#table-ditolak').bootstrapTable('refresh');
+        cb(start,end);
       });
     })
+
+      function cb(start, end) {
+        $('#daterangepicker_start').val(start.format('YYYY-MM-DD'));
+        $('#daterangepicker_end').val(end.format('YYYY-MM-DD'));
+        $('#reportrange span').html(start.format('D MMM YYYY') + ' - ' + end.format('D MMM YYYY'));
+      }
   </script>
   @endpush

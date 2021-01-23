@@ -41,6 +41,30 @@ class ConfigIdSeeder extends Seeder
     			'config_value'=>2,
     			'description'=>'Role untuk Admin Sistem',
     		],
+            [
+                'table_source'=>'roles',
+                'config_name'=>'ROLE_PELAKSANA',
+                'config_value'=>3,
+                'description'=>'Role untuk Pelaksana Sistem',
+            ],
+            [
+                'table_source'=>'roles',
+                'config_name'=>'ROLE_SITE_MANAGER',
+                'config_value'=>4,
+                'description'=>'Role untuk Site Manager Sistem',
+            ],
+            [
+                'table_source'=>'roles',
+                'config_name'=>'ROLE_PROJECT_MANAGER',
+                'config_value'=>5,
+                'description'=>'Role untuk Project Manager Sistem',
+            ],
+            [
+                'table_source'=>'roles',
+                'config_name'=>'ROLE_KOMERSIAL',
+                'config_value'=>6,
+                'description'=>'Role untuk Komersial Sistem',
+            ],
     		[
     			'table_source'=>'',
     			'config_name'=>'Y-m-d',

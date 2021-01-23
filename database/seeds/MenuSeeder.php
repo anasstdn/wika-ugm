@@ -338,6 +338,23 @@ class MenuSeeder extends Seeder
         )
     );
         $submenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'verifikasi-spm-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Verifikasi SPM',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'N',
+            'url' => 'verifikasi-spm'
+        )
+    );
+        $submenu->save();
     }
 }
 

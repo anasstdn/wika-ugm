@@ -111,4 +111,60 @@ function bulan($bln)
     }
 }
 
+function dashboard_pelaksana()
+{
+    $total_all_spm = \DB::table('spm')
+                    ->where('user_input',\Auth::user()->id)
+                    ->count();
+
+    $total_belum_diverif = \DB::table('spm')
+                            ->whereNull('flag_verif_komersial')
+                            ->where('user_input',\Auth::user()->id)
+                            ->count();
+
+    $total_verif_diterima = \DB::table('spm')
+                            ->where('flag_verif_komersial','=','Y')
+                            ->where('user_input',\Auth::user()->id)
+                            ->count();
+
+    $total_verif_ditolak = \DB::table('spm')
+                            ->where('flag_verif_komersial','=','N')
+                            ->where('user_input',\Auth::user()->id)
+                            ->count();
+
+    $data['total_all_spm'] = $total_all_spm;
+    $data['total_belum_diverif'] = $total_belum_diverif;
+    $data['total_verif_diterima'] = $total_verif_diterima;
+    $data['total_verif_ditolak'] = $total_verif_ditolak;
+
+    return $data;
+}
+
+function dashboard_site_manager()
+{
+    $total_all_spm = \DB::table('spm')->count();
+
+    $total_belum_diverif = \DB::table('spm')
+                            ->whereNull('flag_verif_site_manager')
+                            ->count();
+
+    $total_verif_diterima = \DB::table('spm')
+                            ->where('flag_verif_site_manager','=','Y')
+                            ->where('user_verif_site_manager','=',\Auth::user()->id)
+                            ->count();
+
+    $total_verif_ditolak = \DB::table('spm')
+                            ->where('flag_verif_site_manager','=','N')
+                            ->where('user_verif_site_manager','=',\Auth::user()->id)
+                            ->count();
+
+    $data['total_all_spm'] = $total_all_spm;
+    $data['total_belum_diverif'] = $total_belum_diverif;
+    $data['total_verif_diterima'] = $total_verif_diterima;
+    $data['total_verif_ditolak'] = $total_verif_ditolak;
+
+    return $data;
+}
+
+
 ?>

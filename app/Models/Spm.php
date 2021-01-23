@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $flag_verif_pm
  * @property int|null $user_verif_pm
  * @property Carbon|null $tgl_verif_pm
+ * @property string|null $flag_batal
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
@@ -73,7 +74,8 @@ class Spm extends Model
 		'tgl_verif_komersial',
 		'flag_verif_pm',
 		'user_verif_pm',
-		'tgl_verif_pm'
+		'tgl_verif_pm',
+		'flag_batal'
 	];
 
 	public function user()

@@ -215,6 +215,7 @@ class SPMController extends Controller
             'tgl_verif_pm' => date('Y-m-d'),
             'flag_verif_komersial' => 'N',
             'tgl_verif_komersial' => date('Y-m-d'),
+            'flag_batal' => 'Y',
             'keterangan' => 'Pengajuan dibatalkan oleh '.\Auth::user()->name
         ]);
 
@@ -261,9 +262,13 @@ class SPMController extends Controller
                             ->orWhere('nama_pemohon','LIKE','%'.$input['nama'].'%')
                             ->orWhere('lokasi','LIKE','%'.$input['nama'].'%');
                         }
-                        if(isset($input['tgl_spm']) && !empty($input['tgl_spm']))
+                        if(isset($input['date_start']) && !empty($input['date_start']))
                         {
-                            $q->whereDate('tgl_spm','=',date('Y-m-d',strtotime($input['tgl_spm'])));
+                            $q->whereDate('tgl_spm','>=',date('Y-m-d',strtotime($input['date_start'])));
+                        }
+                        if(isset($input['date_end']) && !empty($input['date_end']))
+                        {
+                            $q->whereDate('tgl_spm','<=',date('Y-m-d',strtotime($input['date_end'])));
                         }
                         if(!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN')))
                         {
@@ -343,9 +348,13 @@ class SPMController extends Controller
                             ->orWhere('nama_pemohon','LIKE','%'.$input['nama'].'%')
                             ->orWhere('lokasi','LIKE','%'.$input['nama'].'%');
                         }
-                        if(isset($input['tgl_spm']) && !empty($input['tgl_spm']))
+                        if(isset($input['date_start']) && !empty($input['date_start']))
                         {
-                            $q->whereDate('tgl_spm','=',date('Y-m-d',strtotime($input['tgl_spm'])));
+                            $q->whereDate('tgl_spm','>=',date('Y-m-d',strtotime($input['date_start'])));
+                        }
+                        if(isset($input['date_end']) && !empty($input['date_end']))
+                        {
+                            $q->whereDate('tgl_spm','<=',date('Y-m-d',strtotime($input['date_end'])));
                         }
                         if(!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN')))
                         {
@@ -421,9 +430,13 @@ class SPMController extends Controller
                             ->orWhere('nama_pemohon','LIKE','%'.$input['nama'].'%')
                             ->orWhere('lokasi','LIKE','%'.$input['nama'].'%');
                         }
-                        if(isset($input['tgl_spm']) && !empty($input['tgl_spm']))
+                        if(isset($input['date_start']) && !empty($input['date_start']))
                         {
-                            $q->whereDate('tgl_spm','=',date('Y-m-d',strtotime($input['tgl_spm'])));
+                            $q->whereDate('tgl_spm','>=',date('Y-m-d',strtotime($input['date_start'])));
+                        }
+                        if(isset($input['date_end']) && !empty($input['date_end']))
+                        {
+                            $q->whereDate('tgl_spm','<=',date('Y-m-d',strtotime($input['date_end'])));
                         }
                         if(!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN')))
                         {

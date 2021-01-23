@@ -57,6 +57,10 @@ return [
 				'spm-create',
 				'spm-edit',
 				'spm-delete',
+				'verifikasi-spm-list',
+				'verifikasi-spm-create',
+				'verifikasi-spm-edit',
+				'verifikasi-spm-delete',
 
 			'profil-list',
 			'profil-create',
@@ -111,6 +115,10 @@ return [
 				'spm-create',
 				'spm-edit',
 				'spm-delete',
+				'verifikasi-spm-list',
+				'verifikasi-spm-create',
+				'verifikasi-spm-edit',
+				'verifikasi-spm-delete',
 
 			'profil-list',
 			'profil-create',
@@ -136,6 +144,11 @@ return [
 			'profil-create',
 			'profil-edit',
 			'profil-delete',
+			'spm-menu',
+				'verifikasi-spm-list',
+				'verifikasi-spm-create',
+				'verifikasi-spm-edit',
+				'verifikasi-spm-delete',
 		],
 
 		'project_manager' => [
@@ -143,6 +156,11 @@ return [
 			'profil-create',
 			'profil-edit',
 			'profil-delete',
+			'spm-menu',
+				'verifikasi-spm-list',
+				'verifikasi-spm-create',
+				'verifikasi-spm-edit',
+				'verifikasi-spm-delete',
 		],
 
 		'komersial' => [
@@ -150,6 +168,11 @@ return [
 			'profil-create',
 			'profil-edit',
 			'profil-delete',
+			'spm-menu',
+				'verifikasi-spm-list',
+				'verifikasi-spm-create',
+				'verifikasi-spm-edit',
+				'verifikasi-spm-delete',
 		],
 	]
 ];

@@ -31,3 +31,20 @@ Route::prefix('spm')->group(function() {
     Route::get('/delete-detail-spm', 'SPMController@deleteDetailSpm');
     Route::get('/{id}/batal', 'SPMController@batal');
 });
+
+Route::prefix('verifikasi-spm')->group(function() {
+    Route::get('/', 'VerifikasiSPMController@index');
+    Route::match(['get', 'post'],'/get-data','VerifikasiSPMController@getData');
+    Route::match(['get', 'post'],'/get-data-diterima','VerifikasiSPMController@getDataDiterima');
+    Route::match(['get', 'post'],'/get-data-ditolak','VerifikasiSPMController@getDataDitolak');
+    Route::get('/create',['as' => 'spm.create', 'uses' => 'VerifikasiSPMController@create']);
+    Route::match(['get', 'post'],'/material-search','VerifikasiSPMController@searchMaterial');
+    Route::match(['get','post'],'/store',['as' => 'spm.store', 'uses' => 'VerifikasiSPMController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'spm.update', 'uses' => 'VerifikasiSPMController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','VerifikasiSPMController@edit');
+    Route::match(['get', 'post'],'/{id}/view','VerifikasiSPMController@show');
+    Route::match(['get','post'],'/send-data','VerifikasiSPMController@sendData');
+    Route::match(['get','post'],'/load-data-material','VerifikasiSPMController@loadDataMaterial');
+    Route::get('/delete-detail-spm', 'VerifikasiSPMController@deleteDetailSpm');
+    Route::get('/{id}/batal', 'VerifikasiSPMController@batal');
+});

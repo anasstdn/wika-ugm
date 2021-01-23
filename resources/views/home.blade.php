@@ -43,73 +43,14 @@
     <!-- Content -->
     <div class="content">
         <!-- Icon Navigation -->
-        <table id="tblAppendGrid"></table>
-         <hr/>
-  <button id="load" type="button" class="btn btn-primary">Load Data</button>
-        <div class="row gutters-tiny push">
-            <div class="col-6 col-md-4 col-xl-2">
-                <a class="block block-rounded block-bordered block-link-shadow text-center" href="javascript:void(0)">
-                    <div class="block-content">
-                        <p class="mt-5">
-                            <i class="si si-home fa-3x text-muted"></i>
-                        </p>
-                        <p class="font-w600">Home</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-xl-2">
-                <a class="block block-rounded block-bordered block-link-shadow ribbon ribbon-primary text-center" href="javascript:void(0)">
-                    <div class="ribbon-box">5</div>
-                    <div class="block-content">
-                        <p class="mt-5">
-                            <i class="si si-envelope fa-3x text-muted"></i>
-                        </p>
-                        <p class="font-w600">Inbox</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-xl-2">
-                <a class="block block-rounded block-bordered block-link-shadow text-center" href="javascript:void(0)">
-                    <div class="block-content">
-                        <p class="mt-5">
-                            <i class="si si-bag fa-3x text-muted"></i>
-                        </p>
-                        <p class="font-w600">Cart</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-xl-2">
-                <a class="block block-rounded block-bordered block-link-shadow text-center" href="javascript:void(0)">
-                    <div class="block-content">
-                        <p class="mt-5">
-                            <i class="si si-bar-chart fa-3x text-muted"></i>
-                        </p>
-                        <p class="font-w600">Statistics</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-xl-2">
-                <a class="block block-rounded block-bordered block-link-shadow ribbon ribbon-primary text-center" href="javascript:void(0)">
-                    <div class="ribbon-box">3</div>
-                    <div class="block-content">
-                        <p class="mt-5">
-                            <i class="si si-cloud-download fa-3x text-muted"></i>
-                        </p>
-                        <p class="font-w600">Downloads</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-xl-2">
-                <a class="block block-rounded block-bordered block-link-shadow text-center" href="javascript:void(0)">
-                    <div class="block-content">
-                        <p class="mt-5">
-                            <i class="si si-docs fa-3x text-muted"></i>
-                        </p>
-                        <p class="font-w600">Documents</p>
-                    </div>
-                </a>
-            </div>
-        </div>
+        @if(in_array(\Auth::user()->roles->pluck('id')[0], array_merge(getConfigValues('ROLE_PELAKSANA'))))
+        @include('dashboard-pelaksana')
+        @endif
+        
+        @if(in_array(\Auth::user()->roles->pluck('id')[0], array_merge(getConfigValues('ROLE_SITE_MANAGER'))))
+        @include('dashboard-site-manager')
+        @endif
+        
         <!-- END Icon Navigation -->
 
         <!-- Mini Stats -->
@@ -221,33 +162,33 @@
                         </div>
                     </div>
                     <div class="block-content p-5">
-                       <div class="form-row">
-                          <div class="form-group col-12 text-right">
-                             <button id="add_keluarga" type="button" class="btn btn-primary">Tambah Keluarga</button>
-                         </div>
-                     </div>
-                     <table id="table-list-keluarga"  class="table borderless table-hover table-striped table-bordered w-full">
-                        <thead>
-                            <tr>
-                                <th class="text-center">No</th>
-                                <th class="text-center">Nama</th>
-                                <th class="text-center">Hubungan Keluarga</th>
-                                <th class="text-center">Pekerjaan</th>
-                                <th class="text-center">Tanggal Lahir</th>
-                                <th class="text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-list-keluarga-body">
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
-            </div>
-            <!-- END Top Products -->
+                     <div class="form-row">
+                      <div class="form-group col-12 text-right">
+                       <button id="add_keluarga" type="button" class="btn btn-primary">Tambah Keluarga</button>
+                   </div>
+               </div>
+               <table id="table-list-keluarga"  class="table borderless table-hover table-striped table-bordered w-full">
+                <thead>
+                    <tr>
+                        <th class="text-center">No</th>
+                        <th class="text-center">Nama</th>
+                        <th class="text-center">Hubungan Keluarga</th>
+                        <th class="text-center">Pekerjaan</th>
+                        <th class="text-center">Tanggal Lahir</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="table-list-keluarga-body">
+                </tbody>
+            </table>
         </div>
-        <!-- END More Data -->
     </div>
-    <!-- END Content -->
+</div>
+<!-- END Top Products -->
+</div>
+<!-- END More Data -->
+</div>
+<!-- END Content -->
 </div>
 
 <!-- END Page Content -->
@@ -258,67 +199,67 @@
     $.fn.hasId = function(id) {
       return this.attr('id') == id;
   };
-    const table_list_pegawai = $('#table-list-keluarga');
-    let flag_new_table = true;
-    $(function(){
-        $('#add_keluarga').click(()=>{
-            if(flag_new_table){
-                flag_new_table = false;
-            }
-            add_row_to_table(table_list_pegawai);
-        })
-
-        $("#table-list-keluarga-body").on( "click", ".delete-keluarga-btn", function(e) {
-
-            let row = $(this).closest('tr');
-            remove_row_table(table_list_pegawai,row);
-
-        });
+  const table_list_pegawai = $('#table-list-keluarga');
+  let flag_new_table = true;
+  $(function(){
+    $('#add_keluarga').click(()=>{
+        if(flag_new_table){
+            flag_new_table = false;
+        }
+        add_row_to_table(table_list_pegawai);
     })
 
-    const add_row_to_table = (table) => {
-        row = `
-        <tr class="table-new-row-keluarga" data-row-id-pegawai = "">
-        <th class="text-center" style="text-align:center">
-        <span class="isi number"></span>
-        </th>
-        <th class="text-left">
-        <input name="pegawai[]" id="pegawai_" class="form-control isi" value="" type="text" autocomplete="on">
-        </th>
-        <th class="text-center">
-        <select class="form-control select isi" id="id_hubungan_keluarga_" name="id_hubungan_keluarga[]" data-plugin="select2">
-        <optgroup label="Hubungan Keluarga">
-        <option value="">-Pilih-</option>
-        @if(isset($hubungan_keluarga_select) && !$hubungan_keluarga_select->isEmpty)
-        @foreach($hubungan_keluarga_select as $a)
-        <option value="<?php echo $a->id?>"><?php echo $a->hubungan_keluarga ?></option>
-        @endforeach
-        @endif
-        </optgroup>
-        </select>
-        </th>
-        <th class="text-left">
-        <select class="form-control select keluar isi" id="id_profesi_" name="id_profesi[]" data-plugin="select2">
-        <optgroup label="Profesi">
-        <option value="">-Pilih-</option>
-        @if(isset($pekerjaan_select) && !$pekerjaan_select->isEmpty())
-        @foreach($pekerjaan_select as $a)
-        <option value="<?php echo $a->id?>"><?php echo $a->nama_profesi ?></option>
-        @endforeach
-        @endif
-        </optgroup>
-        </select>
-        </th>
-        <th class="text-left">
-        <input name="tanggal_lahir[]" style="text-align:right;" id="tanggal_lahir_'+count+'" class="form-control isi" value="" type="text" autocomplete="on">
-        </th>
-        <th class="text-center">
-        <button type="button" class="btn btn-danger btn-icon btn-xs delete-keluarga-btn" aria-label="Left Align">
-        <span class="glyphicon glyphicon-trash" aria-hidden="true" data-id-pegawai=""></span>
-        </button>
-        </th>
-        </tr>
-        `;
+    $("#table-list-keluarga-body").on( "click", ".delete-keluarga-btn", function(e) {
+
+        let row = $(this).closest('tr');
+        remove_row_table(table_list_pegawai,row);
+
+    });
+})
+
+  const add_row_to_table = (table) => {
+    row = `
+    <tr class="table-new-row-keluarga" data-row-id-pegawai = "">
+    <th class="text-center" style="text-align:center">
+    <span class="isi number"></span>
+    </th>
+    <th class="text-left">
+    <input name="pegawai[]" id="pegawai_" class="form-control isi" value="" type="text" autocomplete="on">
+    </th>
+    <th class="text-center">
+    <select class="form-control select isi" id="id_hubungan_keluarga_" name="id_hubungan_keluarga[]" data-plugin="select2">
+    <optgroup label="Hubungan Keluarga">
+    <option value="">-Pilih-</option>
+    @if(isset($hubungan_keluarga_select) && !$hubungan_keluarga_select->isEmpty)
+    @foreach($hubungan_keluarga_select as $a)
+    <option value="<?php echo $a->id?>"><?php echo $a->hubungan_keluarga ?></option>
+    @endforeach
+    @endif
+    </optgroup>
+    </select>
+    </th>
+    <th class="text-left">
+    <select class="form-control select keluar isi" id="id_profesi_" name="id_profesi[]" data-plugin="select2">
+    <optgroup label="Profesi">
+    <option value="">-Pilih-</option>
+    @if(isset($pekerjaan_select) && !$pekerjaan_select->isEmpty())
+    @foreach($pekerjaan_select as $a)
+    <option value="<?php echo $a->id?>"><?php echo $a->nama_profesi ?></option>
+    @endforeach
+    @endif
+    </optgroup>
+    </select>
+    </th>
+    <th class="text-left">
+    <input name="tanggal_lahir[]" style="text-align:right;" id="tanggal_lahir_'+count+'" class="form-control isi" value="" type="text" autocomplete="on">
+    </th>
+    <th class="text-center">
+    <button type="button" class="btn btn-danger btn-icon btn-xs delete-keluarga-btn" aria-label="Left Align">
+    <span class="glyphicon glyphicon-trash" aria-hidden="true" data-id-pegawai=""></span>
+    </button>
+    </th>
+    </tr>
+    `;
 
             let tbody = table.find("tbody").attr('id'); // tbody of table
             $('#'+tbody).append(row);
@@ -348,5 +289,5 @@
                 });    
             });
         };
-</script>
-@endpush
+    </script>
+    @endpush
