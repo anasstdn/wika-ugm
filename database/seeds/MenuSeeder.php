@@ -168,6 +168,23 @@ class MenuSeeder extends Seeder
         $subsubmenu->save();
 
         $permission = Permission::firstOrNew(array(
+            'name'=>'stok-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $subsubmenu = Menu::firstOrNew(array(
+            'name'=>'Stok Gudang',
+            'parent_id'=>$submenu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>3,
+            'parent_status'=>'N',
+            'url'=>'stok',
+        )
+    );
+        $subsubmenu->save();
+
+        $permission = Permission::firstOrNew(array(
             'name'=>'kepegawaian-menu',
         ));
         $permission->guard_name = 'web';

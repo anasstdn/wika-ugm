@@ -78,6 +78,17 @@ Route::prefix('material')->group(function() {
     Route::get('/{id}/delete', 'MaterialController@destroy');
 });
 
+Route::prefix('stok')->group(function() {
+    Route::get('/', 'StokController@index');
+    Route::match(['get', 'post'],'/get-data','StokController@getData');
+    Route::get('/create',['as' => 'stok.create', 'uses' => 'StokController@create']);
+    Route::match(['get','post'],'/store',['as' => 'stok.store', 'uses' => 'StokController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'stok.update', 'uses' => 'StokController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','StokController@edit');
+    Route::match(['get','post'],'/send-data','StokController@sendData');
+    Route::get('/{id}/delete', 'StokController@destroy');
+});
+
 Route::prefix('departement')->group(function() {
     Route::get('/', 'DepartementController@index');
     Route::match(['get', 'post'],'/get-data','DepartementController@getData');

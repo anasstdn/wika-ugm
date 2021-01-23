@@ -123,7 +123,7 @@ class SupplierController extends Controller
                     })
                     // ->offset($offset)
                     // ->limit($limit)
-                    ->paginate($limit);
+                    ->paginate($limit,['*'], 'page', $page);
 
         $total_all = Supplier::get();
 
