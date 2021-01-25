@@ -33,6 +33,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $flag_batal
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string|null $catatan_site_manager
+ * @property string|null $catatan_project_manager
+ * @property string|null $catatan_komersial
  * 
  * @property User|null $user
  * @property Collection|DetailSpm[] $detail_spms
@@ -75,7 +78,10 @@ class Spm extends Model
 		'flag_verif_pm',
 		'user_verif_pm',
 		'tgl_verif_pm',
-		'flag_batal'
+		'flag_batal',
+		'catatan_site_manager',
+		'catatan_project_manager',
+		'catatan_komersial'
 	];
 
 	public function user()

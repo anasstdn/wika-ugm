@@ -245,6 +245,8 @@ class SPMController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         // $search = $request->has('search') ? $request->get('search') : null;
         // 
+        $material_id = $input['material_id'] == 'null'?null:$input['material_id'];
+
         if($offset == 0)
         {
           $page = 1;
@@ -255,7 +257,8 @@ class SPMController extends Controller
         }
 
         $dataList = Spm::select(\DB::raw('spm.*'))
-                    ->where(function($q) use($input){
+                    ->join('detail_spm','detail_spm.spm_id','=','spm.id')
+                    ->where(function($q) use($input,$material_id){
                         if(isset($input['nama']) && !empty($input['nama']))
                         {
                             $q->where('no_spm','LIKE','%'.$input['nama'].'%')
@@ -274,10 +277,15 @@ class SPMController extends Controller
                         {
                             $q->where('user_input',\Auth::user()->id);
                         }
+                        if(isset($material_id) && !empty($material_id))
+                        {
+                            $q->where('detail_spm.material_id',$material_id);
+                        }
                     })
                     ->whereNull('flag_verif_komersial')
                     // ->offset($offset)
                     // ->limit($limit)
+                    ->distinct()
                     ->orderby('tgl_spm','DESC')
                     ->paginate($limit,['*'], 'page', $page);
 
@@ -331,6 +339,8 @@ class SPMController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         // $search = $request->has('search') ? $request->get('search') : null;
         // 
+        $material_id = $input['material_id'] == 'null'?null:$input['material_id'];
+
         if($offset == 0)
         {
           $page = 1;
@@ -341,7 +351,8 @@ class SPMController extends Controller
         }
 
         $dataList = Spm::select(\DB::raw('spm.*'))
-                    ->where(function($q) use($input){
+                    ->join('detail_spm','detail_spm.spm_id','=','spm.id')
+                    ->where(function($q) use($input,$material_id){
                         if(isset($input['nama']) && !empty($input['nama']))
                         {
                             $q->where('no_spm','LIKE','%'.$input['nama'].'%')
@@ -360,10 +371,15 @@ class SPMController extends Controller
                         {
                             $q->where('user_input',\Auth::user()->id);
                         }
+                        if(isset($material_id) && !empty($material_id))
+                        {
+                            $q->where('detail_spm.material_id',$material_id);
+                        }
                     })
                     ->where('flag_verif_komersial','=','Y')
                     // ->offset($offset)
                     // ->limit($limit)
+                    ->distinct()
                     ->orderby('tgl_spm','DESC')
                     ->paginate($limit,['*'], 'page', $page);
 
@@ -413,6 +429,8 @@ class SPMController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         // $search = $request->has('search') ? $request->get('search') : null;
         // 
+        $material_id = $input['material_id'] == 'null'?null:$input['material_id'];
+
         if($offset == 0)
         {
           $page = 1;
@@ -423,7 +441,8 @@ class SPMController extends Controller
         }
 
         $dataList = Spm::select(\DB::raw('spm.*'))
-                    ->where(function($q) use($input){
+                    ->join('detail_spm','detail_spm.spm_id','=','spm.id')
+                    ->where(function($q) use($input,$material_id){
                         if(isset($input['nama']) && !empty($input['nama']))
                         {
                             $q->where('no_spm','LIKE','%'.$input['nama'].'%')
@@ -442,10 +461,15 @@ class SPMController extends Controller
                         {
                             $q->where('user_input',\Auth::user()->id);
                         }
+                        if(isset($material_id) && !empty($material_id))
+                        {
+                            $q->where('detail_spm.material_id',$material_id);
+                        }
                     })
                     ->where('flag_verif_komersial','=','N')
                     // ->offset($offset)
                     // ->limit($limit)
+                    ->distinct()
                     ->orderby('tgl_spm','DESC')
                     ->paginate($limit,['*'], 'page', $page);
 

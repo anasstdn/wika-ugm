@@ -154,9 +154,10 @@ return [
 			'profil-delete',
 			'spm-menu',
 				'verifikasi-spm-list',
-				'verifikasi-spm-create',
-				'verifikasi-spm-edit',
-				'verifikasi-spm-delete',
+				'verifikasi-site-manager-spm-list',
+				'verifikasi-site-manager-spm-create',
+				'verifikasi-site-manager-spm-edit',
+				'verifikasi-site-manager-spm-delete',
 		],
 
 		'project_manager' => [
@@ -166,9 +167,10 @@ return [
 			'profil-delete',
 			'spm-menu',
 				'verifikasi-spm-list',
-				'verifikasi-spm-create',
-				'verifikasi-spm-edit',
-				'verifikasi-spm-delete',
+				'verifikasi-pm-spm-list',
+				'verifikasi-pm-spm-create',
+				'verifikasi-pm-spm-edit',
+				'verifikasi-pm-spm-delete',
 		],
 
 		'komersial' => [
@@ -178,9 +180,10 @@ return [
 			'profil-delete',
 			'spm-menu',
 				'verifikasi-spm-list',
-				'verifikasi-spm-create',
-				'verifikasi-spm-edit',
-				'verifikasi-spm-delete',
+				'verifikasi-komersial-spm-list',
+				'verifikasi-komersial-spm-create',
+				'verifikasi-komersial-spm-edit',
+				'verifikasi-komersial-spm-delete',
 		],
 	]
 ];

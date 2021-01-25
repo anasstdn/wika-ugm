@@ -42,9 +42,13 @@ class HomeController extends Controller
                 return redirect('profil/edit/'.$id);
             }
         }
+        return view('home');
+    }
+
+    public function materialDropdown()
+    {
         $material = Material::where('parent_status','N')->orderby('kode_material','ASC')->get();
-        $data['material'] = $material;
-        return view('home', $data);
+        return $material;
     }
 
     public function getDataStok(Request $request)
@@ -64,11 +68,13 @@ class HomeController extends Controller
           $page = ($offset / $limit) + 1;
         }
 
+        $material_id = $input['material_id'] == 'null'?null:$input['material_id'];
+
         $dataList = Material::select('*')
-                    ->where(function($q) use($input){
-                        if(!empty($input['material_id']))
+                    ->where(function($q) use($material_id){
+                        if(!empty($material_id))
                         {
-                            $q->where('id',$input['material_id']);
+                            $q->where('id',$material_id);
                         }
                     })
                     ->where('parent_status','N')
@@ -113,7 +119,7 @@ class HomeController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         $search = $request->has('search') ? $request->get('search') : null;
 
-        $material_id = $input['material_id'];
+        $material_id = $input['material_id'] == 'null'?null:$input['material_id'];
         $date_start = $input['date_start'];
         $date_end = $input['date_end'];
 

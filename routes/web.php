@@ -25,6 +25,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::match(['get', 'post'],'home/material-dropdown','HomeController@materialDropdown');
 Route::match(['get', 'post'],'home/get-data-stok','HomeController@getDataStok');
 Route::match(['get', 'post'],'home/get-data-riwayat-stok','HomeController@getDataRiwayatStok');
 

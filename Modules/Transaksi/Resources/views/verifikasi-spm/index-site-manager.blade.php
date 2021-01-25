@@ -8,15 +8,10 @@
       <div class="col-md py-10 d-md-flex align-items-md-center text-center">
         <h1 class="text-white mb-0">
           <span class="font-w300">SPM</span>
-          <span class="font-w400 font-size-lg text-white-op d-none d-md-inline-block">Pengajuan SPM</span>
+          <span class="font-w400 font-size-lg text-white-op d-none d-md-inline-block">Verifikasi SPM</span>
         </h1>
       </div>
       <div class="col-md py-10 d-md-flex align-items-md-center justify-content-md-end text-center">
-        @can('spm-create')
-        <a class="btn btn-alt-primary" href="{{ route('spm.create') }}">
-          <i class="fa fa-plus mr-5"></i> Tambah SPM Baru
-        </a>
-        @endcan
       </div>
     </div>
   </div>
@@ -32,7 +27,7 @@
     <!-- Dynamic Table Full -->
     <div class="block block-themed">
       <div class="block-header bg-info">
-        <h3 class="block-title">Pengajuan SPM</h3>
+        <h3 class="block-title">Verifikasi SPM</h3>
         <div class="block-options">
           <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
             <i class="si si-refresh"></i>
@@ -234,7 +229,7 @@
 
         $.ajax({
           type: "POST",
-          url: "{{ url('spm/get-data') }}",
+          url: "{{ url('verifikasi-spm/get-data') }}",
           headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           },
