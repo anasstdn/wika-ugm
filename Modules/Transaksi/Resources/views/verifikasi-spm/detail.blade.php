@@ -136,14 +136,21 @@
 				<div class="form-row">
 					<div class="form-group col-6">
 						<label for="wizard-progress-nama-depan">Keterangan</label>
-						<textarea class="form-control" readonly="" rows="5">{{ $data->keterangan }}</textarea>
+						<textarea class="form-control" readonly="" rows="5">
+							@if(!empty($data->keterangan))
+							{{ $data->keterangan }}
+							@endif
+							@if(!empty($data->catatan_site_manager))
+							Site Manager : &#13;&#10{{ $data->catatan_site_manager }}
+							@endif
+						</textarea>
 					</div>
 				</div>
 
 				<br/><br/>
 				<div class="row">
 					<div class="col-12 text-right">
-						<a href="{{ url('/spm') }}" class="btn btn-alt-success">Kembali</a>
+						<a href="{{ url('/verifikasi-spm') }}" class="btn btn-alt-success">Kembali</a>
 					</div>
 				</div>
 			</div>

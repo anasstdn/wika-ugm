@@ -7,7 +7,7 @@
 			<div class="col-md py-10 d-md-flex align-items-md-center text-center">
 				<h1 class="text-white mb-0">
 					<span class="font-w300">SPM</span>
-					<span class="font-w400 font-size-lg text-white-op d-none d-md-inline-block">Detail SPM</span>
+					<span class="font-w400 font-size-lg text-white-op d-none d-md-inline-block">Verifikasi Pengajuan SPM</span>
 				</h1>
 			</div>
 		</div>
@@ -25,6 +25,7 @@
 					<button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
 				</div>
 			</div>
+			{!! Form::model($data, ['method' => 'put','route' => ['verifikasi-spm.update', $data->id],'class' => 'js-wizard-validation-classic-form','id'=>'form','files'=>true]) !!}
 			<div class="block-content block-content-full">
 				<div class="form-row">
 					<div class="form-group col-3">
@@ -46,33 +47,11 @@
 				</div>
 				<div class="form-row">
 					<div class="form-group col-3">
-						<label for="wizard-progress-nama-depan">Mengetahui Site Manager</label>
+						<label for="wizard-progress-nama-depan">Status Verifikasi Site Manager</label>
 						<br/>
 						@if($data->flag_verif_site_manager == 'Y')
 						<span class="badge badge-success">Disetujui</span>
 						@elseif($data->flag_verif_site_manager == 'N')
-						<span class="badge badge-danger">Ditolak</span>
-						@else
-						<span class="badge badge-danger">Menunggu Verifikasi</span>
-						@endif
-					</div>
-					<div class="form-group col-3">
-						<label for="wizard-progress-nama-depan">Verifikasi Projek Manager</label>
-						<br/>
-						@if($data->flag_verif_pm == 'Y')
-						<span class="badge badge-success">Disetujui</span>
-						@elseif($data->flag_verif_pm == 'N')
-						<span class="badge badge-danger">Ditolak</span>
-						@else
-						<span class="badge badge-danger">Menunggu Verifikasi</span>
-						@endif
-					</div>
-					<div class="form-group col-3">
-						<label for="wizard-progress-nama-depan">Verifikasi Komersil</label>
-						<br/>
-						@if($data->flag_verif_komersial == 'Y')
-						<span class="badge badge-success">Disetujui</span>
-						@elseif($data->flag_verif_komersial == 'N')
 						<span class="badge badge-danger">Ditolak</span>
 						@else
 						<span class="badge badge-danger">Menunggu Verifikasi</span>
@@ -106,7 +85,8 @@
 								<th>No</th>
 								<th>Jenis Material</th>
 								<th>Spesifikasi</th>
-								<th>Jumlah</th>
+								<th>Jumlah Pengajuan</th>
+								<th>Stok Aktual</th>
 								<th>Satuan</th>
 								<th>Digunakan Tanggal</th>
 								<th>Keterangan</th>
@@ -123,6 +103,7 @@
 								<td>{{ $material->kode_material }} - {{ $material->material }}</td>
 								<td>{{ $material->spesifikasi }}</td>
 								<td>{{ $value->volume }}</td>
+								<td>{{ get_jumlah_current_stok($material->id) }}</td>
 								<td>{{ $material->satuan }}</td>
 								<td>{{ date_indo(date('Y-m-d',strtotime($value->tgl_penggunaan))) }}</td>
 								<td>{{ $value->keterangan }}</td>
@@ -134,20 +115,112 @@
 				</div>
 				<hr/>
 				<div class="form-row">
+					<div class="form-group col-3">
+						<label for="wizard-progress-nama-depan">Pengajuan Diterima / Ditolak</label>
+						<select class="form-control pengajuan" name="verifikasi" id="verifikasi">
+							<option value="">- Silahkan Pilih -</option>
+							<option value="Y">Diterima</option>
+							<option value="N">Ditolak</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-row">
 					<div class="form-group col-6">
-						<label for="wizard-progress-nama-depan">Keterangan</label>
-						<textarea class="form-control" readonly="" rows="5">{{ $data->keterangan }}</textarea>
+						<label for="wizard-progress-nama-depan">Catatan (Tidak Wajib Diisi)</label>
+						<textarea class="form-control pengajuan" name="catatan_site_manager" id="catatan_site_manager" rows="5"></textarea>
 					</div>
 				</div>
 
 				<br/><br/>
 				<div class="row">
 					<div class="col-12 text-right">
-						<a href="{{ url('/spm') }}" class="btn btn-alt-success">Kembali</a>
+						{{-- <a href="{{ url('/verifikasi-spm/'.$data->id.'/test-pdf') }}" class="btn btn-alt-info">Print</a> --}}
+						<a href="{{ url('/verifikasi-spm') }}" class="btn btn-alt-success">Kembali</a>
+						<button type="submit" id="simpan" class="btn btn-alt-primary">Simpan</button>
 					</div>
 				</div>
 			</div>
+			{!! Form::close() !!}
 		</div>
 	</div>
 </div>
 @endsection
+
+@push('js')
+<script>
+	$(function(){
+		initWizardSimple();
+	})
+
+		initWizardSimple = () => {
+		let formClassic     = jQuery('.js-wizard-validation-classic-form');
+
+		formClassic.on('keyup keypress', e => {
+			let code = e.keyCode || e.which;
+
+			if (code === 13) {
+				e.preventDefault();
+				return false;
+			}
+		});
+
+		$.validator.addMethod("validDate", function(value, element) {
+			return this.optional(element) || moment(value,"DD-MM-YYYY").isValid();
+		}, "Format tanggal yang diperbolehkan, exp: DD-MM-YYYY");
+
+		let validatorClassic = formClassic.validate({
+			errorClass: 'invalid-feedback animated fadeInDown',
+			errorElement: 'div',
+			errorPlacement: (error, e) => {
+				$(e).parents('.form-group').append(error);
+			},
+			highlight: e => {
+				$(e).closest('.form-group').removeClass('is-invalid').addClass('is-invalid');
+			},
+			success: e => {
+				$(e).closest('.form-group').removeClass('is-invalid');
+				$(e).remove();
+			},
+		});
+
+		$('.pengajuan').each(function(index,element){
+			if($(element).attr('id') == 'verifikasi')
+			{
+				$(element).rules('add', {
+					required: true,
+					messages: {
+						required: "Form Wajib Diisi"
+					},
+				});
+			}
+
+			if($(element).attr('id') == 'catatan_site_manager')
+			{
+				$(element).rules('add', {
+					maxlength: 100,
+					minlength: 1,
+				});
+			}
+		})
+
+		$('input').on('focus focusout keyup', function () {
+			$(this).valid();
+		});
+
+		$("select").on("select2:close", function (e) {  
+			$(this).valid(); 
+		});
+
+		$(".datepicker").on("change", function (e) {  
+			$(this).valid(); 
+		});
+
+		$('#form').submit('#simpan',function(e){
+			if($(this).valid())
+			{
+				clicked(e);
+			}
+		});
+	}
+</script>
+@endpush

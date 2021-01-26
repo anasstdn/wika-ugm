@@ -150,12 +150,12 @@ function dashboard_site_manager()
 
     $total_verif_diterima = \DB::table('spm')
                             ->where('flag_verif_site_manager','=','Y')
-                            ->where('user_verif_site_manager','=',\Auth::user()->id)
+                            // ->where('user_verif_site_manager','=',\Auth::user()->id)
                             ->count();
 
     $total_verif_ditolak = \DB::table('spm')
                             ->where('flag_verif_site_manager','=','N')
-                            ->where('user_verif_site_manager','=',\Auth::user()->id)
+                            // ->where('user_verif_site_manager','=',\Auth::user()->id)
                             ->count();
 
     $data['total_all_spm'] = $total_all_spm;
@@ -164,6 +164,13 @@ function dashboard_site_manager()
     $data['total_verif_ditolak'] = $total_verif_ditolak;
 
     return $data;
+}
+
+function get_jumlah_current_stok($material_id)
+{
+    $stok = \DB::table('stok')->where('material_id',$material_id)->first();
+
+    return isset($stok) && !empty($stok)?$stok->qty:0;
 }
 
 

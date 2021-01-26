@@ -201,7 +201,7 @@
         <script src="{{asset('codebase/')}}/src/assets/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
         <script src="{{asset('codebase/')}}/src/assets/js/plugins/es6-promise/es6-promise.auto.min.js"></script>
         <script src="{{asset('codebase/')}}/src/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
-        <script src="https://js.pusher.com/5.0/pusher.min.js"></script>
+        {{-- <script src="https://js.pusher.com/5.0/pusher.min.js"></script> --}}
         <script src="{{asset('codebase/')}}/src/assets/js/pages/be_ui_activity.min.js"></script>
 
         <script src="{{asset('codebase/')}}/src/assets/js/plugins/flatpickr/flatpickr.min.js"></script>
@@ -398,42 +398,42 @@ function clicked(e)
 
 </script>
 <script>
-  Pusher.logToConsole = false;
+  // Pusher.logToConsole = false;
 
-  var notificationsWrapper   = $('.notifications');
-  var notificationsToggle    = notificationsWrapper.find('button[data-toggle]');
-  var notificationsCountElem = notificationsToggle.find('span[data-count]');
-  var notificationsCount     = parseInt(notificationsCountElem.data('count'));
-  var notifications          = notificationsWrapper.find('ul.content-notif');
+  // var notificationsWrapper   = $('.notifications');
+  // var notificationsToggle    = notificationsWrapper.find('button[data-toggle]');
+  // var notificationsCountElem = notificationsToggle.find('span[data-count]');
+  // var notificationsCount     = parseInt(notificationsCountElem.data('count'));
+  // var notifications          = notificationsWrapper.find('ul.content-notif');
 
-  var pusher = new Pusher('d32a5c0e169aaa4f1287', {
-    cluster: 'ap1'
-  });
+  // var pusher = new Pusher('d32a5c0e169aaa4f1287', {
+  //   cluster: 'ap1'
+  // });
 
-  var channel = pusher.subscribe('{{ Auth::user()->id }}');
-  channel.bind('send-message', function(data) {
-    var existingNotifications = notifications.html();
-    var newNotificationHtml = `
-    <li class="new-notification">
-    <a class="text-body-color-dark media mb-15" href="{{url('/')}}/`+data.url+`">
-    <div class="ml-5 mr-15">
-    <i class="fa fa-fw fa-exclamation-triangle text-warning"></i>
-    </div>
-    <div class="media-body pr-10">
-    <p class="mb-0" style="font-size:10pt"><b>`+data.title+`</b></p>
-    <p class="mb-0" style="font-size:9pt">`+data.content+`</p>
-    <div class="text-muted font-size-sm font-italic">15 min ago</div>
-    </div>
-    </a>
-    </li>
-    `;
-    notifications.html(newNotificationHtml + existingNotifications);
-    notificationsCount += 1;
-    notificationsCountElem.attr('data-count', notificationsCount);
-    notificationsCountElem.text(notificationsCount);
+  // var channel = pusher.subscribe('{{ Auth::user()->id }}');
+  // channel.bind('send-message', function(data) {
+  //   var existingNotifications = notifications.html();
+  //   var newNotificationHtml = `
+  //   <li class="new-notification">
+  //   <a class="text-body-color-dark media mb-15" href="{{url('/')}}/`+data.url+`">
+  //   <div class="ml-5 mr-15">
+  //   <i class="fa fa-fw fa-exclamation-triangle text-warning"></i>
+  //   </div>
+  //   <div class="media-body pr-10">
+  //   <p class="mb-0" style="font-size:10pt"><b>`+data.title+`</b></p>
+  //   <p class="mb-0" style="font-size:9pt">`+data.content+`</p>
+  //   <div class="text-muted font-size-sm font-italic">15 min ago</div>
+  //   </div>
+  //   </a>
+  //   </li>
+  //   `;
+  //   notifications.html(newNotificationHtml + existingNotifications);
+  //   notificationsCount += 1;
+  //   notificationsCountElem.attr('data-count', notificationsCount);
+  //   notificationsCountElem.text(notificationsCount);
 
-    notificationsWrapper.show();
-  });
+  //   notificationsWrapper.show();
+  // });
 </script>
 
 @yield('js')  

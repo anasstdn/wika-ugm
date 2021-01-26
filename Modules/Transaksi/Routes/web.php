@@ -43,6 +43,8 @@ Route::prefix('verifikasi-spm')->group(function() {
     Route::match(['get','post','put'],'/update/{id}',['as' => 'verifikasi-spm.update', 'uses' => 'VerifikasiSPMController@update']);
     Route::match(['get', 'post'],'/{id}/edit','VerifikasiSPMController@edit');
     Route::match(['get', 'post'],'/{id}/view','VerifikasiSPMController@show');
+    Route::match(['get', 'post'],'/{id}/test-pdf','VerifikasiSPMController@test_pdf');
+    Route::match(['get', 'post'],'/{id}/verifikasi','VerifikasiSPMController@verifikasi');
     Route::match(['get','post'],'/send-data','VerifikasiSPMController@sendData');
     Route::match(['get','post'],'/load-data-material','VerifikasiSPMController@loadDataMaterial');
     Route::get('/delete-detail-spm', 'VerifikasiSPMController@deleteDetailSpm');
