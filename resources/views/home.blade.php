@@ -51,6 +51,14 @@
     @include('dashboard-site-manager')
     @endif
 
+    @if(in_array(\Auth::user()->roles->pluck('id')[0], array_merge(getConfigValues('ROLE_PROJECT_MANAGER'))))
+    @include('dashboard-project-manager')
+    @endif
+
+    @if(in_array(\Auth::user()->roles->pluck('id')[0], array_merge(getConfigValues('ROLE_KOMERSIAL'))))
+    @include('dashboard-komersial')
+    @endif
+
     <!-- END Icon Navigation -->
 
     <!-- Mini Stats -->

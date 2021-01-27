@@ -36,7 +36,7 @@ class VerifikasiSPMController extends Controller
 
         if(\Auth::user()->can('verifikasi-pm-spm-list'))
         {
-            return view('transaksi::verifikasi-spm.index-pm');
+            return view('transaksi::verifikasi-spm.project_manager.index-pm');
         }
 
         if(\Auth::user()->can('verifikasi-komersial-spm-list'))
@@ -120,6 +120,29 @@ class VerifikasiSPMController extends Controller
                 ]);
             }
         }
+
+        if(\Auth::user()->can('verifikasi-pm-spm-edit'))
+        {
+            $spm = Spm::find($id);
+
+            if($request->input('verifikasi',null) == 'Y')
+            {
+                $spm->update(['flag_verif_pm' => $request->input('verifikasi',null), 'tgl_verif_pm' => date('Y-m-d H:i:s'), 'catatan_project_manager' => $request->input('catatan_project_manager',null),'user_verif_pm' => \Auth::user()->id]);
+            }
+            else
+            {
+                $spm->update([
+                    'flag_verif_pm' => $request->input('verifikasi',null), 
+                    'tgl_verif_pm' => date('Y-m-d H:i:s'),
+                    'flag_verif_komersial' => 'N', 
+                    'tgl_verif_komersial' => date('Y-m-d H:i:s'), 
+                    'flag_verif_site_manager' => 'N', 
+                    'tgl_verif_site_manager' => date('Y-m-d H:i:s'),  
+                    'catatan_project_manager' => $request->input('catatan_project_manager',null),
+                    'user_verif_pm' => \Auth::user()->id
+                ]);
+            }
+        }
         
         message(true,'Verifikasi berhasil','Verifikasi gagal');
 
@@ -174,8 +197,23 @@ class VerifikasiSPMController extends Controller
                         {
                             $q->where('detail_spm.material_id',$material_id);
                         }
+
+                        if(\Auth::user()->can('verifikasi-site-manager-spm-list'))
+                        {
+                            $q->whereNull('flag_verif_site_manager');
+                        }
+                        elseif(\Auth::user()->can('verifikasi-pm-spm-list'))
+                        {
+                            $q->where('flag_verif_site_manager','=','Y');
+                            $q->whereNull('flag_verif_pm');
+                        }
+                        elseif(\Auth::user()->can('verifikasi-komersial-spm-list'))
+                        {
+                            $q->where('flag_verif_site_manager','=','Y');
+                            $q->where('flag_verif_pm','=','Y');
+                            $q->whereNull('flag_verif_komersial');
+                        }
                     })
-                    ->whereNull('flag_verif_site_manager')
                     ->distinct()
                     ->orderby('tgl_spm','DESC')
                     ->paginate($limit,['*'], 'page', $page);
@@ -197,6 +235,11 @@ class VerifikasiSPMController extends Controller
             $data[$key]['aksi'] = '';
 
             if(\Auth::user()->can('verifikasi-site-manager-spm-edit'))
+            {
+                $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='$verifikasi' class='btn btn-primary btn-sm' data-original-title='Verifikasi' title='Verifikasi'><i class='fa fa-check' aria-hidden='true'></i> Verifikasi</a></div></div>";
+            }
+
+            if(\Auth::user()->can('verifikasi-pm-spm-edit'))
             {
                 $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='$verifikasi' class='btn btn-primary btn-sm' data-original-title='Verifikasi' title='Verifikasi'><i class='fa fa-check' aria-hidden='true'></i> Verifikasi</a></div></div>";
             }
@@ -245,8 +288,23 @@ class VerifikasiSPMController extends Controller
                         {
                             $q->where('detail_spm.material_id',$material_id);
                         }
+
+                        if(\Auth::user()->can('verifikasi-site-manager-spm-list'))
+                        {
+                            $q->where('flag_verif_site_manager','=','Y');
+                        }
+                        elseif(\Auth::user()->can('verifikasi-pm-spm-list'))
+                        {
+                            $q->where('flag_verif_site_manager','=','Y');
+                            $q->where('flag_verif_pm','=','Y');
+                        }
+                        elseif(\Auth::user()->can('verifikasi-komersial-spm-list'))
+                        {
+                            $q->where('flag_verif_site_manager','=','Y');
+                            $q->where('flag_verif_pm','=','Y');
+                            $q->where('flag_verif_komersial','=','Y');
+                        }
                     })
-                    ->where('flag_verif_site_manager','=','Y')
                     ->distinct()
                     ->orderby('tgl_spm','DESC')
                     ->paginate($limit,['*'], 'page', $page);
@@ -319,8 +377,23 @@ class VerifikasiSPMController extends Controller
                         {
                             $q->where('detail_spm.material_id',$material_id);
                         }
+
+                        if(\Auth::user()->can('verifikasi-site-manager-spm-list'))
+                        {
+                            $q->where('flag_verif_site_manager','=','N');
+                        }
+                        elseif(\Auth::user()->can('verifikasi-pm-spm-list'))
+                        {
+                            $q->where('flag_verif_site_manager','=','N');
+                            $q->where('flag_verif_pm','=','N');
+                        }
+                        elseif(\Auth::user()->can('verifikasi-komersial-spm-list'))
+                        {
+                            $q->where('flag_verif_site_manager','=','N');
+                            $q->where('flag_verif_pm','=','N');
+                            $q->where('flag_verif_komersial','=','N');
+                        }
                     })
-                    ->where('flag_verif_site_manager','=','N')
                     ->distinct()
                     ->orderby('tgl_spm','DESC')
                     ->paginate($limit,['*'], 'page', $page);
@@ -358,6 +431,13 @@ class VerifikasiSPMController extends Controller
             $data_detail = DetailSpm::where('spm_id',$data->id)->get();
 
             return view('transaksi::verifikasi-spm.site_manager.verif',compact('data','data_detail'));
+        }
+        if(\Auth::user()->can('verifikasi-pm-spm-edit'))
+        {
+            $data = Spm::find($id);
+            $data_detail = DetailSpm::where('spm_id',$data->id)->get();
+
+            return view('transaksi::verifikasi-spm.project_manager.verif',compact('data','data_detail'));
         }
     }
 

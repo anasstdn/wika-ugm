@@ -166,6 +166,63 @@ function dashboard_site_manager()
     return $data;
 }
 
+function dashboard_project_manager()
+{
+    $total_all_spm = \DB::table('spm')->count();
+
+    $total_belum_diverif = \DB::table('spm')
+                            ->where('flag_verif_site_manager','=','Y')
+                            ->whereNull('flag_verif_pm')
+                            ->count();
+
+    $total_verif_diterima = \DB::table('spm')
+                            ->where('flag_verif_site_manager','=','Y')
+                            ->where('flag_verif_pm','=','Y')
+                            ->count();
+
+    $total_verif_ditolak = \DB::table('spm')
+                            ->where('flag_verif_site_manager','=','N')
+                            ->where('flag_verif_pm','=','N')
+                            ->count();
+
+    $data['total_all_spm'] = $total_all_spm;
+    $data['total_belum_diverif'] = $total_belum_diverif;
+    $data['total_verif_diterima'] = $total_verif_diterima;
+    $data['total_verif_ditolak'] = $total_verif_ditolak;
+
+    return $data;
+}
+
+function dashboard_komersial()
+{
+    $total_all_spm = \DB::table('spm')->count();
+
+    $total_belum_diverif = \DB::table('spm')
+                            ->where('flag_verif_site_manager','=','Y')
+                            ->where('flag_verif_pm','=','Y')
+                            ->whereNull('flag_verif_komersial')
+                            ->count();
+
+    $total_verif_diterima = \DB::table('spm')
+                            ->where('flag_verif_site_manager','=','Y')
+                            ->where('flag_verif_pm','=','Y')
+                            ->where('flag_verif_komersial','=','Y')
+                            ->count();
+
+    $total_verif_ditolak = \DB::table('spm')
+                            ->where('flag_verif_site_manager','=','N')
+                            ->where('flag_verif_pm','=','N')
+                            ->where('flag_verif_komersial','=','N')
+                            ->count();
+
+    $data['total_all_spm'] = $total_all_spm;
+    $data['total_belum_diverif'] = $total_belum_diverif;
+    $data['total_verif_diterima'] = $total_verif_diterima;
+    $data['total_verif_ditolak'] = $total_verif_ditolak;
+
+    return $data;
+}
+
 function get_jumlah_current_stok($material_id)
 {
     $stok = \DB::table('stok')->where('material_id',$material_id)->first();
