@@ -136,14 +136,18 @@
 				<div class="form-row">
 					<div class="form-group col-6">
 						<label for="wizard-progress-nama-depan">Keterangan</label>
-						<textarea class="form-control" readonly="" rows="5">
 							@if(!empty($data->keterangan))
-							{{ $data->keterangan }}
+							<br/><span>Pesan : {{ $data->keterangan }}</span>
 							@endif
 							@if(!empty($data->catatan_site_manager))
-							Site Manager : &#13;&#10{{ $data->catatan_site_manager }}
+							<br/><span>Site Manager : &#13;&#10{{ $data->catatan_site_manager }}</span>
 							@endif
-						</textarea>
+							@if(!empty($data->catatan_project_manager))
+							<br/><span>Project Manager : &#13;&#10{{ $data->catatan_project_manager }}</span>
+							@endif
+							@if(!empty($data->catatan_komersial))
+							<br/><span>Komersial : &#13;&#10{{ $data->catatan_komersial }}</span>
+							@endif
 					</div>
 				</div>
 
