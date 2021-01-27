@@ -523,8 +523,8 @@ class VerifikasiSPMController extends Controller
             $array['data_detail'] = $data_detail;
 
             $pdf = PDF::loadView('transaksi::verifikasi-spm.site_manager.pdf', $array);
-
-            return $pdf->stream();
+            
+            return $pdf->stream("SPM_".$data->no_spm."_".date('Y_m_d',strtotime($data->tgl_spm)).".pdf");
         }
 
         message(false,'','Anda tidak dapat mengakses halaman ini');
