@@ -7,35 +7,40 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class DetailSpm
+ * Class DetailPo
  * 
  * @property int $id
- * @property int|null $spm_id
+ * @property int|null $po_id
  * @property int|null $material_id
  * @property float|null $volume
  * @property Carbon|null $tgl_penggunaan
  * @property string|null $keterangan
+ * @property int|null $supplier_id
+ * @property float|null $harga_per_unit
+ * @property float|null $subtotal
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
  * @property Material|null $material
- * @property Spm|null $spm
- * @property Collection|SpmSurvei[] $spm_surveis
+ * @property Po|null $po
+ * @property Supplier|null $supplier
  *
  * @package App\Models
  */
-class DetailSpm extends Model
+class DetailPo extends Model
 {
-	protected $table = 'detail_spm';
+	protected $table = 'detail_po';
 
 	protected $casts = [
-		'spm_id' => 'int',
+		'po_id' => 'int',
 		'material_id' => 'int',
-		'volume' => 'float'
+		'volume' => 'float',
+		'supplier_id' => 'int',
+		'harga_per_unit' => 'float',
+		'subtotal' => 'float'
 	];
 
 	protected $dates = [
@@ -43,11 +48,14 @@ class DetailSpm extends Model
 	];
 
 	protected $fillable = [
-		'spm_id',
+		'po_id',
 		'material_id',
 		'volume',
 		'tgl_penggunaan',
-		'keterangan'
+		'keterangan',
+		'supplier_id',
+		'harga_per_unit',
+		'subtotal'
 	];
 
 	public function material()
@@ -55,13 +63,13 @@ class DetailSpm extends Model
 		return $this->belongsTo(Material::class);
 	}
 
-	public function spm()
+	public function po()
 	{
-		return $this->belongsTo(Spm::class);
+		return $this->belongsTo(Po::class);
 	}
 
-	public function spm_surveis()
+	public function supplier()
 	{
-		return $this->hasMany(SpmSurvei::class);
+		return $this->belongsTo(Supplier::class);
 	}
 }

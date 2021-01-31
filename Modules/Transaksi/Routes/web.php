@@ -51,3 +51,21 @@ Route::prefix('verifikasi-spm')->group(function() {
     Route::get('/delete-detail-spm', 'VerifikasiSPMController@deleteDetailSpm');
     Route::get('/{id}/batal', 'VerifikasiSPMController@batal');
 });
+
+Route::prefix('survei')->group(function() {
+    Route::get('/', 'SurveiController@index');
+    Route::match(['get', 'post'],'/get-data','SurveiController@getData');
+    Route::match(['get', 'post'],'/load-table','SurveiController@loadTable');
+    Route::match(['get', 'post'],'/get-data-diterima','SurveiController@getDataDiterima');
+    Route::get('/{id}/form-survei', 'SurveiController@formSurvei');
+    Route::match(['get', 'post'],'/get-data-ditolak','SurveiController@getDataDitolak');
+    Route::get('/create',['as' => 'survei.create', 'uses' => 'SurveiController@create']);
+    Route::match(['get', 'post'],'/material-search','SurveiController@searchMaterial');
+    Route::match(['get','post'],'/store',['as' => 'survei.store', 'uses' => 'SurveiController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'survei.update', 'uses' => 'SurveiController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','SurveiController@formSurvei');
+    Route::match(['get', 'post'],'/{id}/view','SurveiController@show');
+    Route::match(['get','post'],'/send-data','SurveiController@sendData');
+    Route::match(['get','post'],'/load-data-material','SurveiController@loadDataMaterial');
+    Route::get('/{id}/batal', 'SurveiController@batal');
+});

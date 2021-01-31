@@ -29,12 +29,12 @@
 		<div class="block-content">
 			{!! Form::open(array('route' => 'stok.store','method'=>'POST','class' => 'js-wizard-validation-classic-form','id'=>'form','files'=>true)) !!}
 			<div class="row items-push">
-				<div class="col-lg-3">
+				{{-- <div class="col-lg-3">
 					<p class="text-muted">
 						Silahkan isi data stok barang dengan lengkap.
 					</p>
-				</div>
-				<div class="col-lg-8 offset-lg-1">
+				</div> --}}
+				<div class="col-lg-12">
 					<div class="table-responsive">
 					<table class="table table-sm" width="100%">
 						<thead>
@@ -42,6 +42,7 @@
 								<th>No</th>
 								<th>Kode Material</th>
 								<th>Material</th>
+								<th>Spesifikasi</th>
 								<th>Satuan</th>
 								<th>Qty</th>
 							</tr>
@@ -58,6 +59,7 @@
 								</td>
 								<td>{{$val->kode_material}}</td>
 								<td>{{$val->material}}</td>
+								<td>{{$val->spesifikasi}}</td>
 								<td>{{$val->satuan}}</td>
 								<td><input type="number" min="0" class="form-control" style="text-align: right" name="qty[]" value="{{isset($qty_stok->qty) && !empty($qty_stok->qty)?$qty_stok->qty:0}}"></td>
 							</tr>

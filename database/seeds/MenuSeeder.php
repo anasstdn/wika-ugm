@@ -22,6 +22,7 @@ class MenuSeeder extends Seeder
         // $this->menuPengaturan();
         $this->menuMasterdata();
         $this->menuSpm();
+        $this->menuPo();
         // $this->menuTransaksiKas();
         // $this->menuSimpanan();
         // $this->menuPinjaman();
@@ -372,6 +373,75 @@ class MenuSeeder extends Seeder
         )
     );
         $submenu->save();
+    }
+
+    private function menuPo()
+    {
+        $this->command->info('Menu PO Seeder');
+        $permission = Permission::firstOrNew(array(
+            'name'=>'po-menu'
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+        $menu = Menu::firstOrNew(array(
+            'name'=>'Purchase Order',
+            'permission_id'=>$permission->id,
+            'ordinal'=>1,
+            'parent_status'=>'Y'
+        ));
+        $menu->icon = 'si-briefcase';
+        $menu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'survei-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Survei Barang',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'N',
+            'url' => 'survei'
+        )
+    );
+        $submenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'po-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Pengajuan PO',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'N',
+            'url' => 'po'
+        )
+    );
+        $submenu->save();
+
+    //     $permission = Permission::firstOrNew(array(
+    //         'name'=>'verifikasi-spm-list',
+    //     ));
+    //     $permission->guard_name = 'web';
+    //     $permission->save();
+
+    //     $submenu = Menu::firstOrNew(array(
+    //         'name'=>'Verifikasi SPM',
+    //         'parent_id'=>$menu->id,
+    //         'permission_id'=>$permission->id,
+    //         'ordinal'=>2,
+    //         'parent_status'=>'N',
+    //         'url' => 'verifikasi-spm'
+    //     )
+    // );
+    //     $submenu->save();
     }
 }
 

@@ -11,31 +11,36 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class DetailSpm
+ * Class DetailSurvei
  * 
  * @property int $id
- * @property int|null $spm_id
+ * @property int|null $survei_id
  * @property int|null $material_id
+ * @property string|null $merek
  * @property float|null $volume
  * @property Carbon|null $tgl_penggunaan
  * @property string|null $keterangan
+ * @property float|null $harga_per_unit
+ * @property float|null $subtotal
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
  * @property Material|null $material
- * @property Spm|null $spm
+ * @property Survei|null $survei
  * @property Collection|SpmSurvei[] $spm_surveis
  *
  * @package App\Models
  */
-class DetailSpm extends Model
+class DetailSurvei extends Model
 {
-	protected $table = 'detail_spm';
+	protected $table = 'detail_survei';
 
 	protected $casts = [
-		'spm_id' => 'int',
+		'survei_id' => 'int',
 		'material_id' => 'int',
-		'volume' => 'float'
+		'volume' => 'float',
+		'harga_per_unit' => 'float',
+		'subtotal' => 'float'
 	];
 
 	protected $dates = [
@@ -43,11 +48,14 @@ class DetailSpm extends Model
 	];
 
 	protected $fillable = [
-		'spm_id',
+		'survei_id',
 		'material_id',
+		'merek',
 		'volume',
 		'tgl_penggunaan',
-		'keterangan'
+		'keterangan',
+		'harga_per_unit',
+		'subtotal'
 	];
 
 	public function material()
@@ -55,9 +63,9 @@ class DetailSpm extends Model
 		return $this->belongsTo(Material::class);
 	}
 
-	public function spm()
+	public function survei()
 	{
-		return $this->belongsTo(Spm::class);
+		return $this->belongsTo(Survei::class);
 	}
 
 	public function spm_surveis()
