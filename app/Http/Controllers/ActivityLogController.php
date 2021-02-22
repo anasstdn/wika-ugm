@@ -109,18 +109,42 @@ class ActivityLogController extends Controller
             $data[$key]['description'] = '<table border="0" style="font-size: 9pt">';
             $data[$key]['description'] .= '<tfoot>';
             $data[$key]['description'] .= '<tr>';
-            $data[$key]['description'] .= '<td width="20%"><b>Access Type</b></td><td width="40%">'.$jsonData['attributes']['type'].'</td>';
+            $data[$key]['description'] .= '<td width="20%"><b>Access Type</b></td><td width="20%">'.$jsonData['attributes']['type'].'</td>';
             $data[$key]['description'] .= '</tr>';
-            // if(isset($jsonData['attributes']['description']))
-            // {
-            //     $data[$key]['description'] .= '<tr>';
-            //     $data[$key]['description'] .= '<td width="40%"><b>Description</b></td><td>'.$jsonData['attributes']['description'].'</td>';
-            //     $data[$key]['description'] .= '</tr>';
-            // }
+            if(isset($jsonData['attributes']['description']))
+            {
+                $data[$key]['description'] .= '<tr>';
+                $data[$key]['description'] .= '<td width="20%"><b>Description</b></td><td>'.$jsonData['attributes']['description'].'</td>';
+                $data[$key]['description'] .= '</tr>';
+            }
             if(isset($jsonData['attributes']['menu']))
             {
                 $data[$key]['description'] .= '<tr>';
-                $data[$key]['description'] .= '<td width="20%"><b>URL</b></td><td width="40%">'.$jsonData['attributes']['menu'].'</td>';
+                $data[$key]['description'] .= '<td width="20%"><b>URL</b></td><td width="20%">'.$jsonData['attributes']['menu'].'</td>';
+                $data[$key]['description'] .= '</tr>';
+            }
+            if(isset($jsonData['attributes']['table']))
+            {
+                $data[$key]['description'] .= '<tr>';
+                $data[$key]['description'] .= '<td width="20%"><b>Tabel</b></td><td width="20%">'.$jsonData['attributes']['table'].'</td>';
+                $data[$key]['description'] .= '</tr>';
+            }
+            if(isset($jsonData['attributes']['data']))
+            {
+                $data[$key]['description'] .= '<tr>';
+                $data[$key]['description'] .= '<td width="20%"><b>Data</b></td><td width="20%"><pre>'.json_encode($jsonData['attributes']['data'],JSON_PRETTY_PRINT).'</pre></td>';
+                $data[$key]['description'] .= '</tr>';
+            }
+            if(isset($jsonData['attributes']['device']))
+            {
+                $data[$key]['description'] .= '<tr>';
+                $data[$key]['description'] .= '<td width="20%"><b>Data</b></td><td width="20%">'.$jsonData['attributes']['device'].'</td>';
+                $data[$key]['description'] .= '</tr>';
+            }
+            if(isset($jsonData['attributes']['browser']))
+            {
+                $data[$key]['description'] .= '<tr>';
+                $data[$key]['description'] .= '<td width="20%"><b>Data</b></td><td width="20%">'.$jsonData['attributes']['browser'].'</td>';
                 $data[$key]['description'] .= '</tr>';
             }
             $data[$key]['description'] .= '</tfoot>';
@@ -131,5 +155,12 @@ class ActivityLogController extends Controller
             
         }
         return response()->json(array('data' => $data,'total' => $dataList->total()));
+    }
+
+    public function loadUsers(Request $request)
+    {
+        $data = \App\User::get(['id','name']);
+
+        return response()->json($data);
     }
 }
