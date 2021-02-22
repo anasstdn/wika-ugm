@@ -22,6 +22,15 @@ class SurveiController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:survei-list|survei-create|survei-edit|survei-delete', ['only' => ['index','store','getData']]);
+        $this->middleware('permission:survei-create', ['only' => ['create','store']]);
+        $this->middleware('permission:survei-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:survei-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $material = \DB::table('material')

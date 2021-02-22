@@ -15,6 +15,8 @@ use Response;
 use DataTables;
 use Illuminate\Support\Facades\Validator;
 use Schema;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\ActivityTraits;
 
 class UserController extends Controller
 {
@@ -22,6 +24,7 @@ class UserController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    use ActivityTraits;
     
     function __construct()
     {
@@ -34,6 +37,7 @@ class UserController extends Controller
 
     public function index()
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         return view('pengaturan::user.index');
     }
 
@@ -44,6 +48,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::whereNotIn('id',getConfigValues('ROLE_DEVELOPER'))->pluck('name','name')->all();
+        $this->menuAccess(\Auth::user(), get_current_url());
         return view('pengaturan::user.form',compact('roles'));
     }
 
@@ -77,6 +82,7 @@ class UserController extends Controller
         $data = User::find($id);
         $roles = Role::whereNotIn('id',getConfigValues('ROLE_DEVELOPER'))->pluck('name','name')->all();
         $userRole = $data->roles->pluck('name','name')->all();
+        $this->menuAccess(\Auth::user(), get_current_url());
         return view('pengaturan::user.form',compact('roles','data','userRole','id'));
     }
 
@@ -98,7 +104,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         $data = User::find($id);
+
+        $this->logDeletedActivity($data, 'Delete data '.$id, url()->current(), base_table('App\User'));
+
         $data->delete();
         message($data,'Data berhasil dihapus!','Data gagal dihapus!');
 
@@ -107,6 +117,7 @@ class UserController extends Controller
 
     public function getData(Request $request)
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         $config = getConfigValues('ROLE_DEVELOPER');
         $input = $request->all();
 
@@ -202,6 +213,7 @@ class UserController extends Controller
 
     public function sendData(Request $request)
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         $input = $request->all();
         DB::beginTransaction();
         try {
@@ -236,6 +248,7 @@ class UserController extends Controller
             // 'kd_koperasi'   =>  $input['koperasi'][0],
                 );
                 // dd($data);
+                $this->logCreatedActivity(Auth::user(), $data, url()->current(), base_table('App\User'));
 
                 $act = User::create($data);
                 $act->assignRole($request->input('roles'));
@@ -268,6 +281,9 @@ class UserController extends Controller
               }
 
               $act = User::find($input['id']);
+
+              $this->logUpdatedActivity(Auth::user(), $act->getAttributes(), Arr::except($input,array('roles')), url()->current(), base_table('App\User'));
+              
               $act->update($input);
 
               DB::table('model_has_roles')->where('model_id',$input['id'])->delete();
@@ -301,6 +317,7 @@ class UserController extends Controller
 
   public function checkUsername(Request $request)
   {
+    $this->menuAccess(\Auth::user(), get_current_url());
     $all_data = $request->all();
         // dd($all_data);
     switch($all_data['mode'])
@@ -322,6 +339,7 @@ return Response::json(array('msg' => 'false'));
 
 public function checkEmail(Request $request)
 {
+    $this->menuAccess(\Auth::user(), get_current_url());
     $all_data = $request->all();
     switch($all_data['mode'])
     {
@@ -342,6 +360,7 @@ return Response::json(array('msg' => 'false'));
 
  public function reset(Request $request, $kode)
     {
+      $this->menuAccess(\Auth::user(), get_current_url());
       $user=User::find($kode);
       $act=false;
       try {
@@ -364,6 +383,7 @@ return Response::json(array('msg' => 'false'));
  public function aktifkan(Request $request, $kode)
     {
         // dd($kode);
+        $this->menuAccess(\Auth::user(), get_current_url());
         $user = User::find($kode);
         $data = array(
             'status_aktif' => 1,
@@ -376,6 +396,7 @@ return Response::json(array('msg' => 'false'));
 
     public function nonaktifkan(Request $request, $kode)
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         $user = User::find($kode);
 
         $data = array(

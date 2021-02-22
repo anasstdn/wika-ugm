@@ -29,6 +29,11 @@ Route::match(['get', 'post'],'home/material-dropdown','HomeController@materialDr
 Route::match(['get', 'post'],'home/get-data-stok','HomeController@getDataStok');
 Route::match(['get', 'post'],'home/get-data-riwayat-stok','HomeController@getDataRiwayatStok');
 
+Route::prefix('activity-log')->group(function() {
+    Route::get('/', 'ActivityLogController@index');
+    Route::match(['get', 'post'],'/get-data','ActivityLogController@getData');
+});
+
 Route::group(['middleware' => ['auth']], function() {
 
 });

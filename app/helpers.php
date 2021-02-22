@@ -230,5 +230,16 @@ function get_jumlah_current_stok($material_id)
     return isset($stok) && !empty($stok)?$stok->qty:0;
 }
 
+function get_current_url()
+{
+    return url()->previous().' => '.url()->current();
+}
+
+function base_table($model)
+{
+    $modelTable = str_replace('\\', '', Str::snake(Str::plural(class_basename($model))));
+
+    return $modelTable;
+}
 
 ?>

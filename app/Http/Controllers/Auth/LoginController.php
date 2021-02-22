@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Cookie;
 use Illuminate\Http\Request;
+use App\Traits\ActivityTraits;
 
 class LoginController extends Controller
 {
@@ -23,6 +24,7 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
+    use ActivityTraits;
 
     /**
      * Where to redirect users after login.
@@ -72,6 +74,13 @@ class LoginController extends Controller
         $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         if(auth()->attempt(array($fieldType => $input['email'], 'password' => $input['password'])))
         {
+            // dd($requ);
+            $this->logLoginDetails(\Auth::user());
+            $pesan='';
+            $pesan.='Pengguna '.strtoupper(strtolower (Auth::user()->name)).'';
+            $pesan.='<br>Anda melakukan login ke sistem pada '.date('d-m-Y H:i:s');
+
+            message(true,$pesan,'');
             return redirect('home');
         }else{
             $errors = [$this->username() => trans('auth.failed')];
@@ -99,7 +108,6 @@ class LoginController extends Controller
 
     public function authenticated(Request $request, $user)
     {
-
         $remember_me = $request->has('remember') ? true : false; 
         if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')], 
             $remember_me))
@@ -122,7 +130,7 @@ class LoginController extends Controller
         // $url = (!empty(get_val_settings('api_access'))?get_val_settings('api_access'):'localhost:8000')."/api/v1/logout";
         // $get_data = get_data_with_param($data = array(), $token, $url, 'POST');
 
-        // $this->logLogoutDetails(Auth::user());
+        $this->logLogoutDetails(Auth::user());
 
         $this->guard()->logout();
         

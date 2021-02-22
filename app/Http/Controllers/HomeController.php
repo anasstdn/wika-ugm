@@ -25,6 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // dd(redirect('home')->getTargetUrl());
         $config_admin = getConfigValues('ROLE_ADMIN');
 
         if(isset(\Auth::user()->roles[0]->id) && !in_array(\Auth::user()->roles[0]->id, $config_admin))

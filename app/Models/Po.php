@@ -14,7 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * Class Po
  * 
  * @property int $id
- * @property int|null $spm_id
+ * @property int|null $survei_id
+ * @property int|null $supplier_id
  * @property string|null $no_po
  * @property Carbon|null $tgl_pengajuan_po
  * @property string|null $nama_pemohon
@@ -33,7 +34,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
- * @property Spm|null $spm
+ * @property Supplier|null $supplier
+ * @property Survei|null $survei
  * @property User|null $user
  * @property Collection|DetailPo[] $detail_pos
  *
@@ -44,7 +46,8 @@ class Po extends Model
 	protected $table = 'po';
 
 	protected $casts = [
-		'spm_id' => 'int',
+		'survei_id' => 'int',
+		'supplier_id' => 'int',
 		'user_input' => 'int',
 		'user_update' => 'int',
 		'user_verif_komersial' => 'int',
@@ -59,7 +62,8 @@ class Po extends Model
 	];
 
 	protected $fillable = [
-		'spm_id',
+		'survei_id',
+		'supplier_id',
 		'no_po',
 		'tgl_pengajuan_po',
 		'nama_pemohon',
@@ -77,9 +81,14 @@ class Po extends Model
 		'total_harga'
 	];
 
-	public function spm()
+	public function supplier()
 	{
-		return $this->belongsTo(Spm::class);
+		return $this->belongsTo(Supplier::class);
+	}
+
+	public function survei()
+	{
+		return $this->belongsTo(Survei::class);
 	}
 
 	public function user()
