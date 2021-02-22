@@ -34,7 +34,7 @@ class ActivityLogController extends Controller
 
         $offset = $request->has('offset') ? $request->get('offset') : 0;
         $limit = $request->has('limit') ? $request->get('limit') : 10;
-        // $search = $request->has('search') ? $request->get('search') : null;
+        // $search = $request->has('search') ? $request->get('search') : null;as
         // 
         // $material_id = $input['material_id'] == 'null'?null:$input['material_id'];
 
