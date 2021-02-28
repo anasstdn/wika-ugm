@@ -18,6 +18,7 @@ class MenuSeeder extends Seeder
         $this->command->info('Delete semua tabel menu');
         Model::unguard();
         Menu::truncate();
+        $this->menuActivity();
         $this->menuAcl();
         // $this->menuPengaturan();
         $this->menuMasterdata();
@@ -28,6 +29,24 @@ class MenuSeeder extends Seeder
         // $this->menuPinjaman();
         // $this->menuAnggota();
         // $this->menuLaporan();
+    }
+
+    private function menuActivity(){
+        $this->command->info('Menu Activity Log Seeder');
+        $permission = Permission::firstOrNew(array(
+            'name'=>'activity-log-list'
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+        $menu = Menu::firstOrNew(array(
+            'name'=>'Riwayat Aktivitas User',
+            'permission_id'=>$permission->id,
+            'ordinal'=>1,
+            'parent_status'=>'N',
+            'url' => 'activity-log'
+        ));
+        $menu->icon = 'si-list';
+        $menu->save();
     }
 
     private function menuAcl(){

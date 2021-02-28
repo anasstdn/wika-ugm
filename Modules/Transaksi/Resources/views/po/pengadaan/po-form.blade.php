@@ -29,15 +29,16 @@
 		<div class="block-content">
 			<div class="row items-push">
 				<div class="col-lg-12">
-					@if(isset($data) && !empty($data))
-					{!! Form::model($data, ['method' => 'put','route' => ['survei.update', $data->id],'class' => 'js-wizard-validation-classic-form','id'=>'form','files'=>true]) !!}
-					@else
-					{!! Form::open(array('route' => 'survei.store','method'=>'POST','class' => 'js-wizard-validation-classic-form','id'=>'form','files'=>true)) !!}
-					@endif
+					{{-- @if(isset($data) && !empty($data))
+					{!! Form::model($data, ['method' => 'put','route' => ['po.update', $data->id],'class' => 'js-wizard-validation-classic-form','id'=>'form','files'=>true]) !!}
+					@else --}}
+					{!! Form::open(array('route' => 'po.store','method'=>'POST','class' => 'js-wizard-validation-classic-form','id'=>'form','files'=>true)) !!}
+					{{-- @endif --}}
 					<div class="form-row">
 						<div class="form-group col-3">
 							<label for="wizard-progress-nama-depan">Nomor PO</label>
 							<input class="form-control form-control-sm" type="text" id="no_po" name="no_po" value="">
+							<input class="form-control form-control-sm" type="hidden" id="id" name="id" value="{{ $data->id }}">
 						</div>
 						<div class="form-group col-1">
 						</div>
@@ -134,7 +135,7 @@
 					</div>
 					<div class="form-group row" style="margin-top: 2em">
 						<div class="col-12 text-right">
-							<a href="{{ url('/po/create') }}" class="btn btn-alt-success">Kembali</a>
+							<a href="{{ url('/po') }}" class="btn btn-alt-success">Kembali</a>
 							<button type="submit" id="simpan" class="btn btn-alt-primary">Simpan</button>
 						</div>
 					</div>
@@ -171,7 +172,7 @@
 		$('#form').submit('#simpan',function (e) {
 			var err = 0;
 
-			if($('#supplier_id').val() == '')
+			if($('#no_po').val() == '')
 			{
 				err += 1;
 				notification('Silahkan pilih supplier terlebih dahulu','gagal');

@@ -16,10 +16,10 @@ class ActivityLogController extends Controller
     function __construct()
     {
         $this->middleware('auth');
-        // $this->middleware('permission:agama-list|agama-create|agama-edit|agama-delete', ['only' => ['index','store','getData']]);
-        // $this->middleware('permission:agama-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:agama-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:agama-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:activity-log-list|activity-log-create|activity-log-edit|activity-log-delete', ['only' => ['index','store','getData']]);
+        $this->middleware('permission:activity-log-create', ['only' => ['create','store']]);
+        $this->middleware('permission:activity-log-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:activity-log-delete', ['only' => ['destroy']]);
     }
 
     public function index()
@@ -56,6 +56,10 @@ class ActivityLogController extends Controller
                         if(isset($input['date_end']) && !empty($input['date_end']))
                         {
                             $q->whereDate('created_at','<=',date('Y-m-d',strtotime($input['date_end'])));
+                        }
+                        if(isset($input['user_id']) && ($input['user_id'] !== null && $input['user_id']!== 'null'))
+                        {
+                            $q->where('causer_id','=',$input['user_id']);
                         }
                     })
                     ->orderby('created_at','DESC')

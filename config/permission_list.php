@@ -2,6 +2,11 @@
 return [
 	'role_structure' => [
 		'developer' => [
+			'activity-log-list',
+			'activity-log-create',
+			'activity-log-edit',
+			'activity-log-delete',
+
 			'acl-menu',
 				'user-list',
 				'user-create',
@@ -81,6 +86,11 @@ return [
 			'profil-delete',
 		],
 		'admin' => [
+			'activity-log-list',
+			'activity-log-create',
+			'activity-log-edit',
+			'activity-log-delete',
+			
 			'acl-menu',
 				'user-list',
 				'user-create',

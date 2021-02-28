@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Permission;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\ActivityTraits;
 
 class RoleController extends Controller
 {
@@ -17,6 +18,8 @@ class RoleController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    use ActivityTraits;
+
     function __construct()
     {
         $this->middleware('auth');
@@ -28,6 +31,7 @@ class RoleController extends Controller
 
     public function index()
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         return view('pengaturan::roles.index');
     }
 
@@ -37,6 +41,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         $permission = Permission::get();
         return view('pengaturan::roles.form',compact('permission'));
     }
@@ -68,6 +73,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         $role = Role::find($id);
         $permission = Permission::get();
         $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
@@ -85,6 +91,7 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->menuAccess(\Auth::user(), get_current_url());
         Validator::make($request->all(), [
             'name' => 'required',
             'permission' => 'required',
@@ -108,6 +115,7 @@ class RoleController extends Controller
     public function destroy($id)
     {
         //
+        $this->menuAccess(\Auth::user(), get_current_url());
         $data = DB::table("roles")->where('id',$id)->delete();
         
         message($data,'Data berhasil dihapus!','Data gagal dihapus!');
@@ -117,6 +125,7 @@ class RoleController extends Controller
 
     public function getData(Request $request)
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         $input = $request->all();
 
         $offset = $request->has('offset') ? $request->get('offset') : 0;

@@ -242,4 +242,41 @@ function base_table($model)
     return $modelTable;
 }
 
+function sendTelegramBot($telegram_id, $message_text, $secret_token = '1587425011:AAHbQrOgc9K_bSpy8PpaBHglya8OebkqqL0')
+{
+    $website="https://api.telegram.org/bot".$secret_token;
+    $params=[
+        'chat_id' => $telegram_id,
+        'text' => $message_text,
+        'parse_mode' => 'HTML'
+    ];
+    $ch = curl_init($website . '/sendMessage');
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, ($params));
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    return $result;
+}
+
+function get_key_val()
+{
+    $out    =   array();
+    $data   = \DB::table('pengaturan')->select(\DB::raw('opsi_key,opsi_val'))->get();
+    if(isset($data) && count($data) > 0)
+    {
+        foreach ($data as $key => $value) {
+            $out[$value->opsi_key]  =   $value->opsi_val;
+        }
+        return $out;
+    }
+    else
+    {
+        return array();
+    }
+}
+
 ?>

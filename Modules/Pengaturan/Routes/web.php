@@ -168,3 +168,14 @@ Route::prefix('pegawai')->group(function() {
     Route::match(['get','post'],'/send-data','PegawaiController@sendData');
     Route::get('/{id}/delete', 'PegawaiController@destroy');
 });
+
+Route::prefix('pengaturan')->group(function() {
+    Route::get('/', 'PengaturanController@index');
+    Route::match(['get', 'post'],'/get-data','PengaturanController@getData');
+    Route::get('/create',['as' => 'pengaturan.create', 'uses' => 'PengaturanController@create']);
+    Route::match(['get','post'],'/store',['as' => 'pengaturan.store', 'uses' => 'PengaturanController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'pengaturan.update', 'uses' => 'PengaturanController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','PengaturanController@edit');
+    Route::match(['get','post'],'/send-data','PengaturanController@sendData');
+    Route::get('/{id}/delete', 'PengaturanController@destroy');
+});

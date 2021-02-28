@@ -32,8 +32,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $user_update
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string|null $telegram_id
  * 
  * @property User|null $user
+ * @property Collection|Pegawai[] $pegawais
  * @property Collection|UserProfil[] $user_profils
  *
  * @package App\Models
@@ -70,7 +72,8 @@ class Profil extends Model
 		'email',
 		'foto',
 		'user_input',
-		'user_update'
+		'user_update',
+		'telegram_id'
 	];
 
 	public function agama()
@@ -91,6 +94,11 @@ class Profil extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'user_update');
+	}
+
+	public function pegawais()
+	{
+		return $this->hasMany(Pegawai::class);
 	}
 
 	public function user_profils()

@@ -414,10 +414,10 @@
         $('#departement_id').val('').trigger('change');
         $('#jabatan_id').val('').trigger('change');
         $('#material_id').val('').trigger('change');
+        cb(start,end);
         $('#table').bootstrapTable('refresh');   
         $('#table-diterima').bootstrapTable('refresh');
         $('#table-ditolak').bootstrapTable('refresh');
-        cb(start,end);
       });
 
       load_data_ajax('{{ url('home/material-dropdown') }}','POST',{}).then((e) => {

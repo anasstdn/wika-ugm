@@ -100,8 +100,8 @@
 
 
       <script>
-        var start = moment().startOf('month');
-        var end = moment().endOf('month');
+        var start = moment();
+        var end = moment();
 
         function ajaxRequest(params) {
           var formData = new FormData();
@@ -110,6 +110,9 @@
           formData.append('order', params.data.order);
           formData.append('search', params.data.search);
           formData.append('sort', params.data.sort);
+          formData.append('date_start', $('#daterangepicker_start').val());
+          formData.append('date_end', $('#daterangepicker_end').val());
+          formData.append('user_id', $('#user_id').val());
 
           $.ajax({
             type: "POST",
@@ -152,8 +155,8 @@
             },
             showDropdowns: true,
             format: 'YYYY-MM-DD',
-            startDate: moment().startOf('month'),
-            endDate: moment().endOf('month')
+            startDate: moment(),
+            endDate: moment()
           },cb);
 
           cb(start,end);
@@ -161,6 +164,16 @@
           load_data_ajax('{{ url('activity-log/users') }}','POST',{}).then((e) => {
             insert_into_select_opt(e,'#user_id','id','name');
           }).catch(e => console.log(e));
+
+          $('#cari').click(function(){
+            $('#table').bootstrapTable('refresh')
+          });
+
+          $('#reset').click(function(){
+            $('#user_id').val('').trigger('change');
+            cb(start,end);
+            $('#table').bootstrapTable('refresh');   
+          });
 
         });
 

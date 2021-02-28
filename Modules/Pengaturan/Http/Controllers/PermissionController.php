@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Permission;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\ActivityTraits;
 
 class PermissionController extends Controller
 {
@@ -16,6 +17,9 @@ class PermissionController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    
+    use ActivityTraits;
+    
     function __construct()
     {
         $this->middleware('permission:permissions-list|permissions-create|permissions-edit|permissions-delete', ['only' => ['index','store','getData']]);
@@ -26,6 +30,7 @@ class PermissionController extends Controller
 
     public function index()
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         return view('pengaturan::permissions.index');
     }
 
@@ -35,6 +40,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         return view('pengaturan::permissions.form');
     }
 
@@ -65,6 +71,7 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         $data = Permission::find($id);
         return view('pengaturan::permissions.form',compact('data','id'));
     }
@@ -88,7 +95,10 @@ class PermissionController extends Controller
     public function destroy($id)
     {
         //
+        $this->menuAccess(\Auth::user(), get_current_url());
         $data = Permission::find($id);
+        $this->logDeletedActivity($data, 'Delete data '.$id, url()->current(), base_table('Spatie\Permission\Models\Permission'));
+
         $data->delete();
         message($data,'Data berhasil dihapus!','Data gagal dihapus!');
 
@@ -97,6 +107,7 @@ class PermissionController extends Controller
 
     public function getData(Request $request)
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
         $input = $request->all();
 
         $offset = $request->has('offset') ? $request->get('offset') : 0;
@@ -158,6 +169,8 @@ class PermissionController extends Controller
 
     public function sendData(Request $request)
     {
+        $this->menuAccess(\Auth::user(), get_current_url());
+
         $validation = Validator::make($request->all(), [
             'name' => 'required',
             'guard_name' => 'required',
@@ -186,10 +199,15 @@ class PermissionController extends Controller
             // 'kd_koperasi'   =>  $input['koperasi'][0],
                 );
 
+                $this->logCreatedActivity(Auth::user(), $data, url()->current(), base_table('Spatie\Permission\Models\Permission'));
+
                 $act = Permission::create($data);
                 break;
                 case 'edit':
                 $act = Permission::find($input['id']);
+
+                $this->logUpdatedActivity(Auth::user(), $act->getAttributes(), $input, url()->current(), base_table('Spatie\Permission\Models\Permission'));
+
                 $act->update($input);
                 break;
             }
