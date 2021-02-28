@@ -74,7 +74,7 @@ Route::prefix('po')->group(function() {
     Route::get('/', 'PurchaseOrderController@index');
     Route::match(['get', 'post'],'/get-data','PurchaseOrderController@getData');
     Route::match(['get', 'post'],'/load-table','PurchaseOrderController@loadTable');
-    Route::match(['get', 'post'],'/get-data-diterima','PurchaseOrderController@getDataDiterima');
+    Route::match(['get', 'post'],'/get-data-loading','PurchaseOrderController@getDataLoading');
     Route::get('/{id}/form-survei', 'PurchaseOrderController@formSurvei');
     Route::match(['get', 'post'],'/get-data-ditolak','PurchaseOrderController@getDataDitolak');
     Route::get('/create-',['as' => 'po.create', 'uses' => 'PurchaseOrderController@create']);

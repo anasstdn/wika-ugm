@@ -142,13 +142,13 @@ class ActivityLogController extends Controller
             if(isset($jsonData['attributes']['device']))
             {
                 $data[$key]['description'] .= '<tr>';
-                $data[$key]['description'] .= '<td width="20%"><b>Data</b></td><td width="20%">'.$jsonData['attributes']['device'].'</td>';
+                $data[$key]['description'] .= '<td width="20%"><b>Device</b></td><td width="20%">'.$jsonData['attributes']['device'].'</td>';
                 $data[$key]['description'] .= '</tr>';
             }
             if(isset($jsonData['attributes']['browser']))
             {
                 $data[$key]['description'] .= '<tr>';
-                $data[$key]['description'] .= '<td width="20%"><b>Data</b></td><td width="20%">'.$jsonData['attributes']['browser'].'</td>';
+                $data[$key]['description'] .= '<td width="20%"><b>Browser</b></td><td width="20%">'.$jsonData['attributes']['browser'].'</td>';
                 $data[$key]['description'] .= '</tr>';
             }
             $data[$key]['description'] .= '</tfoot>';
