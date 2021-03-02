@@ -242,8 +242,9 @@ function base_table($model)
     return $modelTable;
 }
 
-function sendTelegramBot($telegram_id, $message_text, $secret_token = '1587425011:AAHbQrOgc9K_bSpy8PpaBHglya8OebkqqL0')
+function sendTelegramBot($telegram_id, $message_text)
 {
+    $secret_token = isset(get_key_val()['telegram_api'])?get_key_val()['telegram_api']:'';
     $website="https://api.telegram.org/bot".$secret_token;
     $params=[
         'chat_id' => $telegram_id,
@@ -277,6 +278,339 @@ function get_key_val()
     {
         return array();
     }
+}
+
+function getTelegramId()
+{
+    $user_profil = \App\Models\UserProfil::join('profil','profil.id','=','user_profil.profil_id')
+                    ->where('user_id',\Auth::user()->id)->first(['profil.telegram_id']);
+
+    if(!empty($user_profil))
+    {
+        return $user_profil->telegram_id;
+    }
+    else
+    {
+        return null;
+    }
+}
+
+function getTelegramByRoles($config_id)
+{
+    $user_profil = \App\User::join('user_profil','users.id','=','user_profil.user_id')
+                    ->join('profil','profil.id','=','user_profil.profil_id') 
+                    ->whereHas('roles', function($q) use($config_id){
+                        $q->whereIn('id',$config_id);
+                    })->get(['profil.*']);
+
+    if(isset($user_profil) && !$user_profil->isEmpty())
+    {
+        return $user_profil;
+    }
+    else
+    {
+        return null;
+    }
+}
+
+function getProfileByUserId($id)
+{
+     $user_profil = \App\Models\UserProfil::select('profil.*')
+                    ->join('profil','profil.id','=','user_profil.profil_id')
+                    ->where('user_id',$id)->first();
+
+    if(!empty($user_profil))
+    {
+        return $user_profil;
+    }
+    else
+    {
+        return null;
+    }
+}
+
+function notifikasi_telegram_spm($id_spm)
+{
+	$spm = \App\Models\Spm::find($id_spm);
+
+	if($spm->flag_batal == 'N')
+	{
+		if($spm->flag_verif_site_manager == null && $spm->flag_verif_komersial == null && $spm->flag_verif_pm == null)
+		{
+        // == SEND TELEGRAM NOTIFICATION TO ALL SITE MANAGER== //
+			$profil = getTelegramByRoles(getConfigValues('ROLE_SITE_MANAGER'));
+			if(isset($profil) && count($profil) > 0)
+			{
+				foreach($profil as $key => $val)
+				{
+					if($val->telegram_id !== null)
+					{
+						$text_site_manager = "Permintaan Verifikasi SPM. Halo <b>" . $val->nama . "</b> anda menerima pemberitahuan permintaan Verifikasi SPM dengan detail sebagai berikut :.\n\n"
+						. "No SPM : ".$spm->no_spm."\n"
+						. "Tanggal : ".date('d/m/Y',strtotime($spm->tgl_spm))."\n"
+						. "Nama Pemohon : ".$spm->nama_pemohon."\n"
+						. "Nama Pelaksana : ".getProfileByUserId($spm->user_input)->nama."\n"
+						. "Keterangan : ".$spm->keterangan."\n\n"
+						. "Silahkan anda untuk menindak lanjuti permintaan ini dengan mengakses menu <b>SPM -> Verifikasi SPM</b>.\n\n"
+						. "Terima kasih. Salam,\n"
+						. "WikaBot.";
+
+						sendTelegramBot($val->telegram_id,$text_site_manager);
+					}
+				}
+			}
+       	 // == END == //
+
+        	// == SEND TELEGRAM NOTIFICATION TO USER PEMBUAT==//
+			$text_pelaksana = "Pesan Notifikasi Pengajuan SPM. Halo <b>" . getProfileByUserId($spm->user_input)->nama . "</b> anda telah mengajukan SPM dengan detail sebagai berikut :.\n\n"
+			. "No SPM : ".$spm->no_spm."\n"
+			. "Tanggal : ".date('d/m/Y',strtotime($spm->tgl_spm))."\n"
+			. "Nama Pemohon : ".$spm->nama_pemohon."\n"
+			. "Nama Pelaksana : ".getProfileByUserId($spm->user_input)->nama."\n"
+			. "Keterangan : ".$spm->keterangan."\n\n"
+			. "Silahkan anda untuk menunggu verifikasi selanjutnya.\n\n"
+			. "Terima kasih. Salam,\n"
+			. "WikaBot.";
+
+			if(!empty(getProfileByUserId($spm->user_input)->telegram_id))
+			{
+				sendTelegramBot(getProfileByUserId($spm->user_input)->telegram_id,$text_pelaksana);
+			}
+        // == END ==//
+		}
+		elseif($spm->flag_verif_site_manager !== null && $spm->flag_verif_komersial == null && $spm->flag_verif_pm == null)
+		{
+			// == SEND TELEGRAM NOTIFICATION TO ALL PROJECT MANAGER== //
+			$profil = getTelegramByRoles(getConfigValues('ROLE_PROJECT_MANAGER'));
+			if(isset($profil) && count($profil) > 0)
+			{
+				foreach($profil as $key => $val)
+				{
+					if($val->telegram_id !== null)
+					{
+						$text_site_manager = "Permintaan Verifikasi SPM. Halo <b>" . $val->nama . "</b> anda menerima pemberitahuan permintaan Verifikasi SPM dengan detail sebagai berikut :.\n\n"
+						. "No SPM : ".$spm->no_spm."\n"
+						. "Tanggal : ".date('d/m/Y',strtotime($spm->tgl_spm))."\n"
+						. "Nama Pemohon : ".$spm->nama_pemohon."\n"
+						. "Nama Pelaksana : ".getProfileByUserId($spm->user_input)->nama."\n"
+						. "Keterangan : ".$spm->keterangan."\n\n"
+						. "Silahkan anda untuk menindak lanjuti permintaan ini dengan mengakses menu <b>SPM -> Verifikasi SPM</b>.\n\n"
+						. "Terima kasih. Salam,\n"
+						. "WikaBot.";
+
+						sendTelegramBot($val->telegram_id,$text_site_manager);
+					}
+				}
+			}
+       	 // == END == //
+
+			if($spm->flag_verif_site_manager == 'Y')
+			{
+				$verif_sm = 'Diterima'; 
+			}
+			elseif($spm->flag_verif_site_manager == 'N')
+			{
+				$verif_sm = 'Ditolak'; 
+			}
+			else
+			{
+				$verif_sm = 'Menunggu Verifikasi'; 
+			}
+
+       	 // == SEND TELEGRAM NOTIFICATION TO USER PEMBUAT==//
+			$text_pelaksana = "Pesan Notifikasi Pengajuan SPM. Halo <b>" . getProfileByUserId($spm->user_input)->nama . "</b> berikut adalah informasi SPM dengan detail sebagai berikut :.\n\n"
+			. "No SPM : ".$spm->no_spm."\n"
+			. "Tanggal : ".date('d/m/Y',strtotime($spm->tgl_spm))."\n"
+			. "Nama Pemohon : ".$spm->nama_pemohon."\n"
+			. "Nama Pelaksana : ".getProfileByUserId($spm->user_input)->nama."\n"
+			. "Keterangan : ".$spm->keterangan."\n"
+			. "Verifikasi Site Manager : ".$verif_sm."\n\n"
+			. "Silahkan anda untuk menunggu verifikasi selanjutnya.\n\n"
+			. "Terima kasih. Salam,\n"
+			. "WikaBot.";
+
+			if(!empty(getProfileByUserId($spm->user_input)->telegram_id))
+			{
+				sendTelegramBot(getProfileByUserId($spm->user_input)->telegram_id,$text_pelaksana);
+			}
+        // == END ==//
+		}
+		elseif($spm->flag_verif_site_manager !== null && $spm->flag_verif_komersial == null && $spm->flag_verif_pm !== null)
+		{
+			// == SEND TELEGRAM NOTIFICATION TO ALL PROJECT MANAGER== //
+			$profil = getTelegramByRoles(getConfigValues('ROLE_KOMERSIAL'));
+			if(isset($profil) && count($profil) > 0)
+			{
+				foreach($profil as $key => $val)
+				{
+					if($val->telegram_id !== null)
+					{
+						$text_site_manager = "Permintaan Verifikasi SPM. Halo <b>" . $val->nama . "</b> anda menerima pemberitahuan permintaan Verifikasi SPM dengan detail sebagai berikut :.\n\n"
+						. "No SPM : ".$spm->no_spm."\n"
+						. "Tanggal : ".date('d/m/Y',strtotime($spm->tgl_spm))."\n"
+						. "Nama Pemohon : ".$spm->nama_pemohon."\n"
+						. "Nama Pelaksana : ".getProfileByUserId($spm->user_input)->nama."\n"
+						. "Keterangan : ".$spm->keterangan."\n\n"
+						. "Silahkan anda untuk menindak lanjuti permintaan ini dengan mengakses menu <b>SPM -> Verifikasi SPM</b>.\n\n"
+						. "Terima kasih. Salam,\n"
+						. "WikaBot.";
+
+						sendTelegramBot($val->telegram_id,$text_site_manager);
+					}
+				}
+			}
+       	 // == END == //
+
+			if($spm->flag_verif_site_manager == 'Y')
+			{
+				$verif_sm = 'Diterima'; 
+			}
+			elseif($spm->flag_verif_site_manager == 'N')
+			{
+				$verif_sm = 'Ditolak'; 
+			}
+			else
+			{
+				$verif_sm = 'Menunggu Verifikasi'; 
+			}
+
+			if($spm->flag_verif_pm == 'Y')
+			{
+				$verif_pm = 'Diterima'; 
+			}
+			elseif($spm->flag_verif_pm == 'N')
+			{
+				$verif_pm = 'Ditolak'; 
+			}
+			else
+			{
+				$verif_pm = 'Menunggu Verifikasi'; 
+			}
+
+       	 // == SEND TELEGRAM NOTIFICATION TO USER PEMBUAT==//
+			$text_pelaksana = "Pesan Notifikasi Pengajuan SPM. Halo <b>" . getProfileByUserId($spm->user_input)->nama . "</b> berikut adalah informasi SPM dengan detail sebagai berikut :.\n\n"
+			. "No SPM : ".$spm->no_spm."\n"
+			. "Tanggal : ".date('d/m/Y',strtotime($spm->tgl_spm))."\n"
+			. "Nama Pemohon : ".$spm->nama_pemohon."\n"
+			. "Nama Pelaksana : ".getProfileByUserId($spm->user_input)->nama."\n"
+			. "Keterangan : ".$spm->keterangan."\n"
+			. "Verifikasi Site Manager : ".$verif_sm."\n"
+			. "Verifikasi Project Manager : ".$verif_pm."\n\n"
+			. "Silahkan anda untuk menunggu verifikasi selanjutnya.\n\n"
+			. "Terima kasih. Salam,\n"
+			. "WikaBot.";
+
+			if(!empty(getProfileByUserId($spm->user_input)->telegram_id))
+			{
+				sendTelegramBot(getProfileByUserId($spm->user_input)->telegram_id,$text_pelaksana);
+			}
+        // == END ==//
+		}
+		elseif($spm->flag_verif_site_manager !== null && $spm->flag_verif_komersial !== null && $spm->flag_verif_pm !== null)
+		{
+			// == SEND TELEGRAM NOTIFICATION TO ALL PROJECT MANAGER== //
+			$profil = getTelegramByRoles(getConfigValues('ROLE_PENGADAAN'));
+			if(isset($profil) && count($profil) > 0)
+			{
+				foreach($profil as $key => $val)
+				{
+					if($val->telegram_id !== null)
+					{
+						$text_pengadaan = "Permintaan Survei Barang. Halo <b>" . $val->nama . "</b> anda menerima pemberitahuan permintaan Survei Barang dengan detail SPM sebagai berikut :.\n\n"
+						. "No SPM : ".$spm->no_spm."\n"
+						. "Tanggal : ".date('d/m/Y',strtotime($spm->tgl_spm))."\n"
+						. "Nama Pemohon : ".$spm->nama_pemohon."\n"
+						. "Nama Pelaksana : ".getProfileByUserId($spm->user_input)->nama."\n"
+						. "Keterangan : ".$spm->keterangan."\n\n"
+						. "Silahkan anda untuk menindak lanjuti permintaan ini dengan mengakses menu <b>Purchase Order -> Survei Barang -> Tambah Survei Baru</b>.\n\n"
+						. "Terima kasih. Salam,\n"
+						. "WikaBot.";
+
+						sendTelegramBot($val->telegram_id,$text_pengadaan);
+					}
+				}
+			}
+       	 // == END == //
+       	 if($spm->flag_verif_site_manager == 'Y')
+			{
+				$verif_sm = 'Diterima'; 
+			}
+			elseif($spm->flag_verif_site_manager == 'N')
+			{
+				$verif_sm = 'Ditolak'; 
+			}
+			else
+			{
+				$verif_sm = 'Menunggu Verifikasi'; 
+			}
+
+			if($spm->flag_verif_pm == 'Y')
+			{
+				$verif_pm = 'Diterima'; 
+			}
+			elseif($spm->flag_verif_pm == 'N')
+			{
+				$verif_pm = 'Ditolak'; 
+			}
+			else
+			{
+				$verif_pm = 'Menunggu Verifikasi'; 
+			}
+
+			if($spm->flag_verif_komersial == 'Y')
+			{
+				$verif_komersial = 'Diterima'; 
+			}
+			elseif($spm->flag_verif_komersial == 'N')
+			{
+				$verif_komersial = 'Ditolak'; 
+			}
+			else
+			{
+				$verif_komersial = 'Menunggu Verifikasi'; 
+			}
+
+       	 // == SEND TELEGRAM NOTIFICATION TO USER PEMBUAT==//
+			$text_pelaksana = "Pesan Notifikasi Pengajuan SPM. Halo <b>" . getProfileByUserId($spm->user_input)->nama . "</b> berikut adalah informasi SPM dengan detail sebagai berikut :.\n\n"
+			. "No SPM : ".$spm->no_spm."\n"
+			. "Tanggal : ".date('d/m/Y',strtotime($spm->tgl_spm))."\n"
+			. "Nama Pemohon : ".$spm->nama_pemohon."\n"
+			. "Nama Pelaksana : ".getProfileByUserId($spm->user_input)->nama."\n"
+			. "Keterangan : ".$spm->keterangan."\n"
+			. "Verifikasi Site Manager : ".$verif_sm."\n"
+			. "Verifikasi Project Manager : ".$verif_pm."\n"
+			. "Verifikasi Project Komersial : ".$verif_komersial."\n\n"
+			. "Pengajuan SPM anda akan dilanjutkan ke Survei Barang di Pengadaan.\n\n"
+			. "Terima kasih. Salam,\n"
+			. "WikaBot.";
+
+			if(!empty(getProfileByUserId($spm->user_input)->telegram_id))
+			{
+				sendTelegramBot(getProfileByUserId($spm->user_input)->telegram_id,$text_pelaksana);
+			}
+        // == END ==//	
+		}
+	}
+	else
+	{
+		 // == SEND TELEGRAM NOTIFICATION TO USER PEMBUAT==//
+		$text_pelaksana = "Pesan Notifikasi Pengajuan SPM. Halo <b>" . getProfileByUserId($spm->user_input)->nama . "</b> berikut adalah informasi SPM dengan detail sebagai berikut :.\n\n"
+		. "No SPM : ".$spm->no_spm."\n"
+		. "Tanggal : ".date('d/m/Y',strtotime($spm->tgl_spm))."\n"
+		. "Nama Pemohon : ".$spm->nama_pemohon."\n"
+		. "Nama Pelaksana : ".getProfileByUserId($spm->user_input)->nama."\n"
+		. "Keterangan : ".$spm->keterangan."\n"
+		. "Pengajuan SPM anda berhasil dibatalkan.\n\n"
+		. "Terima kasih. Salam,\n"
+		. "WikaBot.";
+
+		if(!empty(getProfileByUserId($spm->user_input)->telegram_id))
+		{
+			sendTelegramBot(getProfileByUserId($spm->user_input)->telegram_id,$text_pelaksana);
+		}
+	}
+
+	return null;
 }
 
 ?>

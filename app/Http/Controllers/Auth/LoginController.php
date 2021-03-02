@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Cookie;
 use Illuminate\Http\Request;
 use App\Traits\ActivityTraits;
+use Jenssegers\Agent\Agent;
 
 class LoginController extends Controller
 {
@@ -75,6 +76,32 @@ class LoginController extends Controller
         if(auth()->attempt(array($fieldType => $input['email'], 'password' => $input['password'])))
         {
             // dd($requ);
+            $profil = getProfileByUserId(\Auth::user()->id);
+
+            if(!empty($profil))
+            {
+              $agent = new Agent();
+              $browser = $agent->browser();
+              $version_browser = $agent->version($browser);
+
+              $platform = $agent->platform();
+              $version_platform = $agent->version($platform);
+
+              $emoticon_smile = "\ud83d\ude0a";
+              $text = "Permintaan Masuk Baru. Halo <b>" . $profil->nama . "</b> kami mendeteksi adanya permintaan masuk ke akun Wika Web Anda.\n\n"
+              . "Perangkat : ".$platform." ".$version_platform."\n"
+              . "Browser : ".$browser."\n"
+              . "IP Address : ".$this->getIp()."\n"
+              . "Waktu : ".date('d/M/Y')." pukul ".date('H:i:s')."\n\n"
+              . "Jika ini bukan Anda, Silahkan ubah password anda atau hubungi admin yang bersangkutan.\n\n"
+              . "Jika menurut Anda ada seseorang yang ingin masuk ke akun tanpa sepengetahuan Anda, silahkan kombinasikan password anda dengan angka dan huruf besar kecil serta gunakan karakter khusus pada <b>Pengaturan Pengguna</b>.\n\n"
+              . "Salam,\n"
+              . "WikaBot.";  
+
+              sendTelegramBot(getTelegramId(),$text);
+          }
+            
+
             $this->logLoginDetails(\Auth::user());
             $pesan='';
             $pesan.='Pengguna '.strtoupper(strtolower (Auth::user()->name)).'';
@@ -106,6 +133,20 @@ class LoginController extends Controller
           
     }
 
+    public function getIp(){
+        foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){
+            if (array_key_exists($key, $_SERVER) === true){
+                foreach (explode(',', $_SERVER[$key]) as $ip){
+                    $ip = trim($ip);
+                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false){
+                        return $ip;
+                    }
+                }
+            }
+        }
+        return request()->ip();
+    }
+
     public function authenticated(Request $request, $user)
     {
         $remember_me = $request->has('remember') ? true : false; 
@@ -131,6 +172,31 @@ class LoginController extends Controller
         // $get_data = get_data_with_param($data = array(), $token, $url, 'POST');
 
         $this->logLogoutDetails(Auth::user());
+
+        $profil = getProfileByUserId(\Auth::user()->id);
+
+        if(!empty($profil))
+        {
+          $agent = new Agent();
+          $browser = $agent->browser();
+          $version_browser = $agent->version($browser);
+
+          $platform = $agent->platform();
+          $version_platform = $agent->version($platform);
+
+          $emoticon_smile = "\ud83d\ude0a";
+          $text = "Permintaan Keluar Baru. Halo <b>" . $profil->nama . "</b> kami mendeteksi adanya permintaan keluar dari akun Wika Anda.\n\n"
+          . "Perangkat : ".$platform." ".$version_platform."\n"
+          . "Browser : ".$browser."\n"
+          . "IP Address : ".$this->getIp()."\n"
+          . "Waktu : ".date('d/M/Y')." pukul ".date('H:i:s')."\n\n"
+          . "Jika ini bukan Anda, Silahkan ubah password anda atau hubungi admin yang bersangkutan.\n\n"
+          . "Jika menurut Anda ada seseorang yang ingin masuk ke akun tanpa sepengetahuan Anda, silahkan kombinasikan password anda dengan angka dan huruf besar kecil serta gunakan karakter khusus pada <b>Pengaturan Pengguna</b>.\n\n"
+          . "Salam,\n"
+          . "WikaBot.";
+
+          sendTelegramBot(getTelegramId(),$text);
+      }
 
         $this->guard()->logout();
         

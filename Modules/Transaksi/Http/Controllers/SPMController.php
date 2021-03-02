@@ -97,6 +97,11 @@ class SPMController extends Controller
         }
         DB::commit();
 
+        if($insert_detail_spm == true)
+        {
+            notifikasi_telegram_spm($id_spm);
+        }
+
         return redirect('/spm');
     }
 
@@ -191,6 +196,11 @@ class SPMController extends Controller
         }
         DB::commit();
 
+        if($insert_detail_spm == true)
+        {
+            notifikasi_telegram_spm($id_spm);
+        }
+
         return redirect('/spm');
     }
 
@@ -218,6 +228,11 @@ class SPMController extends Controller
             'flag_batal' => 'Y',
             'keterangan' => 'Pengajuan dibatalkan oleh '.\Auth::user()->name
         ]);
+
+        if($id !== null)
+        {
+            notifikasi_telegram_spm($id);
+        }
 
         message(true,'Pengajuan Berhasil Dibatalkan','');
 

@@ -167,6 +167,7 @@ class ProfilController extends Controller
             'no_telp' => $input['no_telp'] ,
             'email' => $input['email'] ,
             'foto' => $flag,
+            'telegram_id' => $request->input('telegram_id',null)
           );
 
         $userProfil = UserProfil::where('user_id',\Auth::user()->id)->first();

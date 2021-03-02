@@ -155,6 +155,10 @@
 										<label for="wizard-progress-email">Email</label>
 										<input class="form-control form-control-sm" type="email" id="email" name="email" value="{{ isset($profile->email) && !empty($profile->email)?$profile->email:'' }}">
 									</div>
+									<div class="form-group">
+										<label for="wizard-progress-email">User ID Telegram</label>
+										<input class="form-control form-control-sm" type="text" id="telegram_id" name="telegram_id" value="{{ isset($profile->telegram_id) && !empty($profile->telegram_id)?$profile->telegram_id:'' }}">
+									</div>
 								</div>
 
 								<!-- Step 3 -->
@@ -324,6 +328,12 @@
 						maxlength: 20,
                     // digits: true,
                 },
+                'telegram_id': {
+                	required: false,
+                	minlength: 8,
+                	maxlength: 12,
+                	digits: true,
+                }
 				},
 				messages: {
 					'nama': {
@@ -349,6 +359,11 @@
 					},
 					'status_perkawinan': {
 						required: 'Silahkan isi form',
+					},
+					'telegram_id': {
+						minlength: 'Form diisi minimal 8 karakter',
+						maxlength: 'Form diisi minimal 12 karakter',
+						digits : 'Form hanya diisi angka'
 					},
 					'email': 'Please enter a valid email address',
 				}

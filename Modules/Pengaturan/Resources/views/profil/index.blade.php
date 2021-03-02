@@ -160,6 +160,7 @@
   			</address>
   			<address>
           <abbr title="Phone"><strong>Telepon</strong></abbr><br> {{$data->no_telp}}<br/>
+          <abbr title="Phone"><strong>Telegram User ID</strong></abbr><br> {{$data->telegram_id}}<br/>
   				<strong>Email</strong><br>
   				<a href="mailto:#">{{$data->email}}</a>
   			</address>

@@ -120,6 +120,8 @@ class VerifikasiSPMController extends Controller
                 ]);
             }
 
+            notifikasi_telegram_spm($id);
+            
             message(true,'Verifikasi berhasil','Verifikasi gagal');
             return redirect('verifikasi-spm');
         }
@@ -145,6 +147,8 @@ class VerifikasiSPMController extends Controller
                     'user_verif_pm' => \Auth::user()->id
                 ]);
             }
+
+            notifikasi_telegram_spm($id);
 
             message(true,'Verifikasi berhasil','Verifikasi gagal');
             return redirect('verifikasi-spm');
@@ -187,6 +191,8 @@ class VerifikasiSPMController extends Controller
                     'msg' => 'Verifikasi Berhasil Dilakukan'
                 );
             }
+
+            notifikasi_telegram_spm($request->input('id',null));
         }
         else
         {
@@ -556,10 +562,16 @@ class VerifikasiSPMController extends Controller
                     'flag_verif_pm' => 'N', 
                     'tgl_verif_pm' => date('Y-m-d H:i:s'),  
                     'catatan_site_manager' => $request->input('alasan_pembatalan',null),
-                    'user_verif_site_manager' => \Auth::user()->id
+                    'user_verif_site_manager' => \Auth::user()->id,
+                    'flag_batal' => 'Y',
                 );
 
                 $act = Spm::find($request->input('id',null))->update($data);
+
+                if($request->input('id',null) !== null)
+                {
+                    notifikasi_telegram_spm($request->input('id',null));
+                }
 
                 if($act == true)
                 {
