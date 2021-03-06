@@ -88,3 +88,23 @@ Route::prefix('po')->group(function() {
     Route::match(['get','post'],'/load-data-material','PurchaseOrderController@loadDataMaterial');
     Route::get('/{id}/batal', 'PurchaseOrderController@batal');
 });
+
+Route::prefix('verifikasi-po')->group(function() {
+    Route::get('/', 'VerifikasiPurchaseOrderController@index');
+    Route::match(['get', 'post'],'/get-data','VerifikasiPurchaseOrderController@getData');
+    Route::match(['get', 'post'],'/get-data-diterima','VerifikasiPurchaseOrderController@getDataDiterima');
+    Route::match(['get', 'post'],'/get-data-ditolak','VerifikasiPurchaseOrderController@getDataDitolak');
+    Route::get('/create',['as' => 'verifikasi-po.create', 'uses' => 'VerifikasiPurchaseOrderController@create']);
+    Route::match(['get', 'post'],'/material-search','VerifikasiPurchaseOrderController@searchMaterial');
+    Route::match(['get','post'],'/store',['as' => 'verifikasi-po.store', 'uses' => 'VerifikasiPurchaseOrderController@store']);
+    Route::match(['get','post','put'],'/update/{id}',['as' => 'verifikasi-po.update', 'uses' => 'VerifikasiPurchaseOrderController@update']);
+    Route::match(['get', 'post'],'/{id}/edit','VerifikasiPurchaseOrderController@edit');
+    Route::match(['get', 'post'],'/{id}/view','VerifikasiPurchaseOrderController@show');
+    Route::match(['get', 'post'],'/{id}/test-pdf','VerifikasiPurchaseOrderController@test_pdf');
+    Route::match(['get', 'post'],'/{id}/verifikasi','VerifikasiPurchaseOrderController@verifikasi');
+    Route::match(['get', 'post'],'/verifikasi-komersil','VerifikasiPurchaseOrderController@verifikasiKomersil');
+    Route::match(['get','post'],'/send-data','VerifikasiPurchaseOrderController@sendData');
+    Route::match(['get','post'],'/load-data-material','VerifikasiPurchaseOrderController@loadDataMaterial');
+    Route::get('/delete-detail-spm', 'VerifikasiPurchaseOrderController@deleteDetailSpm');
+    Route::get('/{id}/batal', 'VerifikasiPurchaseOrderController@batal');
+});

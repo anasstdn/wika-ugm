@@ -203,8 +203,9 @@ function dashboard_project_manager()
                             ->count();
 
     $total_po_verif_ditolak = \DB::table('po')
-                            ->where('flag_batal','=','N')
+                            ->where('flag_batal','=','Y')
                             ->where('flag_verif_komersial','=','N')
+                            ->where('flag_verif_pm','=','N')
                             ->count();
 
     $data['total_all_po'] = $total_all_po;
