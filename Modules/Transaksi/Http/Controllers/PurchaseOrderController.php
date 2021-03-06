@@ -308,6 +308,8 @@ class PurchaseOrderController extends Controller
                         {
                             $q->where('po.supplier_id',$supplier_id);
                         }
+                        $q->whereNull('flag_verif_komersial');
+                        $q->orWhereNull('flag_verif_pm');
                     })
                     // ->offset($offset)
                     // ->limit($limit)
