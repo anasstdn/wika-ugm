@@ -190,6 +190,28 @@ function dashboard_project_manager()
     $data['total_verif_diterima'] = $total_verif_diterima;
     $data['total_verif_ditolak'] = $total_verif_ditolak;
 
+    $total_all_po = \DB::table('po')->count();
+
+    $total_po_belum_verif = \DB::table('po')
+                            ->where('flag_batal','=','N')
+                            ->whereNull('flag_verif_komersial')
+                            ->count();
+
+    $total_po_verif_diterima = \DB::table('po')
+                            ->where('flag_batal','=','N')
+                            ->where('flag_verif_komersial','=','Y')
+                            ->count();
+
+    $total_po_verif_ditolak = \DB::table('po')
+                            ->where('flag_batal','=','N')
+                            ->where('flag_verif_komersial','=','N')
+                            ->count();
+
+    $data['total_all_po'] = $total_all_po;
+    $data['total_po_belum_verif'] = $total_po_belum_verif;
+    $data['total_po_verif_diterima'] = $total_po_verif_diterima;
+    $data['total_po_verif_ditolak'] = $total_po_verif_ditolak;
+
     return $data;
 }
 
@@ -374,7 +396,7 @@ function notifikasi_telegram_spm($id_spm)
 
 			if(!empty(getProfileByUserId($spm->user_input)->telegram_id))
 			{
-				sendTelegramBot(getProfileByUserId($spm->user_input)->telegram_id,$text_pelaksana);
+                sendTelegramBot(getProfileByUserId($spm->user_input)->telegram_id,$text_pelaksana);
 			}
         // == END ==//
 		}

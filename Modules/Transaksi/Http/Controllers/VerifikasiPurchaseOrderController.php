@@ -12,6 +12,16 @@ class VerifikasiPurchaseOrderController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+
+    function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:verifikasi-po-list|verifikasi-po-create|verifikasi-po-edit|verifikasi-po-delete', ['only' => ['index','store','getData']]);
+        $this->middleware('permission:verifikasi-po-create', ['only' => ['create','store']]);
+        $this->middleware('permission:verifikasi-po-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:verifikasi-po-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         return view('transaksi::index');

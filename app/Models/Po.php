@@ -18,9 +18,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $supplier_id
  * @property string|null $no_po
  * @property Carbon|null $tgl_pengajuan_po
- * @property string|null $nama_pemohon
- * @property string|null $lokasi
- * @property string|null $keterangan
  * @property int|null $user_input
  * @property int|null $user_update
  * @property string|null $flag_batal
@@ -33,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property float|null $total_harga
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string|null $catatan_project_manager
+ * @property string|null $catatan_komersial
  * 
  * @property Supplier|null $supplier
  * @property Survei|null $survei
@@ -66,9 +65,6 @@ class Po extends Model
 		'supplier_id',
 		'no_po',
 		'tgl_pengajuan_po',
-		'nama_pemohon',
-		'lokasi',
-		'keterangan',
 		'user_input',
 		'user_update',
 		'flag_batal',
@@ -78,7 +74,9 @@ class Po extends Model
 		'flag_verif_pm',
 		'user_verif_pm',
 		'tgl_verif_pm',
-		'total_harga'
+		'total_harga',
+		'catatan_project_manager',
+		'catatan_komersial'
 	];
 
 	public function supplier()

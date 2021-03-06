@@ -199,6 +199,11 @@ return [
 				'verifikasi-pm-spm-create',
 				'verifikasi-pm-spm-edit',
 				'verifikasi-pm-spm-delete',
+			'po-menu',
+				'verifikasi-po-list',
+				'verifikasi-po-create',
+				'verifikasi-po-edit',
+				'verifikasi-po-delete',
 		],
 
 		'komersial' => [
@@ -212,6 +217,11 @@ return [
 				'verifikasi-komersial-spm-create',
 				'verifikasi-komersial-spm-edit',
 				'verifikasi-komersial-spm-delete',
+			'po-menu',
+				'verifikasi-po-list',
+				'verifikasi-po-create',
+				'verifikasi-po-edit',
+				'verifikasi-po-delete',
 		],
 
 		'pengadaan' => [

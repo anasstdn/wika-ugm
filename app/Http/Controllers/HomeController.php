@@ -27,6 +27,7 @@ class HomeController extends Controller
     {
         // dd(redirect('home')->getTargetUrl());
         $config_admin = getConfigValues('ROLE_ADMIN');
+        // notifikasi_telegram_spm('1');
 
         if(isset(\Auth::user()->roles[0]->id) && !in_array(\Auth::user()->roles[0]->id, $config_admin))
         {
