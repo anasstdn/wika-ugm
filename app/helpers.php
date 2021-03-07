@@ -194,12 +194,41 @@ function dashboard_project_manager()
 
     $total_po_belum_verif = \DB::table('po')
                             ->where('flag_batal','=','N')
-                            ->whereNull('flag_verif_komersial')
+                            ->whereNull('flag_verif_pm')
                             ->count();
 
     $total_po_verif_diterima = \DB::table('po')
                             ->where('flag_batal','=','N')
+                            ->where('flag_verif_pm','=','Y')
+                            ->count();
+
+    $total_po_verif_ditolak = \DB::table('po')
+                            ->where('flag_batal','=','Y')
+                            ->where('flag_verif_pm','=','N')
+                            ->where('flag_verif_komersial','=','N')
+                            ->count();
+
+    $data['total_all_po'] = $total_all_po;
+    $data['total_po_belum_verif'] = $total_po_belum_verif;
+    $data['total_po_verif_diterima'] = $total_po_verif_diterima;
+    $data['total_po_verif_ditolak'] = $total_po_verif_ditolak;
+
+    return $data;
+}
+
+function dashboard_pengadaan()
+{
+    $total_all_po = \DB::table('po')->count();
+
+    // $total_po_belum_verif = \DB::table('po')
+    //                         ->where('flag_batal','=','N')
+    //                         ->whereNull('flag_verif_komersial')
+    //                         ->count();
+
+    $total_po_verif_diterima = \DB::table('po')
+                            ->where('flag_batal','=','N')
                             ->where('flag_verif_komersial','=','Y')
+                            ->where('flag_verif_pm','=','Y')
                             ->count();
 
     $total_po_verif_ditolak = \DB::table('po')
@@ -207,6 +236,8 @@ function dashboard_project_manager()
                             ->where('flag_verif_komersial','=','N')
                             ->where('flag_verif_pm','=','N')
                             ->count();
+
+    $total_po_belum_verif = $total_all_po - ($total_po_verif_diterima + $total_po_verif_ditolak);
 
     $data['total_all_po'] = $total_all_po;
     $data['total_po_belum_verif'] = $total_po_belum_verif;
@@ -243,6 +274,31 @@ function dashboard_komersial()
     $data['total_verif_diterima'] = $total_verif_diterima;
     $data['total_verif_ditolak'] = $total_verif_ditolak;
 
+    $total_all_po = \DB::table('po')->count();
+
+    $total_po_belum_verif = \DB::table('po')
+                            ->where('flag_batal','=','N')
+                            ->where('flag_verif_pm','=','Y')
+                            ->whereNull('flag_verif_komersial')
+                            ->count();
+
+    $total_po_verif_diterima = \DB::table('po')
+                            ->where('flag_batal','=','N')
+                            ->where('flag_verif_pm','=','Y')
+                            ->where('flag_verif_komersial','=','Y')
+                            ->count();
+
+    $total_po_verif_ditolak = \DB::table('po')
+                            ->where('flag_batal','=','Y')
+                            ->where('flag_verif_pm','=','N')
+                            ->where('flag_verif_komersial','=','N')
+                            ->count();
+
+    $data['total_all_po'] = $total_all_po;
+    $data['total_po_belum_verif'] = $total_po_belum_verif;
+    $data['total_po_verif_diterima'] = $total_po_verif_diterima;
+    $data['total_po_verif_ditolak'] = $total_po_verif_ditolak;
+
     return $data;
 }
 
@@ -251,6 +307,18 @@ function get_jumlah_current_stok($material_id)
     $stok = \DB::table('stok')->where('material_id',$material_id)->first();
 
     return isset($stok) && !empty($stok)?$stok->qty:0;
+}
+
+function get_spm_data_from_survei($id)
+{
+   $spm = \App\Models\Spm::join('detail_spm','detail_spm.spm_id','=','spm.id')
+   ->join('spm_survei','detail_spm.id','=','spm_survei.detail_spm_id')
+   ->join('detail_survei','detail_survei.id','=','spm_survei.detail_survei_id')
+   ->join('survei','survei.id','=','detail_survei.survei_id')
+   ->where('survei.id','=',$id)
+   ->first();
+
+   return $spm;
 }
 
 function get_current_url()

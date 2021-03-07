@@ -12,11 +12,11 @@
         </h1>
       </div>
       <div class="col-md py-10 d-md-flex align-items-md-center justify-content-md-end text-center">
-        @can('po-create')
+        {{-- @can('po-create')
         <a class="btn btn-alt-primary" href="{{ route('po.create') }}">
           <i class="fa fa-plus mr-5"></i> Tambah PO Baru
         </a>
-        @endcan
+        @endcan --}}
       </div>
     </div>
   </div>
@@ -160,6 +160,49 @@
   </div>
 </div>
 </div>
+  <div class="content">
+    <div class="block block-themed">
+      <div class="block-header bg-success">
+        <h3 class="block-title">PO Terverifikasi</h3>
+        <div class="block-options">
+          <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+            <i class="si si-refresh"></i>
+          </button>
+          <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
+        </div>
+      </div>
+      <div class="block-content block-content-full">
+       <div class="table-responsive">
+        <table 
+        data-toggle="table"
+        data-ajax="ajaxRequestVerified"
+        data-search="false"
+        data-side-pagination="server"
+        data-pagination="true"
+        data-page-list="[5,10, 25, 50, 100, 200, All]"
+        data-show-fullscreen="true"
+        data-show-extended-pagination="true"
+        class="table table-bordered table-striped table-vcenter table-sm" 
+        id="table2"
+        >
+        <thead>
+          <tr>
+            <th data-field="no">No</th>
+            <th data-field="no_po">No PO</th>
+            <th data-field="tgl_pengajuan_po">Tanggal Pengajuan</th>
+            <th data-field="supplier">Supplier</th>
+            <th data-field="jumlah_material">Jumlah</th>
+            <th data-field="flag_batal">Batal</th>
+            <th data-field="flag_verif_komersial">Verif Komersial</th>
+            <th data-field="flag_verif_pm">Verif PM</th>
+            <th data-field="aksi">Aksi</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
 </div>
 @endsection
 
@@ -167,6 +210,8 @@
 <script>
   var start = moment().startOf('month');
   var end = moment().endOf('month');
+
+  cb(start,end);
 
   function ajaxRequest(params) {
     var formData = new FormData();
@@ -238,6 +283,41 @@
     });
   }
 
+  function ajaxRequestVerified(params) {
+    var formData = new FormData();
+    formData.append('limit', params.data.limit);
+    formData.append('offset', params.data.offset);
+    formData.append('order', params.data.order);
+    formData.append('search', params.data.search);
+    formData.append('sort', params.data.sort);
+    formData.append('supplier_id', $('#supplier_id').val());
+    formData.append('date_start', $('#daterangepicker_start').val());
+    formData.append('date_end', $('#daterangepicker_end').val());
+    formData.append('material_id', $('#material_id').val());
+
+    $.ajax({
+      type: "POST",
+      url: "{{ url('po/get-data-verified') }}",
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      data: formData,
+      dataType: "json",
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function (data) {
+        params.success({
+          "rows": data.data,
+          "total": data.total
+        })
+      },
+      error: function (er) {
+        params.error(er);
+      }
+    });
+  }
+
   $(function(){
     $(".select").select2({
       width: '100%'
@@ -246,6 +326,7 @@
     $('#cari').click(function(){
       $('#table').bootstrapTable('refresh')
       $('#table1').bootstrapTable('refresh')
+      $('#table2').bootstrapTable('refresh')
     });
 
     $('#reset').click(function(){
@@ -254,6 +335,7 @@
       $('#material_id').val('').trigger('change');
       $('#table').bootstrapTable('refresh');  
       $('#table1').bootstrapTable('refresh'); 
+      $('#table2').bootstrapTable('refresh')
     });
 
     $('#daterange-btn').daterangepicker({
@@ -272,8 +354,6 @@
       startDate: moment().startOf('month'),
       endDate: moment().endOf('month')
     },cb);
-
-    cb(start,end);
 
   })
 

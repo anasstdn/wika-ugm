@@ -16,6 +16,7 @@ use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ActivityTraits;
+use PDF;
 
 class PurchaseOrderController extends Controller
 {
@@ -396,6 +397,144 @@ class PurchaseOrderController extends Controller
         return response()->json(array('data' => $data,'total' => $dataList->total()));
     }
 
+    public function getDataVerified(Request $request)
+    {
+        $input = $request->all();
+
+        $offset = $request->has('offset') ? $request->get('offset') : 0;
+        $limit = $request->has('limit') ? $request->get('limit') : 10;
+        // $search = $request->has('search') ? $request->get('search') : null;
+        // 
+        $material_id = $request->input('material_id',null);
+        $supplier_id = $request->input('supplier_id',null);
+
+        if($offset == 0)
+        {
+          $page = 1;
+        }
+        else
+        {
+          $page = ($offset / $limit) + 1;
+        }
+
+        $dataList = Po::select(\DB::raw('po.*'))
+                    ->where(function($q) use($input,$material_id,$supplier_id){
+                        if(isset($input['date_start']) && !empty($input['date_start']))
+                        {
+                            $q->whereDate('tgl_pengajuan_po','>=',date('Y-m-d',strtotime($input['date_start'])));
+                        }
+                        if(isset($input['date_end']) && !empty($input['date_end']))
+                        {
+                            $q->whereDate('tgl_pengajuan_po','<=',date('Y-m-d',strtotime($input['date_end'])));
+                        }
+                        // if(!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN')))
+                        // {
+                        //     $q->where('user_input',\Auth::user()->id);
+                        // }
+                        if(isset($material_id) && !empty($material_id))
+                        {
+                            $q->whereRaw('po.id IN (SELECT po_id FROM detail_po WHERE material_id ="'.$material_id.'")');
+                        }
+                        if(isset($supplier_id) && !empty($supplier_id))
+                        {
+                            $q->where('po.supplier_id',$supplier_id);
+                        }
+                        $q->whereNotNull('flag_verif_komersial');
+                        $q->whereNotNull('flag_verif_pm');
+                    })
+                    // ->offset($offset)
+                    // ->limit($limit)
+                    ->orderby('tgl_pengajuan_po','DESC')
+                    ->paginate($limit,['*'], 'page', $page);
+
+        // $total_all = Supplier::get();
+
+        $data = array();
+
+        $no = $offset + 1;
+        
+        foreach($dataList as $key => $val)
+        {
+            $material = DetailPo::where('po_id',$val->id)->get();
+
+            $data[$key]['no'] = $no;
+            $data[$key]['no_po'] = $val->no_po;
+            $data[$key]['tgl_pengajuan_po'] = date_indo(date('Y-m-d',strtotime($val->tgl_pengajuan_po)));
+            $data[$key]['supplier'] = $val->supplier->nama_supplier;
+            $data[$key]['jumlah_material'] = count($material);
+            if($val->flag_batal == 'Y')
+            {
+                $data[$key]['flag_batal'] = '<div class="col-md-12"><div class="text-center"><span class="badge badge-primary">Ya</div></div>';
+            }
+            else
+            {
+                $data[$key]['flag_batal'] = '<div class="col-md-12"><div class="text-center"><span class="badge badge-info">Tidak</div></div>';   
+            }
+
+            if($val->flag_verif_komersial == 'Y')
+            {
+                $data[$key]['flag_verif_komersial'] = '<div class="col-md-12"><div class="text-center"><span class="badge badge-success">Ya</div></div>';
+            }
+            elseif($val->flag_verif_komersial == 'N')
+            {
+                $data[$key]['flag_verif_komersial'] = '<div class="col-md-12"><div class="text-center"><span class="badge badge-danger">Tidak</div></div>';   
+            }
+            else
+            {
+                $data[$key]['flag_verif_komersial'] = '<div class="col-md-12"><div class="text-center"><span class="badge badge-secondary">Menunggu Verif</div></div>';   
+            }
+
+            if($val->flag_verif_pm == 'Y')
+            {
+                $data[$key]['flag_verif_pm'] = '<div class="col-md-12"><div class="text-center"><span class="badge badge-success">Ya</div></div>';
+            }
+            elseif($val->flag_verif_pm == 'N')
+            {
+                $data[$key]['flag_verif_pm'] = '<div class="col-md-12"><div class="text-center"><span class="badge badge-danger">Tidak</div></div>';   
+            }
+            else
+            {
+                $data[$key]['flag_verif_pm'] = '<div class="col-md-12"><div class="text-center"><span class="badge badge-secondary">Menunggu Verif</div></div>';   
+            }
+            
+            $view=url("po/".$val->id)."/view";
+            $create_po=url("po/".$val->id)."/buat-po";
+            $batal=url("po/".$val->id)."/batal";
+            $print=url("po/".$val->id)."/test-pdf";
+
+            $data[$key]['aksi'] = '';
+
+            // if(\Auth::user()->can('pegawai-create'))
+            // {
+            $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='$view' class='btn btn-success btn-sm' data-original-title='View' title='View'><i class='fa fa-edit' aria-hidden='true'></i> Detail</a>&nbsp";
+            // }
+
+
+            if(\Auth::user()->can('po-delete'))
+            {
+                if($val->flag_verif_komersial !== null && $val->flag_verif_pm !==null)
+                {
+                    if($val->flag_verif_pm == 'Y' && $val->flag_verif_komersial == 'Y')
+                    {
+                        $data[$key]['aksi'] .="<a href='$print' class='btn btn-danger btn-sm' data-original-title='Print' target='_blank' title='Print'><i class='fa fa-print' aria-hidden='true'></i> Print PDF</a></div></div>";
+                    }
+                    else
+                    {
+                        $data[$key]['aksi'].="</div></div>";
+                    }
+                }
+                else
+                {
+                    $data[$key]['aksi'].="<a href='$batal' onclick='clicked(event)' class='btn btn-danger btn-sm' data-original-title='Batal PO' title='Batal PO'><i class='fa fa-times' aria-hidden='true'></i> Batal</a></div></div>";
+                }
+            }
+
+            $no++;
+            
+        }
+        return response()->json(array('data' => $data,'total' => $dataList->total()));
+    }
+
     public function loadTable(Request $request)
     {
         if($request->ajax())
@@ -473,4 +612,24 @@ class PurchaseOrderController extends Controller
     DB::commit();
     return redirect()->back();
 }
+
+public function test_pdf(Request $request, $id)
+{
+    if(\Auth::user()->can('po-list'))
+    {
+        $data = Po::find($id);
+        $data_detail = DetailPo::where('po_id',$data->id)->get();
+
+        $array['data'] = $data;
+        $array['data_detail'] = $data_detail;
+
+        $pdf = PDF::loadView('transaksi::verifikasi-po.pdf', $array);
+
+        return $pdf->stream("PO_".$data->no_po."_".date('Y_m_d',strtotime($data->tgl_pengajuan_po)).".pdf");
+    }
+
+    message(false,'','Anda tidak dapat mengakses halaman ini');
+    return redirect()->back();
+}
+
 }

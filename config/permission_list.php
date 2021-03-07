@@ -201,9 +201,10 @@ return [
 				'verifikasi-pm-spm-delete',
 			'po-menu',
 				'verifikasi-po-list',
-				'verifikasi-po-create',
-				'verifikasi-po-edit',
-				'verifikasi-po-delete',
+				'verifikasi-pm-po-list',
+				'verifikasi-pm-po-create',
+				'verifikasi-pm-po-edit',
+				'verifikasi-pm-po-delete',
 		],
 
 		'komersial' => [
@@ -219,9 +220,10 @@ return [
 				'verifikasi-komersial-spm-delete',
 			'po-menu',
 				'verifikasi-po-list',
-				'verifikasi-po-create',
-				'verifikasi-po-edit',
-				'verifikasi-po-delete',
+				'verifikasi-komersial-po-list',
+				'verifikasi-komersial-po-create',
+				'verifikasi-komersial-po-edit',
+				'verifikasi-komersial-po-delete',
 		],
 
 		'pengadaan' => [

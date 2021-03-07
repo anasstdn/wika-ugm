@@ -59,6 +59,10 @@
     @include('dashboard-komersial')
     @endif
 
+    @if(in_array(\Auth::user()->roles->pluck('id')[0], array_merge(getConfigValues('ROLE_PENGADAAN'))))
+    @include('dashboard-pengadaan')
+    @endif
+
     <!-- END Icon Navigation -->
 
     <!-- Mini Stats -->

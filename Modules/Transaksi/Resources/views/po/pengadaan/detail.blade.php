@@ -138,6 +138,9 @@
 				<br/><br/>
 				<div class="row">
 					<div class="col-12 text-right">
+						@if($data->flag_verif_komersial == 'Y' && $data->flag_verif_pm == 'Y')
+						<a href="{{ url('/po/'.$data->id.'/test-pdf') }}" class="btn btn-alt-info print_pdf" target="_blank">Print PDF</a>
+						@endif
 						<a href="{{ url('/po') }}" class="btn btn-alt-success">Kembali</a>
 					</div>
 				</div>

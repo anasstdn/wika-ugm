@@ -75,6 +75,7 @@ Route::prefix('po')->group(function() {
     Route::match(['get', 'post'],'/get-data','PurchaseOrderController@getData');
     Route::match(['get', 'post'],'/load-table','PurchaseOrderController@loadTable');
     Route::match(['get', 'post'],'/get-data-loading','PurchaseOrderController@getDataLoading');
+    Route::match(['get', 'post'],'/get-data-verified','PurchaseOrderController@getDataVerified');
     Route::get('/{id}/form-survei', 'PurchaseOrderController@formSurvei');
     Route::match(['get', 'post'],'/get-data-ditolak','PurchaseOrderController@getDataDitolak');
     Route::get('/create-',['as' => 'po.create', 'uses' => 'PurchaseOrderController@create']);
@@ -82,6 +83,7 @@ Route::prefix('po')->group(function() {
     Route::match(['get','post'],'/store',['as' => 'po.store', 'uses' => 'PurchaseOrderController@store']);
     Route::match(['get','post','put'],'/update/{id}',['as' => 'po.update', 'uses' => 'PurchaseOrderController@update']);
     Route::match(['get', 'post'],'/{id}/edit','PurchaseOrderController@formSurvei');
+    Route::match(['get', 'post'],'/{id}/test-pdf','PurchaseOrderController@test_pdf');
     Route::match(['get', 'post'],'/{id}/view','PurchaseOrderController@show');
     Route::match(['get', 'post'],'/{id}/buat-po','PurchaseOrderController@buatPO');
     Route::match(['get','post'],'/send-data','PurchaseOrderController@sendData');
@@ -97,7 +99,7 @@ Route::prefix('verifikasi-po')->group(function() {
     Route::get('/create',['as' => 'verifikasi-po.create', 'uses' => 'VerifikasiPurchaseOrderController@create']);
     Route::match(['get', 'post'],'/material-search','VerifikasiPurchaseOrderController@searchMaterial');
     Route::match(['get','post'],'/store',['as' => 'verifikasi-po.store', 'uses' => 'VerifikasiPurchaseOrderController@store']);
-    Route::match(['get','post','put'],'/update/{id}',['as' => 'verifikasi-po.update', 'uses' => 'VerifikasiPurchaseOrderController@update']);
+    Route::match(['get','post','put','patch'],'/update/{id}',['as' => 'verifikasi-po.update', 'uses' => 'VerifikasiPurchaseOrderController@update']);
     Route::match(['get', 'post'],'/{id}/edit','VerifikasiPurchaseOrderController@edit');
     Route::match(['get', 'post'],'/{id}/view','VerifikasiPurchaseOrderController@show');
     Route::match(['get', 'post'],'/{id}/test-pdf','VerifikasiPurchaseOrderController@test_pdf');
