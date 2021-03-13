@@ -32,11 +32,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * @property string|null $catatan_project_manager
  * @property string|null $catatan_komersial
+ * @property string|null $flag_bapb
  * 
  * @property Supplier|null $supplier
  * @property Survei|null $survei
  * @property User|null $user
  * @property Collection|DetailPo[] $detail_pos
+ * @property Collection|Bapb[] $bapbs
  *
  * @package App\Models
  */
@@ -76,7 +78,8 @@ class Po extends Model
 		'tgl_verif_pm',
 		'total_harga',
 		'catatan_project_manager',
-		'catatan_komersial'
+		'catatan_komersial',
+		'flag_bapb'
 	];
 
 	public function supplier()
@@ -97,5 +100,12 @@ class Po extends Model
 	public function detail_pos()
 	{
 		return $this->hasMany(DetailPo::class);
+	}
+
+	public function bapbs()
+	{
+		return $this->belongsToMany(Bapb::class, 'po_bapb')
+					->withPivot('id')
+					->withTimestamps();
 	}
 }
