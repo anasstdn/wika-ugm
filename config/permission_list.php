@@ -80,6 +80,16 @@ return [
 				'po-edit',
 				'po-delete',
 
+			'bapb-menu',
+				'bapb-list',
+				'bapb-create',
+				'bapb-edit',
+				'bapb-delete',
+				'riwayat-bapb-list',
+				'riwayat-bapb-create',
+				'riwayat-bapb-edit',
+				'riwayat-bapb-delete',
+
 			'profil-list',
 			'profil-create',
 			'profil-edit',
@@ -240,6 +250,21 @@ return [
 				'po-create',
 				'po-edit',
 				'po-delete',
+		],
+		'gudang' => [
+			'profil-list',
+			'profil-create',
+			'profil-edit',
+			'profil-delete',
+			'bapb-menu',
+				'bapb-list',
+				'bapb-create',
+				'bapb-edit',
+				'bapb-delete',
+				'riwayat-bapb-list',
+				'riwayat-bapb-create',
+				'riwayat-bapb-edit',
+				'riwayat-bapb-delete',
 		],
 	]
 ];

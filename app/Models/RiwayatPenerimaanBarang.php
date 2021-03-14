@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class RiwayatPenerimaanBarang
  * 
  * @property int $id
- * @property int|null $bapb_id
  * @property int|null $riwayat_stok_id
  * @property int|null $detail_bapb_id
  * @property int|null $user_input
@@ -21,7 +20,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
- * @property Bapb|null $bapb
  * @property DetailBapb|null $detail_bapb
  * @property RiwayatStok|null $riwayat_stok
  * @property User|null $user
@@ -33,7 +31,6 @@ class RiwayatPenerimaanBarang extends Model
 	protected $table = 'riwayat_penerimaan_barang';
 
 	protected $casts = [
-		'bapb_id' => 'int',
 		'riwayat_stok_id' => 'int',
 		'detail_bapb_id' => 'int',
 		'user_input' => 'int',
@@ -41,17 +38,11 @@ class RiwayatPenerimaanBarang extends Model
 	];
 
 	protected $fillable = [
-		'bapb_id',
 		'riwayat_stok_id',
 		'detail_bapb_id',
 		'user_input',
 		'user_update'
 	];
-
-	public function bapb()
-	{
-		return $this->belongsTo(Bapb::class);
-	}
 
 	public function detail_bapb()
 	{

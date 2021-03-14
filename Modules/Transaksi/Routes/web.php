@@ -110,3 +110,9 @@ Route::prefix('verifikasi-po')->group(function() {
     Route::get('/delete-detail-spm', 'VerifikasiPurchaseOrderController@deleteDetailSpm');
     Route::get('/{id}/batal', 'VerifikasiPurchaseOrderController@batal');
 });
+
+Route::prefix('bapb')->group(function() {
+    Route::get('/', 'BeritaAcaraPenerimaanBarangController@index');
+    Route::match(['get','post'],'/po-search','BeritaAcaraPenerimaanBarangController@search');
+    Route::match(['get','post'],'/load-data-po','BeritaAcaraPenerimaanBarangController@loadDataPo');
+});

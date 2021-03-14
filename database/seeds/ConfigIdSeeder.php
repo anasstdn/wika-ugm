@@ -71,6 +71,12 @@ class ConfigIdSeeder extends Seeder
                 'config_value'=>7,
                 'description'=>'Role untuk Pengadaan Sistem',
             ],
+             [
+                'table_source'=>'roles',
+                'config_name'=>'ROLE_GUDANG',
+                'config_value'=>8,
+                'description'=>'Role untuk Gudang Sistem',
+            ],
     		[
     			'table_source'=>'',
     			'config_name'=>'Y-m-d',

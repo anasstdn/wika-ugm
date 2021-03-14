@@ -15,8 +15,6 @@ class CreateRiwayatPenerimaanBarangTable extends Migration
     {
         Schema::create('riwayat_penerimaan_barang', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('bapb_id')->nullable();
-            $table->foreign('bapb_id')->references('id')->on('bapb');
             $table->unsignedBigInteger('riwayat_stok_id')->nullable();
             $table->foreign('riwayat_stok_id')->references('id')->on('riwayat_stok');
             $table->unsignedBigInteger('detail_bapb_id')->nullable();

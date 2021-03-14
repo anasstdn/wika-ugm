@@ -24,6 +24,7 @@ class MenuSeeder extends Seeder
         $this->menuMasterdata();
         $this->menuSpm();
         $this->menuPo();
+        $this->menuBapb();
         // $this->menuTransaksiKas();
         // $this->menuSimpanan();
         // $this->menuPinjaman();
@@ -478,6 +479,58 @@ class MenuSeeder extends Seeder
     //     )
     // );
     //     $submenu->save();
+    }
+
+    private function menuBapb()
+    {
+        $this->command->info('Menu BAPB Seeder');
+        $permission = Permission::firstOrNew(array(
+            'name'=>'bapb-menu'
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+        $menu = Menu::firstOrNew(array(
+            'name'=>'BAPB',
+            'permission_id'=>$permission->id,
+            'ordinal'=>1,
+            'parent_status'=>'Y'
+        ));
+        $menu->icon = 'si-list';
+        $menu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'bapb-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Transaksi BAPB',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'N',
+            'url' => 'bapb'
+        )
+    );
+        $submenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'riwayat-bapb-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Riwayat BAPB',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'N',
+            'url' => 'riwayat-bapb'
+        )
+    );
+        $submenu->save();
     }
 }
 

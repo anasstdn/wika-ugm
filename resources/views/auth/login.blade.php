@@ -36,6 +36,11 @@
   <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
   <!-- END Stylesheets -->
 </head>
+<style type="text/css">
+  .help-block{
+    color:red;
+  }
+</style>
 <body>
 
   <!-- Page Container -->
