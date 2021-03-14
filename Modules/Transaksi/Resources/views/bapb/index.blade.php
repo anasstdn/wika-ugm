@@ -53,8 +53,11 @@
 						</div>
 						<div id="accordion_q1" class="collapse" role="tabpanel" aria-labelledby="accordion_h1" data-parent="#accordion">
 							<div class="block-content">
-								<div id="isi">
-								</div>
+								<form action="#" id="form" method="post" enctype="multipart/form-data">
+									{{ csrf_field() }}
+									<div id="isi">
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -76,49 +79,49 @@
 				dataType: 'json',
 			},
 		}).on('select2:selecting', function(e){
+			Codebase.layout('header_loader_on');
 			$('#accordion_q1').collapse('hide');
 			$('#isi').empty();
 			var formData = new FormData();
 			formData.append('po_id', e.params.args.data.id);
 
 			load_data('{{ url('bapb/load-data-po') }}','POST',formData).then(function(result){
-				console.log(result);
-				row = `
-				<div class="form-row">
-				<div class="form-group col-4">
-				<label for="wizard-progress-nama-depan">Nomor Purchase Order</label>
-				<input type="text" class="form-control" name="no_po" id="no_po" value="`+result.no_po+`" readonly>
-				</div>
-				<div class="form-group col-4">
-				<label for="wizard-progress-nama-depan">Tanggal Pengajuan PO</label>
-				<input type="text" class="form-control" name="tgl_pengajuan_po" id="tgl_pengajuan_po" value="`+result.tgl_pengajuan_po+`" readonly>
-				</div>
-				<div class="form-group col-4">
-				<label for="wizard-progress-nama-depan">User Pembuat PO</label>
-				<input type="text" class="form-control" name="user_input" id="user_input" value="`+result.user_input+`" readonly>
-				</div>
-				</div>
-				<div class="form-row">
-				<div class="form-group col-2">
-				<label for="wizard-progress-nama-depan">Kode Supplier</label>
-				<input type="text" class="form-control" name="kode_supplier" id="kode_supplier" value="`+result.kode_supplier+`" readonly>
-				</div>
-				<div class="form-group col-3">
-				<label for="wizard-progress-nama-depan">Nama Supplier</label>
-				<input type="text" class="form-control" name="nama_supplier" id="nama_supplier" value="`+result.nama_supplier+`" readonly>
-				</div>
-				<div class="form-group col-3">
-				<label for="wizard-progress-nama-depan">Total Harga</label>
-				<input type="text" class="form-control" name="total_harga" id="total_harga" value="`+result.total_harga+`" readonly>
-				</div>
-				</div>
-				<hr/>
-				`;
-				$('#isi').append(row);
+				// console.log(result);
+				Codebase.layout('header_loader_off');
+				$('#isi').append(result);
 				$('#accordion_q1').collapse('show');
-				// $(element).parent().parent().parent().find('.satuan').html(result.satuan);
-				// $(element).parent().parent().parent().find('.spesifikasi').html(result.spesifikasi);
+				$('#table').DataTable({
+					language: {
+						lengthMenu : '{{ "Menampilkan _MENU_ data" }}',
+						zeroRecords : '{{ "Data tidak ditemukan" }}' ,
+						info : '{{ "_PAGE_ dari _PAGES_ halaman" }}',
+						infoEmpty : '{{ "Data tidak ditemukan" }}',
+						infoFiltered : '{{ "(Penyaringan dari _MAX_ data)" }}',
+						loadingRecords : '{{ "Memuat data dari server" }}' ,
+						processing :    '{{ "Memuat data data" }}',
+						search :        '{{ "Pencarian:" }}',
+						paginate : {
+							first :     '{{ "<" }}' ,
+							last :      '{{ ">" }}' ,
+							next :      '{{ ">>" }}',
+							previous :  '{{ "<<" }}'
+						}
+					},
+					aoColumnDefs: [{
+						bSortable: false,
+						aTargets: [-1]
+					}],
+					iDisplayLength: 5,
+					aLengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+				});
 			})
+		});
+
+		$('#form').submit('#simpan',function(e){
+			e.preventDefault();
+			if(confirm('Apakah anda yakin untuk melanjutkan ke proses selanjutnya?')) {
+				save_data();
+			}
 		});
 	})
 
@@ -129,7 +132,7 @@
 				url : url,
 				type: method,
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-				dataType: "JSON",
+				dataType: "HTML",
 				data:params,
 				cache: false,
 				contentType: false,
@@ -142,6 +145,66 @@
 				}
 			})
 		})
+	}
+
+	save_data = () => {
+
+		Codebase.layout('header_loader_on');
+
+		$('#simpan').html('<i class="fa fa-circle-o-notch fa-spin"><i>').prop('disabled',true);
+		$.ajax({
+			url: '{{url('bapb/simpan-data')}}',
+			type: 'POST',
+			data: $('#form').serialize(),
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			xhr: function () {
+				var xhr = new window.XMLHttpRequest();
+				xhr.upload.addEventListener("progress",
+					uploadProgressHandler,
+					false
+					);
+				xhr.addEventListener("load", loadHandler, false);
+				xhr.addEventListener("error", errorHandler, false);
+				xhr.addEventListener("abort", abortHandler, false);
+
+				return xhr;
+			},
+			success:function(data){
+
+				if(data.status==true)
+				{
+					notification(data.msg,'sukses');
+					$('#simpan').html('Simpan').prop('disabled',false);
+					Codebase.layout('header_loader_off');
+					$('#simpan').fadeOut();
+					setTimeout(function(){
+						if(data.print_button == true)
+						{
+							$('.print_pdf').fadeIn();
+							$('.label_verifikasi').removeClass('badge-danger').addClass('badge-success');
+							$('.label_verifikasi').html('Disetujui');
+						}
+						else
+						{
+							$('.label_verifikasi').html('Ditolak');
+						}
+					}, 2000);
+				}
+				else
+				{
+					Codebase.layout('header_loader_off');
+					notification(data.msg,'gagal');
+				}
+
+			},
+			error:function (xhr, status, error)
+			{
+				Codebase.layout('header_loader_off');
+				notification(xhr.responseText,'gagal');
+			},
+		}); 
 	}
 </script>
 @endpush

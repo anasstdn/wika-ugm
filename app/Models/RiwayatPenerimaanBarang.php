@@ -15,12 +15,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int|null $riwayat_stok_id
  * @property int|null $detail_bapb_id
+ * @property int|null $detail_po_id
  * @property int|null $user_input
  * @property int|null $user_update
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
  * @property DetailBapb|null $detail_bapb
+ * @property DetailPo|null $detail_po
  * @property RiwayatStok|null $riwayat_stok
  * @property User|null $user
  *
@@ -33,6 +35,7 @@ class RiwayatPenerimaanBarang extends Model
 	protected $casts = [
 		'riwayat_stok_id' => 'int',
 		'detail_bapb_id' => 'int',
+		'detail_po_id' => 'int',
 		'user_input' => 'int',
 		'user_update' => 'int'
 	];
@@ -40,6 +43,7 @@ class RiwayatPenerimaanBarang extends Model
 	protected $fillable = [
 		'riwayat_stok_id',
 		'detail_bapb_id',
+		'detail_po_id',
 		'user_input',
 		'user_update'
 	];
@@ -47,6 +51,11 @@ class RiwayatPenerimaanBarang extends Model
 	public function detail_bapb()
 	{
 		return $this->belongsTo(DetailBapb::class);
+	}
+
+	public function detail_po()
+	{
+		return $this->belongsTo(DetailPo::class);
 	}
 
 	public function riwayat_stok()

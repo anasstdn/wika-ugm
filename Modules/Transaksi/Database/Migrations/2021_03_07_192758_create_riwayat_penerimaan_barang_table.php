@@ -19,6 +19,8 @@ class CreateRiwayatPenerimaanBarangTable extends Migration
             $table->foreign('riwayat_stok_id')->references('id')->on('riwayat_stok');
             $table->unsignedBigInteger('detail_bapb_id')->nullable();
             $table->foreign('detail_bapb_id')->references('id')->on('detail_bapb');
+            $table->unsignedBigInteger('detail_po_id')->nullable();
+            $table->foreign('detail_po_id')->references('id')->on('detail_po');
             $table->unsignedBigInteger('user_input')->nullable();
             $table->foreign('user_input')->references('id')->on('users');
             $table->unsignedBigInteger('user_update')->nullable();

@@ -115,4 +115,5 @@ Route::prefix('bapb')->group(function() {
     Route::get('/', 'BeritaAcaraPenerimaanBarangController@index');
     Route::match(['get','post'],'/po-search','BeritaAcaraPenerimaanBarangController@search');
     Route::match(['get','post'],'/load-data-po','BeritaAcaraPenerimaanBarangController@loadDataPo');
+    Route::match(['get','post'],'/simpan-data','BeritaAcaraPenerimaanBarangController@simpanData');
 });
