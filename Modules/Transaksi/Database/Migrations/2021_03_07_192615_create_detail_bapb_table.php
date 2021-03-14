@@ -15,6 +15,8 @@ class CreateDetailBapbTable extends Migration
     {
         Schema::create('detail_bapb', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('bapb_id')->nullable();
+            $table->foreign('bapb_id')->references('id')->on('bapb');
             $table->unsignedBigInteger('material_id')->nullable();
             $table->foreign('material_id')->references('id')->on('material');
             $table->text('merek')->nullable();

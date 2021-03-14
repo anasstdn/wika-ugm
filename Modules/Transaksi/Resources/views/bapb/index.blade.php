@@ -114,13 +114,19 @@
 					iDisplayLength: 5,
 					aLengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
 				});
+
+				initWizardSimple();
 			})
 		});
 
 		$('#form').submit('#simpan',function(e){
 			e.preventDefault();
-			if(confirm('Apakah anda yakin untuk melanjutkan ke proses selanjutnya?')) {
-				save_data();
+			if($(this).valid())
+			{
+				if(confirm('Apakah anda yakin untuk melanjutkan ke proses selanjutnya?')) {
+
+					save_data();
+				}
 			}
 		});
 	})
@@ -151,7 +157,7 @@
 
 		Codebase.layout('header_loader_on');
 
-		$('#simpan').html('<i class="fa fa-circle-o-notch fa-spin"><i>').prop('disabled',true);
+		// $('#simpan').html('<i class="fa fa-circle-o-notch fa-spin"><i>').prop('disabled',true);
 		$.ajax({
 			url: '{{url('bapb/simpan-data')}}',
 			type: 'POST',
@@ -176,26 +182,62 @@
 				if(data.status==true)
 				{
 					notification(data.msg,'sukses');
-					$('#simpan').html('Simpan').prop('disabled',false);
-					Codebase.layout('header_loader_off');
-					$('#simpan').fadeOut();
+					$('#simpan').html('<i class="fa fa-check mr-5"></i> Proses & Simpan').prop('disabled',false);
+					// Codebase.layout('header_loader_off');
+					// $('#simpan').fadeOut();
 					setTimeout(function(){
-						if(data.print_button == true)
-						{
-							$('.print_pdf').fadeIn();
-							$('.label_verifikasi').removeClass('badge-danger').addClass('badge-success');
-							$('.label_verifikasi').html('Disetujui');
-						}
-						else
-						{
-							$('.label_verifikasi').html('Ditolak');
-						}
+						// if(data.print_button == true)
+						// {
+						// 	$('.print_pdf').fadeIn();
+						// 	$('.label_verifikasi').removeClass('badge-danger').addClass('badge-success');
+						// 	$('.label_verifikasi').html('Disetujui');
+						// }
+						// else
+						// {
+						// 	$('.label_verifikasi').html('Ditolak');
+						// }
+						$('#isi').empty();
+						var formData = new FormData();
+						formData.append('po_id', data.po_id);
+
+						load_data('{{ url('bapb/load-data-po') }}','POST',formData).then(function(result){
+							Codebase.layout('header_loader_off');
+							$('#isi').append(result);
+							$('#accordion_q1').collapse('show');
+							$('#table').DataTable({
+								language: {
+									lengthMenu : '{{ "Menampilkan _MENU_ data" }}',
+									zeroRecords : '{{ "Data tidak ditemukan" }}' ,
+									info : '{{ "_PAGE_ dari _PAGES_ halaman" }}',
+									infoEmpty : '{{ "Data tidak ditemukan" }}',
+									infoFiltered : '{{ "(Penyaringan dari _MAX_ data)" }}',
+									loadingRecords : '{{ "Memuat data dari server" }}' ,
+									processing :    '{{ "Memuat data data" }}',
+									search :        '{{ "Pencarian:" }}',
+									paginate : {
+										first :     '{{ "<" }}' ,
+										last :      '{{ ">" }}' ,
+										next :      '{{ ">>" }}',
+										previous :  '{{ "<<" }}'
+									}
+								},
+								aoColumnDefs: [{
+									bSortable: false,
+									aTargets: [-1]
+								}],
+								iDisplayLength: 5,
+								aLengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+							});
+
+							initWizardSimple();
+						})
 					}, 2000);
 				}
 				else
 				{
 					Codebase.layout('header_loader_off');
 					notification(data.msg,'gagal');
+					$('#simpan').html('<i class="fa fa-check mr-5"></i> Proses & Simpan').prop('disabled',false);
 				}
 
 			},
@@ -205,6 +247,83 @@
 				notification(xhr.responseText,'gagal');
 			},
 		}); 
+	}
+
+	initWizardSimple = () => {
+
+		$('.datepicker').datepicker({
+			format: "dd-mm-yyyy",
+			locale: 'id',
+			autoclose: true
+		});
+
+		let formClassic     = $('#form');
+
+		formClassic.on('keyup keypress', e => {
+			let code = e.keyCode || e.which;
+
+			if (code === 13) {
+				e.preventDefault();
+				return false;
+			}
+		});
+
+		$.validator.addMethod("validDate", function(value, element) {
+			return this.optional(element) || moment(value,"DD-MM-YYYY").isValid();
+		}, "Format tanggal yang diperbolehkan, exp: DD-MM-YYYY");
+
+		let validatorClassic = formClassic.validate({
+			errorClass: 'invalid-feedback animated fadeInDown',
+			errorElement: 'div',
+			errorPlacement: (error, e) => {
+				$(e).parents('.form-group').append(error);
+			},
+			highlight: e => {
+				$(e).closest('.form-group').removeClass('is-invalid').addClass('is-invalid');
+			},
+			success: e => {
+				$(e).closest('.form-group').removeClass('is-invalid');
+				$(e).remove();
+			},
+			rules: {
+				'no_bapb': {
+					required: true,
+				},
+				'tgl_bapb': {
+					required: true,
+					validDate:true,
+				},
+				'no_surat_jalan': {
+					required: true,
+				},
+				'tgl_surat_jalan': {
+					required: true,
+					validDate:true,
+				},
+				'jenis_kelamin': {
+					required: true,
+				},
+				'no_polisi': {
+					required: true,
+				},
+				'jenis_kendaraan': {
+					required: true,
+				},
+            },
+		});
+
+
+		$('input').on('focus focusout keyup', function () {
+			$(this).valid();
+		});
+
+		$("select").on("select2:close", function (e) {  
+			$(this).valid(); 
+		});
+
+		$(".datepicker").on("change", function (e) {  
+			$(this).valid(); 
+		});
 	}
 </script>
 @endpush
