@@ -14,6 +14,123 @@ function getConfigValues($configName){
     return \App\Models\ConfigId::getValues($configName);
 }
 
+function get_number_surat_pengajuan($mode)
+{
+    switch($mode)
+    {
+        case 'spm':
+        $latest = \App\Models\Spm::latest('created_at')->first();
+
+        if(!$latest){
+            $number = 0;
+        }else{
+            if(romawi_bulan(explode('/',$latest->no_spm)[4]) == date('m',strtotime(current_datetime()))){
+                $number = my_substr_function($latest->no_spm, 0, 3);
+            }else{
+                $number = 0;
+            }
+        }   
+        return sprintf('%03d', intval($number) + 1).'/BAPB/P1UGM/SGLC/'.bulan_romawi(date('m',strtotime(current_datetime()))).'/'.date('Y',strtotime(current_datetime())); 
+        break;
+    }
+}
+
+function my_substr_function($str, $start, $end)
+{
+  return substr($str, $start, $end - $start);
+}
+
+function current_datetime()
+{
+    return date('Y-m-d H:i:s');
+}
+
+function romawi_bulan($index)
+{
+    switch($index)
+    {
+        case 'I':
+        return '01';
+        break;
+        case 'II':
+        return '02';
+        break;
+        case 'III':
+        return '03';
+        break;
+        case 'IV':
+        return '04';
+        break;
+        case 'V':
+        return '05';
+        break;
+        case 'VI':
+        return '06';
+        break;
+        case 'VII':
+        return '07';
+        break;
+        case 'VIII':
+        return '08';
+        break;
+        case 'IX':
+        return '09';
+        break;
+        case 'X':
+        return '10';
+        break;
+        case 'XI':
+        return '11';
+        break;
+        case 'XII':
+        return '12';
+        break;
+    }
+}
+
+function bulan_romawi($datetime)
+{
+    switch($datetime)
+    {
+        case '1':
+        return 'I';
+        break;
+        case '2':
+        return 'II';
+        break;
+        case '3':
+        return 'III';
+        break;
+        case '4':
+        return 'IV';
+        break;
+        case '5':
+        return 'V';
+        break;
+        case '6':
+        return 'VI';
+        break;
+        case '7':
+        return 'VII';
+        break;
+        case '8':
+        return 'VIII';
+        break;
+        case '9':
+        return 'IX';
+        break;
+        case '10':
+        return 'X';
+        break;
+        case '11':
+        return 'XI';
+        break;
+        case '12':
+        return 'XII';
+        break;
+    }
+}
+
 function date_indo($tgl)
 {
     $ubah = gmdate($tgl, time()+60*60*8);
@@ -24,10 +141,6 @@ function date_indo($tgl)
     return $tanggal.' '.$bulan.' '.$tahun;
 }
 
-function current_datetime()
-{
-    return date('Y-m-d H:i:s');
-}
 
 function nama_hari($tgl)
 {

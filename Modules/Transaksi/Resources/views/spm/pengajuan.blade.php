@@ -1,7 +1,7 @@
 <div class="form-row">
 	<div class="form-group col-6">
 		<label for="wizard-progress-nama-belakang">No SPM</label>
-		<input class="form-control pengajuan" type="text" id="no_spm" name="no_spm" value="{{ isset($data->no_spm) && !empty($data->no_spm)?$data->no_spm:'' }}">
+		<input class="form-control pengajuan col-6" type="text" id="no_spm" name="no_spm" value="{{ isset($data->no_spm) && !empty($data->no_spm)?$data->no_spm:$no_spm }}">
 	</div>
 </div>
 

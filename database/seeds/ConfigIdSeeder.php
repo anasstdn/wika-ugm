@@ -113,6 +113,30 @@ class ConfigIdSeeder extends Seeder
     			'config_value'=>'Y/m/d',
     			'description'=>'Date y/m/d format',
     		],
+            [
+                'table_source'=>'action',
+                'config_name'=>'ACTION_CREATE',
+                'config_value'=>1,
+                'description'=>'Aksi Create',
+            ],
+             [
+                'table_source'=>'action',
+                'config_name'=>'ACTION_READ',
+                'config_value'=>2,
+                'description'=>'Aksi Read',
+            ],
+             [
+                'table_source'=>'action',
+                'config_name'=>'ACTION_UPDATE',
+                'config_value'=>3,
+                'description'=>'Aksi Update',
+            ],
+             [
+                'table_source'=>'action',
+                'config_name'=>'ACTION_DELETE',
+                'config_value'=>4,
+                'description'=>'Aksi Delete',
+            ],
     	);
 
     	if(DB::table('config_ids')->get()->count() == 0){

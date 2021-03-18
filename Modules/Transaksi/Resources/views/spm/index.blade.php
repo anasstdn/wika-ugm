@@ -220,6 +220,8 @@
       var start = moment().startOf('month');
       var end = moment().endOf('month');
 
+      cb(start,end);
+
       function ajaxRequest(params) {
         var formData = new FormData();
         formData.append('limit', params.data.limit);
@@ -394,9 +396,6 @@
         startDate: moment().startOf('month'),
         endDate: moment().endOf('month')
       },cb);
-
-      cb(start,end);
-
       
 
       load_autocomplete_data().then((e) => {
