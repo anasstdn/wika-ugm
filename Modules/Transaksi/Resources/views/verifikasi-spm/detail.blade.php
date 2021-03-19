@@ -149,6 +149,20 @@
 							<br/><span>Komersial : &#13;&#10{{ $data->catatan_komersial }}</span>
 							@endif
 					</div>
+					<div class="form-group col-6">
+						<label for="wizard-progress-nama-depan">Riwayat SPM No {{ isset($data->no_spm)?$data->no_spm:'' }}</label>
+							@php
+							$riwayat = [];
+							@endphp
+							@if(isset($riwayat_spm) && !$riwayat_spm->isEmpty())
+							@foreach($riwayat_spm as $key => $val)
+							@php
+							$riwayat[] = ($key+1).". ".date('d-m-Y H:i:s',strtotime($val->created_at)).' '.$val->description['action'];
+							@endphp
+							@endforeach
+							@endif
+						<textarea class="form-control" rows="5" readonly="" style="font-size: 9pt;font-weight: bold">{{  implode("\n\n", $riwayat) }}</textarea>
+					</div>
 				</div>
 
 				<br/><br/>

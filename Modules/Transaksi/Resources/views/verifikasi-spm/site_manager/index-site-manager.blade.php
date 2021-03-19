@@ -214,6 +214,7 @@
     <script>
       var start = moment().startOf('month');
       var end = moment().endOf('month');
+      cb(start,end);
 
       function ajaxRequest(params) {
         var formData = new FormData();
@@ -390,7 +391,7 @@
         endDate: moment().endOf('month')
       },cb);
 
-      cb(start,end);
+     
 
       
 

@@ -78,6 +78,14 @@
 					</div>
 				</div>
 				<hr/>
+				<div class="form-row">
+					<div class="form-group col-12 text-right">
+						<label class="css-control css-control-primary css-checkbox">
+							<input type="checkbox" class="css-control-input" id="checkAll">
+							<span class="css-control-indicator"></span> Centang Semua
+						</label>
+					</div>
+				</div>
 				<div class="table-responsive">
 					<table class="table table-sm" width="100%">
 						<thead>
@@ -90,6 +98,7 @@
 								<th>Satuan</th>
 								<th>Digunakan Tanggal</th>
 								<th>Keterangan</th>
+								<th>Verifikasi</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -99,14 +108,22 @@
 							$material = \DB::table('material')->find($value->material_id);
 							@endphp
 							<tr>
-								<td>{{ $key+1 }}</td>
+								<td>{{ $key+1 }}
+								<input type="hidden" name="detail_id[{{ $key }}]" id="detail_id_{{ $key }}" value="{{ $value->id }}">
+								</td>
 								<td>{{ $material->kode_material }} - {{ $material->material }}</td>
 								<td>{{ $material->spesifikasi }}</td>
-								<td>{{ $value->volume }}</td>
+								<td><input type="number" class="form-control form-control-sm" name="volume[]" id="volume_{{ $key }}" step="0.01" min="0" value="{{ $value->volume }}"></td>
 								<td>{{ get_jumlah_current_stok($material->id) }}</td>
 								<td>{{ $material->satuan }}</td>
 								<td>{{ date_indo(date('Y-m-d',strtotime($value->tgl_penggunaan))) }}</td>
 								<td>{{ $value->keterangan }}</td>
+								<td>
+									<label class="css-control css-control-sm css-control-primary css-switch css-switch-square">
+										<input type="checkbox" class="css-control-input verif" name="verified[{{ $key }}]" id="verified_{{ $key }}" value="Y">
+										<span class="css-control-indicator"></span>
+									</label>
+								</td>
 							</tr>
 							@endforeach
 							@endif
@@ -129,6 +146,20 @@
 						<label for="wizard-progress-nama-depan">Catatan (Tidak Wajib Diisi)</label>
 						<textarea class="form-control pengajuan" name="catatan_site_manager" id="catatan_site_manager" rows="5"></textarea>
 					</div>
+					<div class="form-group col-6">
+						<label for="wizard-progress-nama-depan">Riwayat SPM No {{ isset($data->no_spm)?$data->no_spm:'' }}</label>
+							@php
+							$riwayat = [];
+							@endphp
+							@if(isset($riwayat_spm) && !$riwayat_spm->isEmpty())
+							@foreach($riwayat_spm as $key => $val)
+							@php
+							$riwayat[] = ($key+1).". ".date('d-m-Y H:i:s',strtotime($val->created_at)).' '.$val->description['action'];
+							@endphp
+							@endforeach
+							@endif
+						<textarea class="form-control" rows="5" readonly="" style="font-size: 9pt;font-weight: bold">{{  implode("\n\n", $riwayat) }}</textarea>
+					</div>
 				</div>
 
 				<br/><br/>
@@ -150,6 +181,13 @@
 <script>
 	$(function(){
 		initWizardSimple();
+		$('#checkAll').change(function(){
+			if ($(this).is(':checked')) {
+				$('input:checkbox.verif').not(':disabled').prop('checked',true);
+			} else {
+				$('input:checkbox.verif').prop('checked', false);
+			}
+		});
 	})
 
 		initWizardSimple = () => {
@@ -216,9 +254,28 @@
 		});
 
 		$('#form').submit('#simpan',function(e){
-			if($(this).valid())
+			var err = 0;
+			var atLeastOneIsChecked = false;
+
+			$('input:checkbox.verif').each(function () {
+				if ($(this).is(':checked')) {
+					atLeastOneIsChecked = true;
+					return false;
+				}
+			});
+
+			if(atLeastOneIsChecked == false)
+			{
+				err += 1;
+				notification('Silahkan verifikasi minimal 1 data.','gagal')
+			}
+			
+			if($(this).valid() && err == 0)
 			{
 				clicked(e);
+			}
+			else{
+				e.preventDefault();
 			}
 		});
 	}

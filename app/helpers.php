@@ -30,7 +30,7 @@ function get_number_surat_pengajuan($mode)
                 $number = 0;
             }
         }   
-        return sprintf('%03d', intval($number) + 1).'/BAPB/P1UGM/SGLC/'.bulan_romawi(date('m',strtotime(current_datetime()))).'/'.date('Y',strtotime(current_datetime())); 
+        return sprintf('%03d', intval($number) + 1).'/SPM/P1UGM/SGLC/'.bulan_romawi(date('m',strtotime(current_datetime()))).'/'.date('Y',strtotime(current_datetime())); 
         break;
     }
 }
@@ -584,8 +584,8 @@ function notifikasi_telegram_spm($id_spm)
 		}
 		elseif($spm->flag_verif_site_manager !== null && $spm->flag_verif_komersial == null && $spm->flag_verif_pm == null)
 		{
-			// == SEND TELEGRAM NOTIFICATION TO ALL PROJECT MANAGER== //
-			$profil = getTelegramByRoles(getConfigValues('ROLE_PROJECT_MANAGER'));
+			// == SEND TELEGRAM NOTIFICATION TO ALL KOMERSIAL== //
+			$profil = getTelegramByRoles(getConfigValues('ROLE_KOMERSIAL'));
 			if(isset($profil) && count($profil) > 0)
 			{
 				foreach($profil as $key => $val)
@@ -639,10 +639,10 @@ function notifikasi_telegram_spm($id_spm)
 			}
         // == END ==//
 		}
-		elseif($spm->flag_verif_site_manager !== null && $spm->flag_verif_komersial == null && $spm->flag_verif_pm !== null)
+		elseif($spm->flag_verif_site_manager !== null && $spm->flag_verif_komersial !== null && $spm->flag_verif_pm == null)
 		{
 			// == SEND TELEGRAM NOTIFICATION TO ALL PROJECT MANAGER== //
-			$profil = getTelegramByRoles(getConfigValues('ROLE_KOMERSIAL'));
+			$profil = getTelegramByRoles(getConfigValues('ROLE_PROJECT_MANAGER'));
 			if(isset($profil) && count($profil) > 0)
 			{
 				foreach($profil as $key => $val)
@@ -712,7 +712,7 @@ function notifikasi_telegram_spm($id_spm)
 		}
 		elseif($spm->flag_verif_site_manager !== null && $spm->flag_verif_komersial !== null && $spm->flag_verif_pm !== null)
 		{
-			// == SEND TELEGRAM NOTIFICATION TO ALL PROJECT MANAGER== //
+			// == SEND TELEGRAM NOTIFICATION TO ALL PENGADAAN== //
 			$profil = getTelegramByRoles(getConfigValues('ROLE_PENGADAAN'));
 			if(isset($profil) && count($profil) > 0)
 			{
