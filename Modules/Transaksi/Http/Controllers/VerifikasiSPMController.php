@@ -882,6 +882,18 @@ class VerifikasiSPMController extends Controller
 
                 $act = Spm::find($request->input('id', null))->update($data);
 
+                $data_riwayat_spm = array(
+                    'spm_id' => $request->input('id', null),
+                    'action_id' => getConfigValues('ACTION_UPDATE')[0],
+                    'user_input' => \Auth::user()->id,
+                    'datetime_log' => current_datetime(),
+                    'description' => array(
+                        'action' => 'User '. getProfileByUserId(\Auth::user()->id)->nama.' melakukan pembatalan SPM nomor '.Spm::find($request->input('id', null))->first()->no_spm.' dengan alasan '.$request->input('alasan_pembatalan', null)                    
+                        ),
+                );
+        
+                $insert_riwayat_spm = RiwayatSpm::create($data_riwayat_spm);
+
                 if ($request->input('id', null) !== null) {
                     notifikasi_telegram_spm($request->input('id', null));
                 }

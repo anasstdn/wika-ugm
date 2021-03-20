@@ -285,16 +285,19 @@ function dashboard_project_manager()
 
     $total_belum_diverif = \DB::table('spm')
                             ->where('flag_verif_site_manager','=','Y')
+                            ->where('flag_verif_komersial','=','Y')
                             ->whereNull('flag_verif_pm')
                             ->count();
 
     $total_verif_diterima = \DB::table('spm')
                             ->where('flag_verif_site_manager','=','Y')
+                            ->where('flag_verif_komersial','=','Y')
                             ->where('flag_verif_pm','=','Y')
                             ->count();
 
     $total_verif_ditolak = \DB::table('spm')
                             ->where('flag_verif_site_manager','=','N')
+                            ->where('flag_verif_komersial','=','N')
                             ->where('flag_verif_pm','=','N')
                             ->count();
 
@@ -366,19 +369,19 @@ function dashboard_komersial()
 
     $total_belum_diverif = \DB::table('spm')
                             ->where('flag_verif_site_manager','=','Y')
-                            ->where('flag_verif_pm','=','Y')
+                            // ->where('flag_verif_pm','=','Y')
                             ->whereNull('flag_verif_komersial')
                             ->count();
 
     $total_verif_diterima = \DB::table('spm')
                             ->where('flag_verif_site_manager','=','Y')
-                            ->where('flag_verif_pm','=','Y')
+                            // ->where('flag_verif_pm','=','Y')
                             ->where('flag_verif_komersial','=','Y')
                             ->count();
 
     $total_verif_ditolak = \DB::table('spm')
                             ->where('flag_verif_site_manager','=','N')
-                            ->where('flag_verif_pm','=','N')
+                            // ->where('flag_verif_pm','=','N')
                             ->where('flag_verif_komersial','=','N')
                             ->count();
 
