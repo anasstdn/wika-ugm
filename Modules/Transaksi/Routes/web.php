@@ -118,3 +118,8 @@ Route::prefix('bapb')->group(function() {
     Route::match(['get','post'],'/simpan-data','BeritaAcaraPenerimaanBarangController@simpanData');
     Route::match(['get','post'],'/cetak/{id}','BeritaAcaraPenerimaanBarangController@cetakFaktur');
 });
+
+Route::prefix('history-spm')->group(function() {
+    Route::get('/', 'HistorySPMController@index');
+    Route::match(['get', 'post'],'/get-data','HistorySPMController@getData');
+});

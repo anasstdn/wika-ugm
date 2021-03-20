@@ -393,6 +393,23 @@ class MenuSeeder extends Seeder
         )
     );
         $submenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name'=>'history-spm-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(array(
+            'name'=>'Riwayat SPM',
+            'parent_id'=>$menu->id,
+            'permission_id'=>$permission->id,
+            'ordinal'=>2,
+            'parent_status'=>'N',
+            'url' => 'history-spm'
+        )
+    );
+        $submenu->save();
     }
 
     private function menuPo()

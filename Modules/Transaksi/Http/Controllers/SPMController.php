@@ -21,9 +21,9 @@ class SPMController extends Controller
     function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:spm-list|spm-create|spm-edit|spm-delete', ['only' => ['index','store','getData']]);
-        $this->middleware('permission:spm-create', ['only' => ['create','store']]);
-        $this->middleware('permission:spm-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:spm-list|spm-create|spm-edit|spm-delete', ['only' => ['index', 'store', 'getData']]);
+        $this->middleware('permission:spm-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:spm-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:spm-delete', ['only' => ['destroy']]);
     }
 
@@ -39,14 +39,14 @@ class SPMController extends Controller
     public function create()
     {
         $material = \DB::table('material')
-                    ->where('parent_status','N')
-                    ->where('flag_aktif','Y')
-                    ->orderby('kode_material','ASC')
-                    ->get();
+            ->where('parent_status', 'N')
+            ->where('flag_aktif', 'Y')
+            ->orderby('kode_material', 'ASC')
+            ->get();
 
         $no_spm = get_number_surat_pengajuan('spm');
 
-        return view('transaksi::spm.form',compact('material','no_spm'));
+        return view('transaksi::spm.form', compact('material', 'no_spm'));
     }
 
     /**
@@ -69,7 +69,7 @@ class SPMController extends Controller
         try {
             $data_spm = array(
                 'no_spm' => $input['no_spm'],
-                'tgl_spm' => date('Y-m-d',strtotime($input['tgl_spm'])),
+                'tgl_spm' => date('Y-m-d', strtotime($input['tgl_spm'])),
                 'nama_pemohon' => $input['nama_pemohon'],
                 'lokasi' => $input['lokasi'],
                 'keterangan' => $input['keterangan_spm'],
@@ -79,8 +79,7 @@ class SPMController extends Controller
             $insert_spm = Spm::create($data_spm);
             $id_spm = $insert_spm->id;
 
-            foreach($input['material_id'] as $key => $val)
-            {
+            foreach ($input['material_id'] as $key => $val) {
                 $data_detail_spm = array(
                     'spm_id' => $id_spm,
                     'material_id' => $val,
@@ -98,22 +97,20 @@ class SPMController extends Controller
                 'user_input' => \Auth::user()->id,
                 'datetime_log' => current_datetime(),
                 'description' => array(
-                    'action' => 'User '. getProfileByUserId(\Auth::user()->id)->nama.' telah membuat SPM dengan nomor '.$input['no_spm']
+                    'action' => 'User ' . getProfileByUserId(\Auth::user()->id)->nama . ' telah membuat SPM dengan nomor ' . $input['no_spm']
                 ),
             );
 
             $insert_riwayat_spm = RiwayatSpm::create($data_riwayat_spm);
 
-            message($insert_detail_spm,'Data berhasil disimpan!','Data gagal disimpan!');
-
+            message($insert_detail_spm, 'Data berhasil disimpan!', 'Data gagal disimpan!');
         } catch (Exception $e) {
-            echo 'Message' .$e->getMessage();
+            echo 'Message' . $e->getMessage();
             DB::rollback();
         }
         DB::commit();
 
-        if($insert_detail_spm == true)
-        {
+        if ($insert_detail_spm == true) {
             notifikasi_telegram_spm($id_spm);
         }
 
@@ -128,10 +125,10 @@ class SPMController extends Controller
     public function show($id)
     {
         $data = Spm::find($id);
-        $data_detail = DetailSpm::where('spm_id',$data->id)->get();
-        $riwayat_spm = RiwayatSpm::where('spm_id','=',$data->id)->orderby('updated_at','DESC')->get();
+        $data_detail = DetailSpm::where('spm_id', $data->id)->get();
+        $riwayat_spm = RiwayatSpm::where('spm_id', '=', $data->id)->orderby('updated_at', 'DESC')->get();
 
-        return view('transaksi::spm.detail',compact('data','data_detail','riwayat_spm'));
+        return view('transaksi::spm.detail', compact('data', 'data_detail', 'riwayat_spm'));
     }
 
     /**
@@ -142,15 +139,15 @@ class SPMController extends Controller
     public function edit($id)
     {
         $data = Spm::find($id);
-        $data_detail = DetailSpm::where('spm_id',$data->id)->get();
+        $data_detail = DetailSpm::where('spm_id', $data->id)->get();
 
         $material = \DB::table('material')
-                    ->where('parent_status','N')
-                    ->where('flag_aktif','Y')
-                    ->orderby('kode_material','ASC')
-                    ->get();
+            ->where('parent_status', 'N')
+            ->where('flag_aktif', 'Y')
+            ->orderby('kode_material', 'ASC')
+            ->get();
 
-        return view('transaksi::spm.form',compact('data','data_detail','material'));
+        return view('transaksi::spm.form', compact('data', 'data_detail', 'material'));
     }
 
     /**
@@ -172,26 +169,29 @@ class SPMController extends Controller
 
         DB::beginTransaction();
         try {
-            $spm = Spm::where('id','=',$id)->first();
-            
+            $spm = Spm::where('id', '=', $id)->first();
+
             $data_spm = array(
                 'no_spm' => $input['no_spm'],
-                'tgl_spm' => date('Y-m-d',strtotime($input['tgl_spm'])),
+                'tgl_spm' => date('Y-m-d', strtotime($input['tgl_spm'])),
                 'nama_pemohon' => $input['nama_pemohon'],
                 'lokasi' => $input['lokasi'],
                 'keterangan' => $input['keterangan_spm'],
                 'user_update' => \Auth::user()->id
             );
             $insert_spm = $spm->update($data_spm);
-            if(count($spm->getChanges()) > 0){
-                $list_update = implode(', ', array_map(function ($a, $b) {  
-                    if($a == 'user_update'){
-                        return "$a = ".getProfileByUserId($b)->nama."";
-                    }else{
-                        return "$a = $b"; 
-                    }
-                }, 
-                    array_keys($spm->getChanges()),array_values($spm->getChanges())));
+            if (count($spm->getChanges()) > 0) {
+                $list_update = implode(', ', array_map(
+                    function ($a, $b) {
+                        if ($a == 'user_update') {
+                            return "$a = " . getProfileByUserId($b)->nama . "";
+                        } else {
+                            return "$a = $b";
+                        }
+                    },
+                    array_keys($spm->getChanges()),
+                    array_values($spm->getChanges())
+                ));
 
                 $data_riwayat_spm = array(
                     'spm_id' => $id,
@@ -199,15 +199,15 @@ class SPMController extends Controller
                     'user_input' => \Auth::user()->id,
                     'datetime_log' => current_datetime(),
                     'description' => array(
-                        'action' => 'User '. getProfileByUserId(\Auth::user()->id)->nama.' melakukan edit data '.$list_update                    ),
+                        'action' => 'User ' . getProfileByUserId(\Auth::user()->id)->nama . ' melakukan edit data ' . $list_update
+                    ),
                 );
 
                 $insert_riwayat_spm = RiwayatSpm::create($data_riwayat_spm);
             }
             $id_spm = $id;
 
-            foreach($input['material_id'] as $key => $val)
-            {
+            foreach ($input['material_id'] as $key => $val) {
                 $data_detail_spm = array(
                     'spm_id' => $id_spm,
                     'material_id' => $val,
@@ -216,35 +216,29 @@ class SPMController extends Controller
                     'keterangan' => $input['keterangan'][$key]
                 );
 
-                if(isset($input['id_detail_spm'][$key]))
-                {
+                if (isset($input['id_detail_spm'][$key])) {
                     $insert_detail_spm = DetailSpm::find($input['id_detail_spm'][$key])->update($data_detail_spm);
-                    $change_detail_spm = DetailSpm::where('id','=',$insert_detail_spm)->first()->getChanges();
-                }
-                else
-                {
+                    $change_detail_spm = DetailSpm::where('id', '=', $insert_detail_spm)->first()->getChanges();
+                } else {
                     $insert_detail_spm = DetailSpm::create($data_detail_spm);
                     $id_detail_spm = $insert_detail_spm->id;
                 }
 
-                
 
-                if(isset($change_detail_spm ) && count($change_detail_spm) > 0)
-                {
+
+                if (isset($change_detail_spm) && count($change_detail_spm) > 0) {
                     dd('aaaa');
                 }
             }
 
-            message($insert_detail_spm,'Data berhasil disimpan!','Data gagal disimpan!');
-
+            message($insert_detail_spm, 'Data berhasil disimpan!', 'Data gagal disimpan!');
         } catch (Exception $e) {
-            echo 'Message' .$e->getMessage();
+            echo 'Message' . $e->getMessage();
             DB::rollback();
         }
         DB::commit();
 
-        if($insert_detail_spm == true)
-        {
+        if ($insert_detail_spm == true) {
             notifikasi_telegram_spm($id_spm);
         }
 
@@ -263,7 +257,7 @@ class SPMController extends Controller
 
     public function batal($id)
     {
-        $spm = \DB::table('spm')->where('id',$id);
+        $spm = \DB::table('spm')->where('id', $id);
 
         $spm->update([
             'flag_verif_site_manager' => 'N',
@@ -273,7 +267,7 @@ class SPMController extends Controller
             'flag_verif_komersial' => 'N',
             'tgl_verif_komersial' => date('Y-m-d'),
             'flag_batal' => 'Y',
-            'keterangan' => 'Pengajuan dibatalkan oleh '.\Auth::user()->name
+            'keterangan' => 'Pengajuan dibatalkan oleh ' . \Auth::user()->name
         ]);
 
         $data_riwayat_spm = array(
@@ -282,18 +276,17 @@ class SPMController extends Controller
             'user_input' => \Auth::user()->id,
             'datetime_log' => current_datetime(),
             'description' => array(
-                'action' => 'User '. getProfileByUserId(\Auth::user()->id)->nama.' melakukan pembatalan SPM nomor '.$spm->first()->no_spm                    
-                ),
+                'action' => 'User ' . getProfileByUserId(\Auth::user()->id)->nama . ' melakukan pembatalan SPM nomor ' . $spm->first()->no_spm
+            ),
         );
 
         $insert_riwayat_spm = RiwayatSpm::create($data_riwayat_spm);
 
-        if($id !== null)
-        {
+        if ($id !== null) {
             notifikasi_telegram_spm($id);
         }
 
-        message(true,'Pengajuan Berhasil Dibatalkan','');
+        message(true, 'Pengajuan Berhasil Dibatalkan', '');
 
         return redirect()->back();
     }
@@ -301,13 +294,13 @@ class SPMController extends Controller
     public function searchMaterial(Request $request)
     {
         $data = \DB::table('material')
-                        ->select(\DB::raw('material.id, CONCAT(kode_material," - ",material) as text'))
-                        ->where('material','LIKE','%'.$request->input('term', '').'%')
-                        ->where('flag_aktif','Y')
-                        ->where('parent_status','N')
-                        ->limit(100)
-                        ->get();
-        
+            ->select(\DB::raw('material.id, CONCAT(kode_material," - ",material) as text'))
+            ->where('material', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->where('flag_aktif', 'Y')
+            ->where('parent_status', 'N')
+            ->limit(100)
+            ->get();
+
         return ['results' => $data];
     }
 
@@ -319,67 +312,58 @@ class SPMController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         // $search = $request->has('search') ? $request->get('search') : null;
         // 
-        $material_id = $input['material_id'] == 'null'?null:$input['material_id'];
+        $material_id = $input['material_id'] == 'null' ? null : $input['material_id'];
 
-        if($offset == 0)
-        {
-          $page = 1;
-        }
-        else
-        {
-          $page = ($offset / $limit) + 1;
+        if ($offset == 0) {
+            $page = 1;
+        } else {
+            $page = ($offset / $limit) + 1;
         }
 
         $dataList = Spm::select(\DB::raw('spm.*'))
-                    ->join('detail_spm','detail_spm.spm_id','=','spm.id')
-                    ->where(function($q) use($input,$material_id){
-                        if(isset($input['nama']) && !empty($input['nama']))
-                        {
-                            $q->where('no_spm','LIKE','%'.$input['nama'].'%')
-                            ->orWhere('nama_pemohon','LIKE','%'.$input['nama'].'%')
-                            ->orWhere('lokasi','LIKE','%'.$input['nama'].'%');
-                        }
-                        if(isset($input['date_start']) && !empty($input['date_start']))
-                        {
-                            $q->whereDate('tgl_spm','>=',date('Y-m-d',strtotime($input['date_start'])));
-                        }
-                        if(isset($input['date_end']) && !empty($input['date_end']))
-                        {
-                            $q->whereDate('tgl_spm','<=',date('Y-m-d',strtotime($input['date_end'])));
-                        }
-                        if(!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN')))
-                        {
-                            $q->where('user_input',\Auth::user()->id);
-                        }
-                        if(isset($material_id) && !empty($material_id))
-                        {
-                            $q->where('detail_spm.material_id',$material_id);
-                        }
-                    })
-                    ->whereNull('spm.flag_verif_komersial')
-                    // ->offset($offset)
-                    // ->limit($limit)
-                    ->distinct()
-                    ->orderby('tgl_spm','DESC')
-                    ->paginate($limit,['*'], 'page', $page);
+            ->join('detail_spm', 'detail_spm.spm_id', '=', 'spm.id')
+            ->where(function ($q) use ($input, $material_id) {
+                if (isset($input['nama']) && !empty($input['nama'])) {
+                    $q->where('no_spm', 'LIKE', '%' . $input['nama'] . '%')
+                        ->orWhere('nama_pemohon', 'LIKE', '%' . $input['nama'] . '%')
+                        ->orWhere('lokasi', 'LIKE', '%' . $input['nama'] . '%');
+                }
+                if (isset($input['date_start']) && !empty($input['date_start'])) {
+                    $q->whereDate('tgl_spm', '>=', date('Y-m-d', strtotime($input['date_start'])));
+                }
+                if (isset($input['date_end']) && !empty($input['date_end'])) {
+                    $q->whereDate('tgl_spm', '<=', date('Y-m-d', strtotime($input['date_end'])));
+                }
+                if (!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN'))) {
+                    $q->where('user_input', \Auth::user()->id);
+                }
+                if (isset($material_id) && !empty($material_id)) {
+                    $q->where('detail_spm.material_id', $material_id);
+                }
+            })
+            ->whereNull('spm.flag_verif_komersial')
+            // ->offset($offset)
+            // ->limit($limit)
+            ->distinct()
+            ->orderby('tgl_spm', 'DESC')
+            ->paginate($limit, ['*'], 'page', $page);
 
         // $total_all = Supplier::get();
 
         $data = array();
 
         $no = $offset + 1;
-        
-        foreach($dataList as $key => $val)
-        {
+
+        foreach ($dataList as $key => $val) {
             $data[$key]['no'] = $no;
             $data[$key]['no_spm'] = $val->no_spm;
-            $data[$key]['tgl_spm'] = date_indo(date('Y-m-d',strtotime($val->tgl_spm)));
+            $data[$key]['tgl_spm'] = date_indo(date('Y-m-d', strtotime($val->tgl_spm)));
             $data[$key]['nama_pemohon'] = $val->nama_pemohon;
             $data[$key]['lokasi'] = $val->lokasi;
-            
-            $view=url("spm/".$val->id)."/view";
-            $edit=url("spm/".$val->id)."/edit";
-            $batal=url("spm/".$val->id)."/batal";
+
+            $view = url("spm/" . $val->id) . "/view";
+            $edit = url("spm/" . $val->id) . "/edit";
+            $batal = url("spm/" . $val->id) . "/batal";
 
             $data[$key]['aksi'] = '';
 
@@ -387,22 +371,19 @@ class SPMController extends Controller
             // {
             //     $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='#' onclick='show_modal(\"$add\")' class='btn btn-primary btn-sm' data-original-title='Tambah' title='Tambah'><i class='fa fa-plus' aria-hidden='true'></i></a>&nbsp";
             // }
-            $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='$view' class='btn btn-success btn-sm' data-original-title='View' title='View'><i class='fa fa-edit' aria-hidden='true'></i> Detail</a>&nbsp";
+            $data[$key]['aksi'] .= "<div class='col-md-12'><div class='text-center'><a href='$view' class='btn btn-success btn-sm' data-original-title='View' title='View'><i class='fa fa-edit' aria-hidden='true'></i> Detail</a>&nbsp";
 
-            if(\Auth::user()->can('spm-edit'))
-            {
-                $data[$key]['aksi'] .="<a href='$edit' class='btn btn-primary btn-sm' data-original-title='Edit' title='Edit'><i class='fa fa-edit' aria-hidden='true'></i> Edit</a>&nbsp";
+            if (\Auth::user()->can('spm-edit')) {
+                $data[$key]['aksi'] .= "<a href='$edit' class='btn btn-primary btn-sm' data-original-title='Edit' title='Edit'><i class='fa fa-edit' aria-hidden='true'></i> Edit</a>&nbsp";
             }
 
-            if(\Auth::user()->can('spm-delete'))
-            {
-                $data[$key]['aksi'].="<a href='$batal' onclick='clicked(event)' class='btn btn-danger btn-sm' data-original-title='Hapus' title='Hapus'><i class='fa fa-times' aria-hidden='true'></i> Batal</a></div></div>";
+            if (\Auth::user()->can('spm-delete')) {
+                $data[$key]['aksi'] .= "<a href='$batal' onclick='clicked(event)' class='btn btn-danger btn-sm' data-original-title='Hapus' title='Hapus'><i class='fa fa-times' aria-hidden='true'></i> Batal</a></div></div>";
             }
 
             $no++;
-            
         }
-        return response()->json(array('data' => $data,'total' => $dataList->count()));
+        return response()->json(array('data' => $data, 'total' => $dataList->count()));
     }
 
     public function getDataDiterima(Request $request)
@@ -413,67 +394,58 @@ class SPMController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         // $search = $request->has('search') ? $request->get('search') : null;
         // 
-        $material_id = $input['material_id'] == 'null'?null:$input['material_id'];
+        $material_id = $input['material_id'] == 'null' ? null : $input['material_id'];
 
-        if($offset == 0)
-        {
-          $page = 1;
-        }
-        else
-        {
-          $page = ($offset / $limit) + 1;
+        if ($offset == 0) {
+            $page = 1;
+        } else {
+            $page = ($offset / $limit) + 1;
         }
 
         $dataList = Spm::select(\DB::raw('spm.*'))
-                    ->join('detail_spm','detail_spm.spm_id','=','spm.id')
-                    ->where(function($q) use($input,$material_id){
-                        if(isset($input['nama']) && !empty($input['nama']))
-                        {
-                            $q->where('no_spm','LIKE','%'.$input['nama'].'%')
-                            ->orWhere('nama_pemohon','LIKE','%'.$input['nama'].'%')
-                            ->orWhere('lokasi','LIKE','%'.$input['nama'].'%');
-                        }
-                        if(isset($input['date_start']) && !empty($input['date_start']))
-                        {
-                            $q->whereDate('tgl_spm','>=',date('Y-m-d',strtotime($input['date_start'])));
-                        }
-                        if(isset($input['date_end']) && !empty($input['date_end']))
-                        {
-                            $q->whereDate('tgl_spm','<=',date('Y-m-d',strtotime($input['date_end'])));
-                        }
-                        if(!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN')))
-                        {
-                            $q->where('user_input',\Auth::user()->id);
-                        }
-                        if(isset($material_id) && !empty($material_id))
-                        {
-                            $q->where('detail_spm.material_id',$material_id);
-                        }
-                    })
-                    ->where('spm.flag_verif_komersial','=','Y')
-                    // ->offset($offset)
-                    // ->limit($limit)
-                    ->distinct()
-                    ->orderby('tgl_spm','DESC')
-                    ->paginate($limit,['*'], 'page', $page);
+            ->join('detail_spm', 'detail_spm.spm_id', '=', 'spm.id')
+            ->where(function ($q) use ($input, $material_id) {
+                if (isset($input['nama']) && !empty($input['nama'])) {
+                    $q->where('no_spm', 'LIKE', '%' . $input['nama'] . '%')
+                        ->orWhere('nama_pemohon', 'LIKE', '%' . $input['nama'] . '%')
+                        ->orWhere('lokasi', 'LIKE', '%' . $input['nama'] . '%');
+                }
+                if (isset($input['date_start']) && !empty($input['date_start'])) {
+                    $q->whereDate('tgl_spm', '>=', date('Y-m-d', strtotime($input['date_start'])));
+                }
+                if (isset($input['date_end']) && !empty($input['date_end'])) {
+                    $q->whereDate('tgl_spm', '<=', date('Y-m-d', strtotime($input['date_end'])));
+                }
+                if (!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN'))) {
+                    $q->where('user_input', \Auth::user()->id);
+                }
+                if (isset($material_id) && !empty($material_id)) {
+                    $q->where('detail_spm.material_id', $material_id);
+                }
+            })
+            ->where('spm.flag_verif_komersial', '=', 'Y')
+            // ->offset($offset)
+            // ->limit($limit)
+            ->distinct()
+            ->orderby('tgl_spm', 'DESC')
+            ->paginate($limit, ['*'], 'page', $page);
 
         // $total_all = Supplier::get();
 
         $data = array();
 
         $no = $offset + 1;
-        
-        foreach($dataList as $key => $val)
-        {
+
+        foreach ($dataList as $key => $val) {
             $data[$key]['no'] = $no;
             $data[$key]['no_spm'] = $val->no_spm;
-            $data[$key]['tgl_spm'] = date_indo(date('Y-m-d',strtotime($val->tgl_spm)));
+            $data[$key]['tgl_spm'] = date_indo(date('Y-m-d', strtotime($val->tgl_spm)));
             $data[$key]['nama_pemohon'] = $val->nama_pemohon;
             $data[$key]['lokasi'] = $val->lokasi;
-            
-            $view=url("spm/".$val->id)."/view";
-            $edit=url("spm/".$val->id)."/edit";
-            $batal=url("spm/".$val->id)."/batal";
+
+            $view = url("spm/" . $val->id) . "/view";
+            $edit = url("spm/" . $val->id) . "/edit";
+            $batal = url("spm/" . $val->id) . "/batal";
 
             $data[$key]['aksi'] = '';
 
@@ -481,7 +453,7 @@ class SPMController extends Controller
             // {
             //     $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='#' onclick='show_modal(\"$add\")' class='btn btn-primary btn-sm' data-original-title='Tambah' title='Tambah'><i class='fa fa-plus' aria-hidden='true'></i></a>&nbsp";
             // }
-            $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='$view' class='btn btn-success btn-sm' data-original-title='View' title='View'><i class='fa fa-edit' aria-hidden='true'></i> Detail</a>&nbsp";
+            $data[$key]['aksi'] .= "<div class='col-md-12'><div class='text-center'><a href='$view' class='btn btn-success btn-sm' data-original-title='View' title='View'><i class='fa fa-edit' aria-hidden='true'></i> Detail</a>&nbsp";
 
 
             // if(\Auth::user()->can('spm-delete'))
@@ -490,9 +462,8 @@ class SPMController extends Controller
             // }
 
             $no++;
-            
         }
-        return response()->json(array('data' => $data,'total' => $dataList->count()));
+        return response()->json(array('data' => $data, 'total' => $dataList->count()));
     }
 
     public function getDataDitolak(Request $request)
@@ -503,67 +474,58 @@ class SPMController extends Controller
         $limit = $request->has('limit') ? $request->get('limit') : 10;
         // $search = $request->has('search') ? $request->get('search') : null;
         // 
-        $material_id = $input['material_id'] == 'null'?null:$input['material_id'];
+        $material_id = $input['material_id'] == 'null' ? null : $input['material_id'];
 
-        if($offset == 0)
-        {
-          $page = 1;
-        }
-        else
-        {
-          $page = ($offset / $limit) + 1;
+        if ($offset == 0) {
+            $page = 1;
+        } else {
+            $page = ($offset / $limit) + 1;
         }
 
         $dataList = Spm::select(\DB::raw('spm.*'))
-                    ->join('detail_spm','detail_spm.spm_id','=','spm.id')
-                    ->where(function($q) use($input,$material_id){
-                        if(isset($input['nama']) && !empty($input['nama']))
-                        {
-                            $q->where('no_spm','LIKE','%'.$input['nama'].'%')
-                            ->orWhere('nama_pemohon','LIKE','%'.$input['nama'].'%')
-                            ->orWhere('lokasi','LIKE','%'.$input['nama'].'%');
-                        }
-                        if(isset($input['date_start']) && !empty($input['date_start']))
-                        {
-                            $q->whereDate('tgl_spm','>=',date('Y-m-d',strtotime($input['date_start'])));
-                        }
-                        if(isset($input['date_end']) && !empty($input['date_end']))
-                        {
-                            $q->whereDate('tgl_spm','<=',date('Y-m-d',strtotime($input['date_end'])));
-                        }
-                        if(!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN')))
-                        {
-                            $q->where('user_input',\Auth::user()->id);
-                        }
-                        if(isset($material_id) && !empty($material_id))
-                        {
-                            $q->where('detail_spm.material_id',$material_id);
-                        }
-                    })
-                    ->where('spm.flag_verif_komersial','=','N')
-                    // ->offset($offset)
-                    // ->limit($limit)
-                    ->distinct()
-                    ->orderby('tgl_spm','DESC')
-                    ->paginate($limit,['*'], 'page', $page);
+            ->join('detail_spm', 'detail_spm.spm_id', '=', 'spm.id')
+            ->where(function ($q) use ($input, $material_id) {
+                if (isset($input['nama']) && !empty($input['nama'])) {
+                    $q->where('no_spm', 'LIKE', '%' . $input['nama'] . '%')
+                        ->orWhere('nama_pemohon', 'LIKE', '%' . $input['nama'] . '%')
+                        ->orWhere('lokasi', 'LIKE', '%' . $input['nama'] . '%');
+                }
+                if (isset($input['date_start']) && !empty($input['date_start'])) {
+                    $q->whereDate('tgl_spm', '>=', date('Y-m-d', strtotime($input['date_start'])));
+                }
+                if (isset($input['date_end']) && !empty($input['date_end'])) {
+                    $q->whereDate('tgl_spm', '<=', date('Y-m-d', strtotime($input['date_end'])));
+                }
+                if (!in_array(\Auth::user()->roles->pluck('id')[0], getConfigValues('ROLE_ADMIN'))) {
+                    $q->where('user_input', \Auth::user()->id);
+                }
+                if (isset($material_id) && !empty($material_id)) {
+                    $q->where('detail_spm.material_id', $material_id);
+                }
+            })
+            ->where('spm.flag_verif_komersial', '=', 'N')
+            // ->offset($offset)
+            // ->limit($limit)
+            ->distinct()
+            ->orderby('tgl_spm', 'DESC')
+            ->paginate($limit, ['*'], 'page', $page);
 
         // $total_all = Supplier::get();
 
         $data = array();
 
         $no = $offset + 1;
-        
-        foreach($dataList as $key => $val)
-        {
+
+        foreach ($dataList as $key => $val) {
             $data[$key]['no'] = $no;
             $data[$key]['no_spm'] = $val->no_spm;
-            $data[$key]['tgl_spm'] = date_indo(date('Y-m-d',strtotime($val->tgl_spm)));
+            $data[$key]['tgl_spm'] = date_indo(date('Y-m-d', strtotime($val->tgl_spm)));
             $data[$key]['nama_pemohon'] = $val->nama_pemohon;
             $data[$key]['lokasi'] = $val->lokasi;
-            
-            $view=url("spm/".$val->id)."/view";
-            $edit=url("spm/".$val->id)."/edit";
-            $batal=url("spm/".$val->id)."/batal";
+
+            $view = url("spm/" . $val->id) . "/view";
+            $edit = url("spm/" . $val->id) . "/edit";
+            $batal = url("spm/" . $val->id) . "/batal";
 
             $data[$key]['aksi'] = '';
 
@@ -571,7 +533,7 @@ class SPMController extends Controller
             // {
             //     $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='#' onclick='show_modal(\"$add\")' class='btn btn-primary btn-sm' data-original-title='Tambah' title='Tambah'><i class='fa fa-plus' aria-hidden='true'></i></a>&nbsp";
             // }
-            $data[$key]['aksi'] .="<div class='col-md-12'><div class='text-center'><a href='$view' class='btn btn-success btn-sm' data-original-title='View' title='View'><i class='fa fa-edit' aria-hidden='true'></i> Detail</a>&nbsp";
+            $data[$key]['aksi'] .= "<div class='col-md-12'><div class='text-center'><a href='$view' class='btn btn-success btn-sm' data-original-title='View' title='View'><i class='fa fa-edit' aria-hidden='true'></i> Detail</a>&nbsp";
 
             // if(\Auth::user()->can('spm-edit'))
             // {
@@ -584,19 +546,18 @@ class SPMController extends Controller
             // }
 
             $no++;
-            
         }
-        return response()->json(array('data' => $data,'total' => $dataList->count()));
+        return response()->json(array('data' => $data, 'total' => $dataList->count()));
     }
 
     public function loadDataMaterial(Request $request)
     {
-        $id = $request->input('material_id',null);
-        $data = \DB::table('material')->where('id',$id)->first();
+        $id = $request->input('material_id', null);
+        $data = \DB::table('material')->where('id', $id)->first();
 
         $arr['satuan'] = $data->satuan;
         $arr['spesifikasi'] = $data->spesifikasi;
-        
+
         return response()->json($arr);
     }
 
@@ -607,25 +568,21 @@ class SPMController extends Controller
         DB::beginTransaction();
         try {
 
-            $delete = \DB::table('detail_spm')->where('id',$input['id'])->delete();
+            $delete = \DB::table('detail_spm')->where('id', $input['id'])->delete();
 
-            if($delete)
-            {
+            if ($delete) {
                 $arr['status'] = true;
                 $arr['msg'] = 'Data Berhasil Dihapus';
-            }
-            else
-            {
+            } else {
                 $arr['status'] = false;
                 $arr['msg'] = 'Data Gagal Dihapus';
             }
-
         } catch (Exception $e) {
-            echo 'Message' .$e->getMessage();
+            echo 'Message' . $e->getMessage();
             DB::rollback();
         }
         DB::commit();
-    
+
         return response()->json($arr);
     }
 }
