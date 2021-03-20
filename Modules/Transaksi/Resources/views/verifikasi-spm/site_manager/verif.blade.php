@@ -158,7 +158,7 @@
 							@endphp
 							@endforeach
 							@endif
-						<textarea class="form-control" rows="5" readonly="" style="font-size: 9pt;font-weight: bold">{{  implode("\n\n", $riwayat) }}</textarea>
+						<textarea class="form-control" rows="5" readonly="" style="font-weight: bold">{{  implode("\n\n", $riwayat) }}</textarea>
 					</div>
 				</div>
 
