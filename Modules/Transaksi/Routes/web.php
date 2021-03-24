@@ -122,4 +122,6 @@ Route::prefix('bapb')->group(function() {
 Route::prefix('history-spm')->group(function() {
     Route::get('/', 'HistorySPMController@index');
     Route::match(['get', 'post'],'/get-data','HistorySPMController@getData');
+    Route::match(['get', 'post'],'/count-data','HistorySPMController@countData');
+    Route::match(['get','post'],'excel','HistorySPMController@excel');
 });

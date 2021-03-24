@@ -392,6 +392,7 @@ function clicked(e)
 {
   if(!confirm('Apakah anda yakin untuk melanjutkan ke proses selanjutnya?')) {
     e.preventDefault();
+  }else{
     $('#simpan').fadeOut();
   }
 }

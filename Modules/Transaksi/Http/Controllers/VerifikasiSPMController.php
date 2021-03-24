@@ -106,12 +106,12 @@ class VerifikasiSPMController extends Controller
                 foreach ($request->input('detail_id', null) as $key => $val) {
                     $detail_spm = DetailSpm::find($val);
 
-                    if(isset($request->input('verified')[$key])){
+                    if (isset($request->input('verified')[$key])) {
                         $data_detail_spm = array(
                             'volume' => $request->input('volume', null)[$key],
                             'flag_verif_site_manager' => 'Y'
                         );
-                    }else{
+                    } else {
                         $data_detail_spm = array(
                             'volume' => $request->input('volume', null)[$key],
                             'flag_verif_site_manager' => 'N',
@@ -119,7 +119,7 @@ class VerifikasiSPMController extends Controller
                             'flag_verif_pm' => 'N',
                         );
                     }
-                    
+
                     $detail_spm->update($data_detail_spm);
 
                     if (count($detail_spm->getChanges()) > 0) {
@@ -141,8 +141,8 @@ class VerifikasiSPMController extends Controller
                                         break;
                                     case 'volume':
                                         return "Volume barang " . Material::find($c->material_id)->material . " diubah menjadi " . $b;
-                                    // default:
-                                    //     return "$a = $b";
+                                        // default:
+                                        //     return "$a = $b";
                                 }
                             },
                             array_keys($detail_spm->getChanges()),
@@ -245,15 +245,15 @@ class VerifikasiSPMController extends Controller
             try {
                 $spm = Spm::find($id);
 
-                  foreach ($request->input('detail_id', null) as $key => $val) {
+                foreach ($request->input('detail_id', null) as $key => $val) {
                     $detail_spm = DetailSpm::find($val);
 
-                    if(isset($request->input('verified')[$key])){
+                    if (isset($request->input('verified')[$key])) {
                         $data_detail_spm = array(
                             'volume' => $request->input('volume', null)[$key],
                             'flag_verif_komersial' => 'Y'
                         );
-                    }else{
+                    } else {
                         $data_detail_spm = array(
                             'volume' => $request->input('volume', null)[$key],
                             'flag_verif_site_manager' => 'N',
@@ -261,7 +261,7 @@ class VerifikasiSPMController extends Controller
                             'flag_verif_pm' => 'N',
                         );
                     }
-                    
+
                     $detail_spm->update($data_detail_spm);
 
                     if (count($detail_spm->getChanges()) > 0) {
@@ -283,8 +283,8 @@ class VerifikasiSPMController extends Controller
                                         break;
                                     case 'volume':
                                         return "Volume barang " . Material::find($c->material_id)->material . " diubah menjadi " . $b;
-                                    // default:
-                                    //     return "$a = $b";
+                                        // default:
+                                        //     return "$a = $b";
                                 }
                             },
                             array_keys($detail_spm->getChanges()),
@@ -349,8 +349,8 @@ class VerifikasiSPMController extends Controller
                                     // case 'updated_at':
                                     //     return "Diubah pada tanggal " . date('d/m/Y H:i:s', strtotime($b));
                                     //     break;
-                                    default:
-                                        return "$a = $b";
+                                default:
+                                    return "$a = $b";
                             }
                         },
                         array_keys($spm->getChanges()),
@@ -385,17 +385,17 @@ class VerifikasiSPMController extends Controller
         if (\Auth::user()->can('verifikasi-pm-spm-edit')) {
             DB::beginTransaction();
             try {
-            $spm = Spm::find($id);
+                $spm = Spm::find($id);
 
-            foreach ($request->input('detail_id', null) as $key => $val) {
+                foreach ($request->input('detail_id', null) as $key => $val) {
                     $detail_spm = DetailSpm::find($val);
 
-                    if(isset($request->input('verified')[$key])){
+                    if (isset($request->input('verified')[$key])) {
                         $data_detail_spm = array(
                             'volume' => $request->input('volume', null)[$key],
                             'flag_verif_pm' => 'Y'
                         );
-                    }else{
+                    } else {
                         $data_detail_spm = array(
                             'volume' => $request->input('volume', null)[$key],
                             'flag_verif_site_manager' => 'N',
@@ -403,7 +403,7 @@ class VerifikasiSPMController extends Controller
                             'flag_verif_pm' => 'N',
                         );
                     }
-                    
+
                     $detail_spm->update($data_detail_spm);
 
                     if (count($detail_spm->getChanges()) > 0) {
@@ -448,74 +448,73 @@ class VerifikasiSPMController extends Controller
                     }
                 }
 
-            if ($request->input('verifikasi', null) == 'Y') {
-                $spm->update([
-                    'flag_verif_pm' => $request->input('verifikasi', null), 
-                    'tgl_verif_pm' => date('Y-m-d H:i:s'), 
-                    'catatan_project_manager' => $request->input('catatan_project_manager', null), 
-                    'user_verif_pm' => \Auth::user()->id
+                if ($request->input('verifikasi', null) == 'Y') {
+                    $spm->update([
+                        'flag_verif_pm' => $request->input('verifikasi', null),
+                        'tgl_verif_pm' => date('Y-m-d H:i:s'),
+                        'catatan_project_manager' => $request->input('catatan_project_manager', null),
+                        'user_verif_pm' => \Auth::user()->id
                     ]);
-            } else {
-                $spm->update([
-                    'flag_verif_pm' => $request->input('verifikasi', null),
-                    'tgl_verif_pm' => date('Y-m-d H:i:s'),
-                    'flag_verif_komersial' => 'N',
-                    'tgl_verif_komersial' => date('Y-m-d H:i:s'),
-                    'flag_verif_site_manager' => 'N',
-                    'tgl_verif_site_manager' => date('Y-m-d H:i:s'),
-                    'catatan_project_manager' => $request->input('catatan_project_manager', null),
-                    'user_verif_pm' => \Auth::user()->id
-                ]);
-            }
+                } else {
+                    $spm->update([
+                        'flag_verif_pm' => $request->input('verifikasi', null),
+                        'tgl_verif_pm' => date('Y-m-d H:i:s'),
+                        'flag_verif_komersial' => 'N',
+                        'tgl_verif_komersial' => date('Y-m-d H:i:s'),
+                        'flag_verif_site_manager' => 'N',
+                        'tgl_verif_site_manager' => date('Y-m-d H:i:s'),
+                        'catatan_project_manager' => $request->input('catatan_project_manager', null),
+                        'user_verif_pm' => \Auth::user()->id
+                    ]);
+                }
 
-            if (count($spm->getChanges()) > 0) {
-                $list_update = implode(', ', array_map(
-                    function ($a, $b, $c) {
-                        switch ($a) {
-                            case 'user_verif_pm':
-                                return "Diverif oleh " . getProfileByUserId($b)->nama . "";
-                                break;
-                            case 'flag_verif_pm':
-                                if ($b == 'Y') {
-                                    return "Verifikasi Project Manager = Diterima";
-                                } else {
-                                    return "Verifikasi Project Manager = Ditolak";
-                                }
-                                break;
-                            case 'tgl_verif_pm':
-                                return "Diverif pada tanggal " . date('d/m/Y H:i:s', strtotime($b));
-                                break;
-                            case 'catatan_project_manager':
-                                return "Catatan Project Manager = " . $b;
-                                break;
-                                // case 'updated_at':
-                                //     return "Diubah pada tanggal " . date('d/m/Y H:i:s', strtotime($b));
-                                //     break;
+                if (count($spm->getChanges()) > 0) {
+                    $list_update = implode(', ', array_map(
+                        function ($a, $b, $c) {
+                            switch ($a) {
+                                case 'user_verif_pm':
+                                    return "Diverif oleh " . getProfileByUserId($b)->nama . "";
+                                    break;
+                                case 'flag_verif_pm':
+                                    if ($b == 'Y') {
+                                        return "Verifikasi Project Manager = Diterima";
+                                    } else {
+                                        return "Verifikasi Project Manager = Ditolak";
+                                    }
+                                    break;
+                                case 'tgl_verif_pm':
+                                    return "Diverif pada tanggal " . date('d/m/Y H:i:s', strtotime($b));
+                                    break;
+                                case 'catatan_project_manager':
+                                    return "Catatan Project Manager = " . $b;
+                                    break;
+                                    // case 'updated_at':
+                                    //     return "Diubah pada tanggal " . date('d/m/Y H:i:s', strtotime($b));
+                                    //     break;
                                 default:
                                     return "$a = $b";
-                        }
-                    },
-                    array_keys($spm->getChanges()),
-                    array_values($spm->getChanges()),
-                    array($spm),
-                ));
+                            }
+                        },
+                        array_keys($spm->getChanges()),
+                        array_values($spm->getChanges()),
+                        array($spm),
+                    ));
 
-                $data_riwayat_spm = array(
-                    'spm_id' => $id,
-                    'action_id' => getConfigValues('ACTION_UPDATE')[0],
-                    'user_input' => \Auth::user()->id,
-                    'datetime_log' => current_datetime(),
-                    'description' => array(
-                        'action' => 'User ' . getProfileByUserId(\Auth::user()->id)->nama . ' melakukan perubahan data dengan detail : ' . $list_update
-                    ),
-                );
+                    $data_riwayat_spm = array(
+                        'spm_id' => $id,
+                        'action_id' => getConfigValues('ACTION_UPDATE')[0],
+                        'user_input' => \Auth::user()->id,
+                        'datetime_log' => current_datetime(),
+                        'description' => array(
+                            'action' => 'User ' . getProfileByUserId(\Auth::user()->id)->nama . ' melakukan perubahan data dengan detail : ' . $list_update
+                        ),
+                    );
 
-                $insert_riwayat_spm = RiwayatSpm::create($data_riwayat_spm);
-            }
+                    $insert_riwayat_spm = RiwayatSpm::create($data_riwayat_spm);
+                }
 
-            notifikasi_telegram_spm($id);
-
-              } catch (Exception $e) {
+                notifikasi_telegram_spm($id);
+            } catch (Exception $e) {
                 echo 'Message' . $e->getMessage();
                 DB::rollback();
             }
@@ -868,6 +867,16 @@ class VerifikasiSPMController extends Controller
         DB::beginTransaction();
         try {
             if (\Auth::user()->can('verifikasi-site-manager-spm-delete')) {
+                $detail_spm = DetailSpm::where('spm_id', '=', $request->input('id', null))->get();
+
+                foreach ($detail_spm as $key => $val) {
+                    $val->flag_verif_site_manager = 'N';
+                    $val->flag_verif_komersial = 'N';
+                    $val->flag_verif_pm = 'N';
+                    $val->keterangan = 'Pengajuan dibatalkan oleh ' . getProfileByUserId(\Auth::user()->id)->nama;
+                    $val->save();
+                }
+
                 $data = array(
                     'flag_verif_site_manager' => 'N',
                     'tgl_verif_site_manager' => date('Y-m-d H:i:s'),
@@ -888,10 +897,10 @@ class VerifikasiSPMController extends Controller
                     'user_input' => \Auth::user()->id,
                     'datetime_log' => current_datetime(),
                     'description' => array(
-                        'action' => 'User '. getProfileByUserId(\Auth::user()->id)->nama.' melakukan pembatalan SPM nomor '.Spm::find($request->input('id', null))->first()->no_spm.' dengan alasan '.$request->input('alasan_pembatalan', null)                    
-                        ),
+                        'action' => 'User ' . getProfileByUserId(\Auth::user()->id)->nama . ' melakukan pembatalan SPM nomor ' . Spm::find($request->input('id', null))->first()->no_spm . ' dengan alasan ' . $request->input('alasan_pembatalan', null)
+                    ),
                 );
-        
+
                 $insert_riwayat_spm = RiwayatSpm::create($data_riwayat_spm);
 
                 if ($request->input('id', null) !== null) {

@@ -92,6 +92,7 @@
                 <h3 class="block-title">Pegawai</h3>
               </div> --}}
               <div class="block-content block-content-full">
+                <font style="font-size: 11px" face="Arial" >
                <div class="table-responsive">
                 <table 
                 data-toggle="table"
@@ -112,11 +113,13 @@
                     <th data-field="tgl_spm">Tanggal Pengajuan</th>
                     <th data-field="nama_pemohon">Pemohon</th>
                     <th data-field="lokasi">Lokasi</th>
+                    <th data-field="total_barang">Total Barang</th>
                     <th data-field="aksi">Aksi</th>
                   </tr>
                 </thead>
               </table>
             </div>
+                </font>
           </div>
         </div>
 
@@ -134,6 +137,7 @@
                 <h3 class="block-title">Pegawai</h3>
               </div> --}}
               <div class="block-content block-content-full">
+                <font style="font-size: 11px" face="Arial" >
                <div class="table-responsive">
                 <table 
                 data-toggle="table"
@@ -159,6 +163,7 @@
                 </thead>
               </table>
             </div>
+                </font>
           </div>
         </div>
 
@@ -176,6 +181,7 @@
                 <h3 class="block-title">Pegawai</h3>
               </div> --}}
               <div class="block-content block-content-full">
+                <font style="font-size: 11px" face="Arial" >
                <div class="table-responsive">
                 <table 
                 data-toggle="table"
@@ -201,6 +207,7 @@
                 </thead>
               </table>
             </div>
+                </font>
           </div>
         </div>
       

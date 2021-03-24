@@ -258,6 +258,15 @@ class SPMController extends Controller
     public function batal($id)
     {
         $spm = \DB::table('spm')->where('id', $id);
+        $detail_spm = DetailSpm::where('spm_id','=',$id)->get();
+
+        foreach($detail_spm as $key => $val){
+            $val->flag_verif_site_manager = 'N';
+            $val->flag_verif_komersial = 'N';
+            $val->flag_verif_pm = 'N';
+            $val->keterangan = 'Pengajuan dibatalkan oleh ' . getProfileByUserId(\Auth::user()->id)->nama;
+            $val->save();
+        }
 
         $spm->update([
             'flag_verif_site_manager' => 'N',
@@ -267,7 +276,7 @@ class SPMController extends Controller
             'flag_verif_komersial' => 'N',
             'tgl_verif_komersial' => date('Y-m-d'),
             'flag_batal' => 'Y',
-            'keterangan' => 'Pengajuan dibatalkan oleh ' . \Auth::user()->name
+            'keterangan' => 'Pengajuan dibatalkan oleh ' . getProfileByUserId(\Auth::user()->id)->nama
         ]);
 
         $data_riwayat_spm = array(
@@ -360,6 +369,8 @@ class SPMController extends Controller
             $data[$key]['tgl_spm'] = date_indo(date('Y-m-d', strtotime($val->tgl_spm)));
             $data[$key]['nama_pemohon'] = $val->nama_pemohon;
             $data[$key]['lokasi'] = $val->lokasi;
+            $total_barang = DetailSpm::where('spm_id','=',$val->id)->count();
+            $data[$key]['total_barang'] = '<div class="row"><div class="col-4"><label>Total</label></div><div class="col-1">:</div><div class="col-2">'.$total_barang.'</div></div>';
 
             $view = url("spm/" . $val->id) . "/view";
             $edit = url("spm/" . $val->id) . "/edit";
