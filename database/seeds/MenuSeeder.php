@@ -23,6 +23,7 @@ class MenuSeeder extends Seeder
         // $this->menuPengaturan();
         $this->menuMasterdata();
         $this->menuSpm();
+        $this->menuSurvei();
         $this->menuPo();
         $this->menuBapb();
         // $this->menuTransaksiKas();
@@ -32,314 +33,332 @@ class MenuSeeder extends Seeder
         // $this->menuLaporan();
     }
 
-    private function menuActivity(){
+    private function menuActivity()
+    {
         $this->command->info('Menu Activity Log Seeder');
         $permission = Permission::firstOrNew(array(
-            'name'=>'activity-log-list'
+            'name' => 'activity-log-list'
         ));
         $permission->guard_name = 'web';
         $permission->save();
         $menu = Menu::firstOrNew(array(
-            'name'=>'Riwayat Aktivitas User',
-            'permission_id'=>$permission->id,
-            'ordinal'=>1,
-            'parent_status'=>'N',
+            'name' => 'Riwayat Aktivitas User',
+            'permission_id' => $permission->id,
+            'ordinal' => 1,
+            'parent_status' => 'N',
             'url' => 'activity-log'
         ));
         $menu->icon = 'si-list';
         $menu->save();
     }
 
-    private function menuAcl(){
-    	$this->command->info('Menu ACL Seeder');
-    	$permission = Permission::firstOrNew(array(
-    		'name'=>'acl-menu'
-    	));
-    	$permission->guard_name = 'web';
-    	$permission->save();
-    	$menu = Menu::firstOrNew(array(
-    		'name'=>'Access Control List',
-    		'permission_id'=>$permission->id,
-    		'ordinal'=>1,
-    		'parent_status'=>'Y'
-    	));
-    	$menu->icon = 'si-settings';
-    	$menu->save();
-
-          //create SUBMENU master
-    	$permission = Permission::firstOrNew(array(
-    		'name'=>'user-list',
-    	));
-    	$permission->guard_name = 'web';
-    	$permission->save();
-
-    	$submenu = Menu::firstOrNew(array(
-    		'name'=>'Manajemen Pengguna',
-    		'parent_id'=>$menu->id,
-    		'permission_id'=>$permission->id,
-    		'ordinal'=>2,
-    		'parent_status'=>'N',
-    		'url'=>'user',
-    	)
-    );
-    	$submenu->save();
-
-                  //create SUBMENU master
-          $permission = Permission::firstOrNew(array(
-            'name'=>'permissions-list',
-        ));
-        $permission->guard_name = 'web';
-        $permission->save();
-
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Manajemen Permissions',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url'=>'permissions',
-        )
-    );
-        $submenu->save();
-
+    private function menuAcl()
+    {
+        $this->command->info('Menu ACL Seeder');
         $permission = Permission::firstOrNew(array(
-            'name'=>'role-list',
-        ));
-        $permission->guard_name = 'web';
-        $permission->save();
-
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Manajemen Role',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url'=>'roles',
-        )
-    );
-        $submenu->save();
-    }
-
-    private function menuMasterdata(){
-        $this->command->info('Menu Masterdata Seeder');
-        $permission = Permission::firstOrNew(array(
-            'name'=>'master-data-menu'
+            'name' => 'acl-menu'
         ));
         $permission->guard_name = 'web';
         $permission->save();
         $menu = Menu::firstOrNew(array(
-            'name'=>'Masterdata',
-            'permission_id'=>$permission->id,
-            'ordinal'=>1,
-            'parent_status'=>'Y'
+            'name' => 'Access Control List',
+            'permission_id' => $permission->id,
+            'ordinal' => 1,
+            'parent_status' => 'Y'
+        ));
+        $menu->icon = 'si-settings';
+        $menu->save();
+
+        //create SUBMENU master
+        $permission = Permission::firstOrNew(array(
+            'name' => 'user-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Manajemen Pengguna',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'user',
+            )
+        );
+        $submenu->save();
+
+        //create SUBMENU master
+        $permission = Permission::firstOrNew(array(
+            'name' => 'permissions-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Manajemen Permissions',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'permissions',
+            )
+        );
+        $submenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name' => 'role-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Manajemen Role',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'roles',
+            )
+        );
+        $submenu->save();
+    }
+
+    private function menuMasterdata()
+    {
+        $this->command->info('Menu Masterdata Seeder');
+        $permission = Permission::firstOrNew(array(
+            'name' => 'master-data-menu'
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+        $menu = Menu::firstOrNew(array(
+            'name' => 'Masterdata',
+            'permission_id' => $permission->id,
+            'ordinal' => 1,
+            'parent_status' => 'Y'
         ));
         $menu->icon = 'si-folder';
         $menu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'material-barang-menu',
+            'name' => 'material-barang-menu',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Material Barang',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'Y',
-        )
-    );
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Material Barang',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'Y',
+            )
+        );
         $submenu->save();
 
-          //create SUBMENU master
+        //create SUBMENU master
         $permission = Permission::firstOrNew(array(
-            'name'=>'material-list',
+            'name' => 'material-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $subsubmenu = Menu::firstOrNew(array(
-            'name'=>'Material',
-            'parent_id'=>$submenu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>3,
-            'parent_status'=>'N',
-            'url'=>'material',
-        )
-    );
+        $subsubmenu = Menu::firstOrNew(
+            array(
+                'name' => 'Material',
+                'parent_id' => $submenu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 3,
+                'parent_status' => 'N',
+                'url' => 'material',
+            )
+        );
         $subsubmenu->save();
 
-           //create SUBMENU master
+        //create SUBMENU master
         $permission = Permission::firstOrNew(array(
-            'name'=>'supplier-list',
+            'name' => 'supplier-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $subsubmenu = Menu::firstOrNew(array(
-            'name'=>'Supplier',
-            'parent_id'=>$submenu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>3,
-            'parent_status'=>'N',
-            'url'=>'supplier',
-        )
-    );
-        $subsubmenu->save();
-
-        $permission = Permission::firstOrNew(array(
-            'name'=>'stok-list',
-        ));
-        $permission->guard_name = 'web';
-        $permission->save();
-
-        $subsubmenu = Menu::firstOrNew(array(
-            'name'=>'Stok Gudang',
-            'parent_id'=>$submenu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>3,
-            'parent_status'=>'N',
-            'url'=>'stok',
-        )
-    );
+        $subsubmenu = Menu::firstOrNew(
+            array(
+                'name' => 'Supplier',
+                'parent_id' => $submenu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 3,
+                'parent_status' => 'N',
+                'url' => 'supplier',
+            )
+        );
         $subsubmenu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'kepegawaian-menu',
+            'name' => 'stok-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Kepegawaian',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'Y',
-        )
-    );
+        $subsubmenu = Menu::firstOrNew(
+            array(
+                'name' => 'Stok Gudang',
+                'parent_id' => $submenu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 3,
+                'parent_status' => 'N',
+                'url' => 'stok',
+            )
+        );
+        $subsubmenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name' => 'kepegawaian-menu',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Kepegawaian',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'Y',
+            )
+        );
         $submenu->save();
 
-            //create SUBMENU master
+        //create SUBMENU master
         $permission = Permission::firstOrNew(array(
-            'name'=>'departement-list',
+            'name' => 'departement-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $subsubmenu = Menu::firstOrNew(array(
-            'name'=>'Departement',
-            'parent_id'=>$submenu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>3,
-            'parent_status'=>'N',
-            'url'=>'departement',
-        )
-    );
+        $subsubmenu = Menu::firstOrNew(
+            array(
+                'name' => 'Departement',
+                'parent_id' => $submenu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 3,
+                'parent_status' => 'N',
+                'url' => 'departement',
+            )
+        );
         $subsubmenu->save();
 
-          //create SUBMENU master
+        //create SUBMENU master
         $permission = Permission::firstOrNew(array(
-            'name'=>'jabatan-list',
+            'name' => 'jabatan-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $subsubmenu = Menu::firstOrNew(array(
-            'name'=>'Jabatan',
-            'parent_id'=>$submenu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>3,
-            'parent_status'=>'N',
-            'url'=>'jabatan',
-        )
-    );
+        $subsubmenu = Menu::firstOrNew(
+            array(
+                'name' => 'Jabatan',
+                'parent_id' => $submenu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 3,
+                'parent_status' => 'N',
+                'url' => 'jabatan',
+            )
+        );
         $subsubmenu->save();
 
-            //create SUBMENU master
+        //create SUBMENU master
         $permission = Permission::firstOrNew(array(
-            'name'=>'pegawai-list',
+            'name' => 'pegawai-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $subsubmenu = Menu::firstOrNew(array(
-            'name'=>'Data Pegawai',
-            'parent_id'=>$submenu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>3,
-            'parent_status'=>'N',
-            'url'=>'pegawai',
-        )
-    );
+        $subsubmenu = Menu::firstOrNew(
+            array(
+                'name' => 'Data Pegawai',
+                'parent_id' => $submenu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 3,
+                'parent_status' => 'N',
+                'url' => 'pegawai',
+            )
+        );
         $subsubmenu->save();
 
-    $permission = Permission::firstOrNew(array(
-            'name'=>'umum-menu',
+        $permission = Permission::firstOrNew(array(
+            'name' => 'umum-menu',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Umum',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'Y',
-        )
-    );
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Umum',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'Y',
+            )
+        );
         $submenu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'agama-list',
+            'name' => 'agama-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $subsubmenu = Menu::firstOrNew(array(
-            'name'=>'Agama',
-            'parent_id'=>$submenu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>3,
-            'parent_status'=>'N',
-            'url'=>'agama',
-        )
-    );
+        $subsubmenu = Menu::firstOrNew(
+            array(
+                'name' => 'Agama',
+                'parent_id' => $submenu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 3,
+                'parent_status' => 'N',
+                'url' => 'agama',
+            )
+        );
         $subsubmenu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'status-perkawinan-list',
+            'name' => 'status-perkawinan-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $subsubmenu = Menu::firstOrNew(array(
-            'name'=>'Status Perkawinan',
-            'parent_id'=>$submenu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>3,
-            'parent_status'=>'N',
-            'url'=>'status-perkawinan',
-        )
-    );
+        $subsubmenu = Menu::firstOrNew(
+            array(
+                'name' => 'Status Perkawinan',
+                'parent_id' => $submenu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 3,
+                'parent_status' => 'N',
+                'url' => 'status-perkawinan',
+            )
+        );
         $subsubmenu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'jenis-kelamin-list',
+            'name' => 'jenis-kelamin-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $subsubmenu = Menu::firstOrNew(array(
-            'name'=>'Jenis Kelamin',
-            'parent_id'=>$submenu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>3,
-            'parent_status'=>'N',
-            'url'=>'jenis-kelamin',
-        )
-    );
+        $subsubmenu = Menu::firstOrNew(
+            array(
+                'name' => 'Jenis Kelamin',
+                'parent_id' => $submenu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 3,
+                'parent_status' => 'N',
+                'url' => 'jenis-kelamin',
+            )
+        );
         $subsubmenu->save();
     }
 
@@ -347,68 +366,125 @@ class MenuSeeder extends Seeder
     {
         $this->command->info('Menu SPM Seeder');
         $permission = Permission::firstOrNew(array(
-            'name'=>'spm-menu'
+            'name' => 'spm-menu'
         ));
         $permission->guard_name = 'web';
         $permission->save();
         $menu = Menu::firstOrNew(array(
-            'name'=>'SPM',
-            'permission_id'=>$permission->id,
-            'ordinal'=>1,
-            'parent_status'=>'Y'
+            'name' => 'SPM',
+            'permission_id' => $permission->id,
+            'ordinal' => 1,
+            'parent_status' => 'Y'
         ));
         $menu->icon = 'si-briefcase';
         $menu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'spm-list',
+            'name' => 'spm-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Pengajuan SPM',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url' => 'spm'
-        )
-    );
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Pengajuan SPM',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'spm'
+            )
+        );
         $submenu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'verifikasi-spm-list',
+            'name' => 'verifikasi-spm-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Verifikasi SPM',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url' => 'verifikasi-spm'
-        )
-    );
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Verifikasi SPM',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'verifikasi-spm'
+            )
+        );
         $submenu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'history-spm-list',
+            'name' => 'history-spm-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Riwayat SPM',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url' => 'history-spm'
-        )
-    );
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Riwayat SPM',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'history-spm'
+            )
+        );
+        $submenu->save();
+    }
+
+    private function menuSurvei()
+    {
+        $this->command->info('Menu Survei Seeder');
+        $permission = Permission::firstOrNew(array(
+            'name' => 'survei-menu'
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+        $menu = Menu::firstOrNew(array(
+            'name' => 'Survei Barang',
+            'permission_id' => $permission->id,
+            'ordinal' => 1,
+            'parent_status' => 'Y'
+        ));
+        $menu->icon = 'si-briefcase';
+        $menu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name' => 'survei-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Survei Barang',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'survei'
+            )
+        );
+        $submenu->save();
+
+        $permission = Permission::firstOrNew(array(
+            'name' => 'verifikasi-survei-list',
+        ));
+        $permission->guard_name = 'web';
+        $permission->save();
+
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Verifikasi Survei',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'verifikasi-survei'
+            )
+        );
         $submenu->save();
     }
 
@@ -416,139 +492,141 @@ class MenuSeeder extends Seeder
     {
         $this->command->info('Menu PO Seeder');
         $permission = Permission::firstOrNew(array(
-            'name'=>'po-menu'
+            'name' => 'po-menu'
         ));
         $permission->guard_name = 'web';
         $permission->save();
         $menu = Menu::firstOrNew(array(
-            'name'=>'Purchase Order',
-            'permission_id'=>$permission->id,
-            'ordinal'=>1,
-            'parent_status'=>'Y'
+            'name' => 'Purchase Order',
+            'permission_id' => $permission->id,
+            'ordinal' => 1,
+            'parent_status' => 'Y'
         ));
         $menu->icon = 'si-briefcase';
         $menu->save();
 
+        //     $permission = Permission::firstOrNew(array(
+        //         'name'=>'survei-list',
+        //     ));
+        //     $permission->guard_name = 'web';
+        //     $permission->save();
+
+        //     $submenu = Menu::firstOrNew(array(
+        //         'name'=>'Survei Barang',
+        //         'parent_id'=>$menu->id,
+        //         'permission_id'=>$permission->id,
+        //         'ordinal'=>2,
+        //         'parent_status'=>'N',
+        //         'url' => 'survei'
+        //     )
+        // );
+        //     $submenu->save();
+
         $permission = Permission::firstOrNew(array(
-            'name'=>'survei-list',
+            'name' => 'po-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Survei Barang',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url' => 'survei'
-        )
-    );
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Pengajuan PO',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'po'
+            )
+        );
         $submenu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'po-list',
+            'name' => 'verifikasi-po-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Pengajuan PO',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url' => 'po'
-        )
-    );
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Verifikasi PO',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'verifikasi-po'
+            )
+        );
         $submenu->save();
 
-    $permission = Permission::firstOrNew(array(
-            'name'=>'verifikasi-po-list',
-        ));
-        $permission->guard_name = 'web';
-        $permission->save();
+        //     $permission = Permission::firstOrNew(array(
+        //         'name'=>'verifikasi-spm-list',
+        //     ));
+        //     $permission->guard_name = 'web';
+        //     $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Verifikasi PO',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url' => 'verifikasi-po'
-        )
-    );
-        $submenu->save();
-
-    //     $permission = Permission::firstOrNew(array(
-    //         'name'=>'verifikasi-spm-list',
-    //     ));
-    //     $permission->guard_name = 'web';
-    //     $permission->save();
-
-    //     $submenu = Menu::firstOrNew(array(
-    //         'name'=>'Verifikasi SPM',
-    //         'parent_id'=>$menu->id,
-    //         'permission_id'=>$permission->id,
-    //         'ordinal'=>2,
-    //         'parent_status'=>'N',
-    //         'url' => 'verifikasi-spm'
-    //     )
-    // );
-    //     $submenu->save();
+        //     $submenu = Menu::firstOrNew(array(
+        //         'name'=>'Verifikasi SPM',
+        //         'parent_id'=>$menu->id,
+        //         'permission_id'=>$permission->id,
+        //         'ordinal'=>2,
+        //         'parent_status'=>'N',
+        //         'url' => 'verifikasi-spm'
+        //     )
+        // );
+        //     $submenu->save();
     }
 
     private function menuBapb()
     {
         $this->command->info('Menu BAPB Seeder');
         $permission = Permission::firstOrNew(array(
-            'name'=>'bapb-menu'
+            'name' => 'bapb-menu'
         ));
         $permission->guard_name = 'web';
         $permission->save();
         $menu = Menu::firstOrNew(array(
-            'name'=>'BAPB',
-            'permission_id'=>$permission->id,
-            'ordinal'=>1,
-            'parent_status'=>'Y'
+            'name' => 'BAPB',
+            'permission_id' => $permission->id,
+            'ordinal' => 1,
+            'parent_status' => 'Y'
         ));
         $menu->icon = 'si-list';
         $menu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'bapb-list',
+            'name' => 'bapb-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Transaksi BAPB',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url' => 'bapb'
-        )
-    );
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Transaksi BAPB',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'bapb'
+            )
+        );
         $submenu->save();
 
         $permission = Permission::firstOrNew(array(
-            'name'=>'riwayat-bapb-list',
+            'name' => 'riwayat-bapb-list',
         ));
         $permission->guard_name = 'web';
         $permission->save();
 
-        $submenu = Menu::firstOrNew(array(
-            'name'=>'Riwayat BAPB',
-            'parent_id'=>$menu->id,
-            'permission_id'=>$permission->id,
-            'ordinal'=>2,
-            'parent_status'=>'N',
-            'url' => 'riwayat-bapb'
-        )
-    );
+        $submenu = Menu::firstOrNew(
+            array(
+                'name' => 'Riwayat BAPB',
+                'parent_id' => $menu->id,
+                'permission_id' => $permission->id,
+                'ordinal' => 2,
+                'parent_status' => 'N',
+                'url' => 'riwayat-bapb'
+            )
+        );
         $submenu->save();
     }
 }
-
-?>

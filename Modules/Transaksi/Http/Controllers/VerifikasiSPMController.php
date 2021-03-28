@@ -728,11 +728,11 @@ class VerifikasiSPMController extends Controller
                 $data[$key]['aksi'] .= "<a href='#' onclick='show_modal(\"$batal\")' class='btn btn-danger btn-sm' data-original-title='Batal' title='Batal'><i class='fa fa-times' aria-hidden='true'></i> Batal</a></div></div>";
             }
 
-            if (\Auth::user()->can('verifikasi-komersial-spm-list')) {
-                if ($val->flag_verif_pm == 'Y' && $val->flag_verif_komersial == 'Y' && $val->flag_verif_site_manager) {
-                    $data[$key]['aksi'] .= "<a href='$print' target='_blank' class='btn btn-info btn-sm' data-original-title='Print' title='Print'><i class='fa fa-print' aria-hidden='true'></i> Print PDF</a></div></div>";
-                }
-            }
+            // if (\Auth::user()->can('verifikasi-komersial-spm-list')) {
+            //     if ($val->flag_verif_pm == 'Y' && $val->flag_verif_komersial == 'Y' && $val->flag_verif_site_manager) {
+            //         $data[$key]['aksi'] .= "<a href='$print' target='_blank' class='btn btn-info btn-sm' data-original-title='Print' title='Print'><i class='fa fa-print' aria-hidden='true'></i> Print PDF</a></div></div>";
+            //     }
+            // }
 
             $no++;
         }

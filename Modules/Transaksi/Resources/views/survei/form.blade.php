@@ -36,7 +36,7 @@
 					@endif
 					<br/>
 					<span style="font-size: 11pt;color:red">* Silahkan anda memilih barang yang akan dipesan dengan cara mencentang kolom check</span>
-					<div id="table_data" style="font-family: sans-serif;">
+					<div id="table_data">
 						@include('transaksi::survei.form-data')
 					</div>
 					<div class="form-group row" style="margin-top: 2em">

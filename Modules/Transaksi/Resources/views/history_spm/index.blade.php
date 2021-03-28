@@ -81,12 +81,14 @@
                 <div class="block-header bg-info">
                     <h3 class="block-title">Daftar Riwayat SPM</h3>
                     <div class="block-options">
-                        <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
+                        {{-- <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
                             data-action-mode="demo">
                             <i class="si si-refresh"></i>
                         </button>
                         <button type="button" class="btn-block-option" data-toggle="block-option"
-                            data-action="content_toggle"></button>
+                            data-action="content_toggle"></button> --}}
+                            <a href="#" class="btn btn-alt-success" onclick="exportToExcel()" target="_blank">Export ke
+                                Excel</a>
                     </div>
                 </div>
                 {{-- <div class="block-header block-header-default">
@@ -122,14 +124,13 @@
                             </table>
                         </font>
                     </div>
-                    <hr />
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-12 text-right">
                             <a href="#" class="btn btn-alt-success" onclick="exportToExcel()" target="_blank">Export ke
-                                Excel</a>
-                            <a href="#" class="btn btn-alt-danger" onclick="exportToPDF()" target="_blank">Export ke PDF</a>
-                        </div>
-                    </div>
+                                Excel</a> --}}
+                            {{-- <a href="#" class="btn btn-alt-danger" onclick="exportToPDF()" target="_blank">Export ke PDF</a> --}}
+                        {{-- </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

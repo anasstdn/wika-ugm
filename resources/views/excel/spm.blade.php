@@ -1,6 +1,9 @@
 <table>
     <thead>
         <tr>
+            <td colspan="13" style="text-align: center"><b>LAPORAN SURAT PERMINTAAN BARANG</b></td>
+        </tr>
+        <tr>
             {{-- @foreach ($data[0] as $key => $value)
 		<th>{{ ucfirst($key) }}</th>
 	    @endforeach --}}

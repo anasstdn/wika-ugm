@@ -24,10 +24,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $supplier_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string|null $flag_verif_komersial
+ * @property int|null $user_verif_komersial
+ * @property Carbon|null $tgl_verif_komersial
+ * @property string|null $flag_verif_pm
+ * @property int|null $user_verif_pm
+ * @property Carbon|null $tgl_verif_pm
  * 
  * @property Supplier|null $supplier
  * @property User|null $user
  * @property Collection|DetailSurvei[] $detail_surveis
+ * @property Collection|Po[] $pos
  *
  * @package App\Models
  */
@@ -39,11 +46,15 @@ class Survei extends Model
 		'user_input' => 'int',
 		'user_update' => 'int',
 		'total_harga' => 'float',
-		'supplier_id' => 'int'
+		'supplier_id' => 'int',
+		'user_verif_komersial' => 'int',
+		'user_verif_pm' => 'int'
 	];
 
 	protected $dates = [
-		'tgl_pembuatan'
+		'tgl_pembuatan',
+		'tgl_verif_komersial',
+		'tgl_verif_pm'
 	];
 
 	protected $fillable = [
@@ -54,7 +65,13 @@ class Survei extends Model
 		'flag_batal',
 		'flag_po',
 		'total_harga',
-		'supplier_id'
+		'supplier_id',
+		'flag_verif_komersial',
+		'user_verif_komersial',
+		'tgl_verif_komersial',
+		'flag_verif_pm',
+		'user_verif_pm',
+		'tgl_verif_pm'
 	];
 
 	public function supplier()
@@ -64,11 +81,16 @@ class Survei extends Model
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'user_update');
+		return $this->belongsTo(User::class, 'user_verif_pm');
 	}
 
 	public function detail_surveis()
 	{
 		return $this->hasMany(DetailSurvei::class);
+	}
+
+	public function pos()
+	{
+		return $this->hasMany(Po::class);
 	}
 }

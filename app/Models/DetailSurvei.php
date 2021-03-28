@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property float|null $subtotal
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property string|null $flag_verif_komersial
+ * @property string|null $flag_verif_pm
  * 
  * @property Material|null $material
  * @property Survei|null $survei
@@ -55,7 +57,9 @@ class DetailSurvei extends Model
 		'tgl_penggunaan',
 		'keterangan',
 		'harga_per_unit',
-		'subtotal'
+		'subtotal',
+		'flag_verif_komersial',
+		'flag_verif_pm'
 	];
 
 	public function material()
