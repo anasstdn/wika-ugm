@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use App\Models\Profil;
+use App\Models\UserProfil;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -19,6 +21,9 @@ class CreateAdminUserSeeder extends Seeder
 
     	$config = config('permission_list.role_structure');
 
+        $this->command->info("Create User Data");
+
+        $bar=$this->command->getOutput()->createProgressBar(count($config));
     	foreach($config as $key => $modules)
     	{
     		$role = Role::firstOrCreate(['name' => ucwords(str_replace('_', ' ', $key))]);
@@ -43,6 +48,8 @@ class CreateAdminUserSeeder extends Seeder
     			$user->password = bcrypt('maintenis'); 
     			$user->save();
     			$user->assignRole([$role_id]);
+
+                $id_user = $user->id;
     		}
     		else
     		{
@@ -56,9 +63,25 @@ class CreateAdminUserSeeder extends Seeder
     				$user->password = bcrypt('password');
     				$user->save();
     				$user->assignRole([$role_id]);
+
+                    $id_user = $user->id;
     			}
     		}
+
+            $profil = Profil::firstOrCreate([
+                'nama' => ucwords(str_replace('_', ' ', $key)),
+                'email' => $key.'@gmail.com'
+            ]);
+
+            $user_profil = UserProfil::firstOrCreate([
+                'user_id' => $id_user,
+                'profil_id' => $profil->id
+            ]);
+
+            $bar->advance();
     	}
+
+        $bar->finish();
 
     }
 

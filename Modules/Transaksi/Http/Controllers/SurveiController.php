@@ -159,6 +159,50 @@ class SurveiController extends Controller
 
             $update = $survei->update(['user_update' => \Auth::user()->id, 'supplier_id' => $request->input('supplier_id', null), 'total_harga' => $request->input('grand_total', null)]);
 
+            if (count($survei->getChanges()) > 0) {
+                $list_update = implode(', ', array_map(
+                    function ($a, $b, $c) {
+                        switch ($a) {
+                            case 'user_verif_site_manager':
+                                return "Diverif oleh " . getProfileByUserId($b)->nama . "";
+                                break;
+                            case 'flag_verif_site_manager':
+                                if ($b == 'Y') {
+                                    return "Verifikasi Site Manager = Diterima";
+                                } else {
+                                    return "Verifikasi Site Manager = Ditolak";
+                                }
+                                break;
+                            case 'tgl_verif_site_manager':
+                                return "Diverif pada tanggal " . date('d/m/Y H:i:s', strtotime($b));
+                                break;
+                            case 'catatan_site_manager':
+                                return "Catatan Site Manager = " . $b;
+                                break;
+                                // case 'updated_at':
+                                //     return "Diubah pada tanggal " . date('d/m/Y H:i:s', strtotime($b));
+                                //     break;
+                                // default:
+                                //     return "$a = $b";
+                        }
+                    },
+                    array_keys($survei->getChanges()),
+                    array_values($survei->getChanges()),
+                    array($survei),
+                ));
+
+                $data_riwayat_spm = array(
+                    'spm_id' => $id,
+                    'action_id' => getConfigValues('ACTION_UPDATE')[0],
+                    'user_input' => \Auth::user()->id,
+                    'datetime_log' => current_datetime(),
+                    'description' => array(
+                        'action' => 'User ' . getProfileByUserId(\Auth::user()->id)->nama . ' melakukan perubahan data dengan detail : ' . $list_update
+                    ),
+                );
+
+                $insert_riwayat_spm = RiwayatSpm::create($data_riwayat_spm);
+
             foreach ($request->input('survei_id', null) as $key => $val) {
                 $data = array(
                     'merek' => $request->input('merek', null)[$key],
@@ -168,6 +212,7 @@ class SurveiController extends Controller
 
                 $update_detail = DetailSurvei::find($val)->update($data);
             }
+        }
 
             message($update_detail, 'Data berhasil disimpan', 'Data gagal disimpan');
         } catch (Exception $e) {

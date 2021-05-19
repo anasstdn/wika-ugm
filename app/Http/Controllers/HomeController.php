@@ -28,10 +28,14 @@ class HomeController extends Controller
         // dd(redirect('home')->getTargetUrl());
         $config_admin = getConfigValues('ROLE_ADMIN');
         // notifikasi_telegram_spm('1');
+        
+        // dd(enkripsi_dekripsi_aes('encrypt','Anas Setyadin'));
+        // dd(enkripsi_dekripsi_aes('decrypt','WmY2bWtpWlN5Q2djak5YVStNUFZKUT09'));
 
         if(isset(\Auth::user()->roles[0]->id) && !in_array(\Auth::user()->roles[0]->id, $config_admin))
         {
-            $cek_data_exists = \DB::select('SELECT * FROM user_profil WHERE user_id ="'.\Auth::user()->id.'" LIMIT 1');
+            // $cek_data_exists = \DB::select('SELECT * FROM user_profil WHERE user_id ="'.\Auth::user()->id.'" LIMIT 1');
+            $cek_data_exists = \App\Models\UserProfil::where('user_id','=',\Auth::user()->id)->first();
 
             if(isset($cek_data_exists) && !empty($cek_data_exists))
             {

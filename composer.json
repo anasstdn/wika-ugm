@@ -16,11 +16,13 @@
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^7.29",
+        "laravel/telescope": "^3.0",
         "laravel/tinker": "^2.5",
         "laravel/ui": "2.*",
         "laravelcollective/html": "^6.2",
         "maatwebsite/excel": "^3.1",
         "nwidart/laravel-modules": "^7.0",
+        "rachidlaasri/laravel-installer": "^4.1",
         "reliese/laravel": "^0.0.19",
         "spatie/laravel-activitylog": "^3.0",
         "spatie/laravel-permission": "^3.18"

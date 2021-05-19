@@ -218,6 +218,7 @@
 
         <script src="{{asset('js/')}}/AppendGrid.js"></script>
         <script src="{{asset('js/')}}/daterangepicker.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js">
 
         <script>jQuery(function(){ Codebase.helpers(['maxlength']); });</script>
 
